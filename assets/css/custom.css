@@ -83,6 +83,12 @@ html:not([data-theme="dark"]) {
     margin: 0 !important;
 }
 
+/* Blog 列表页：取消左侧 170px padding，让标题和卡片左对齐平铺 */
+.main:has(.category-page-inner) {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 /* Shift home page content left */
 main.home-page {
     max-width: 1200px !important;
@@ -1798,6 +1804,10 @@ html:not([data-theme="dark"]) .search-empty {
     gap: 32px;
     padding: 32px 24px 48px;
 }
+.main:has(.category-page-inner) .category-page-inner {
+    padding-left: 0;
+    padding-right: 0;
+}
 
 .post-header .post-meta {
     display: flex;
@@ -1992,6 +2002,9 @@ html:not([data-theme="dark"]) .search-empty {
     font-weight: 700;
     line-height: 1.35;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .category-post-title a {
