@@ -68,13 +68,12 @@ help:
 
 dev:
 	@echo "==> Starting Hugo development server..."
-	@echo "==> http://localhost:$(PORT)"
+	@echo "==> http://localhost:$(PORT)/blogio/"
 	@echo ""
 	$(HUGO) server \
 		--bind $(HOST) \
 		--port $(PORT) \
-		--baseURL http://localhost:$(PORT)/ \
-		--renderToMemory \
+		--baseURL http://localhost:$(PORT)/blogio/ \
 		--noHTTPCache \
 		--noBuildLock
 
