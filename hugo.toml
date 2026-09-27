@@ -113,8 +113,8 @@ enableGitInfo = true
 [markup]
   [markup.highlight]
     noClasses = false
-    lineNos = true
-    lineNumbersInTable = true
+    lineNos = false
+    lineNumbersInTable = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
