@@ -1,74 +1,54 @@
 {{ define "main" }}
-<main class="category-page">
-    <div class="category-page-inner">
+<main class="category-page-inner">
 
-        <nav class="category-breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ "posts/" | relLangURL }}" class="crumb-pill crumb-pill--home">
-                <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m3 10 9-7 9 7"></path>
-                    <path d="M5 9v11h14V9"></path>
-                    <path d="M9 20v-6h6v6"></path>
-                </svg>
-                <span>{{ i18n "breadcrumb_home" }}</span>
-            </a>
-            <span class="crumb-sep" aria-hidden="true">
-                <svg class="crumb-chevron" viewBox="0 0 24 24">
-                    <path d="m9 6 6 6-6 6"></path>
-                </svg>
-            </span>
-            <span class="crumb-pill crumb-pill--categories" aria-current="page">
-                <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"></path>
-                    <path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H20"></path>
-                    <path d="M9 6h7M9 10h5"></path>
-                </svg>
-                <span>{{ .Title }}</span>
-            </span>
-        </nav>
+    <h2 class="category-desc">AI、云原生与开源技术分享，实用经验与最新动态</h2>
 
-        <header class="category-header">
-            <h1 class="category-title">{{ .Title }}</h1>
-            {{ with .Description }}
-            <p class="category-desc">{{ . }}</p>
-            {{ end }}
-        </header>
-
-        <div class="category-post-grid">
-            {{ range .Pages }}
-            <article class="category-post-card{{ with .Params.categories }} card-cat-{{ index . 0 }}{{ end }}">
-                <h2 class="category-post-title">
-                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-                </h2>
-                <div class="card-meta">
-                    <time class="card-date" datetime="{{ .Date.Format "2006-01-02" }}">
-                        <svg class="card-date-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        {{ .Date.Format "2006-01-02" }}
-                    </time>
-                    {{ with index .Params.categories 0 }}
-                    <span class="card-meta-dot" aria-hidden="true">·</span>
-                    {{ with site.GetPage (printf "/categories/%s" .) }}
-                    <a href="{{ .RelPermalink }}" class="card-category">{{ .Title }}</a>
-                    {{ end }}
-                    {{ end }}
-                </div>
-                {{ with .Description }}
-                <p class="card-desc">{{ . }}</p>
+    <div class="category-post-grid">
+        {{ range .Pages }}
+        <article class="category-post-card{{ with .Params.categories }} card-cat-{{ index . 0 }}{{ end }}">
+            <h2 class="category-post-title">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </h2>
+            <div class="card-meta">
+                <time class="card-date" datetime="{{ .Date.Format "2006-01-02" }}">
+                    <svg class="card-date-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    {{ .Date.Format "2006-01-02" }}
+                </time>
+                {{ with index .Params.categories 0 }}
+                <span class="card-meta-dot" aria-hidden="true">·</span>
+                {{ with site.GetPage (printf "/categories/%s" .) }}
+                <a href="{{ .RelPermalink }}" class="card-category">{{ .Title }}</a>
                 {{ end }}
-            </article>
+                {{ end }}
+            </div>
+            {{ with .Description }}
+            <p class="card-desc">{{ . }}</p>
             {{ end }}
-        </div>
-
-        {{ if lt (len .Pages) 1 }}
-        <div class="category-empty">
-            <p>{{ i18n "search_no_results" }}</p>
-        </div>
+        </article>
         {{ end }}
-
+        {{ range seq 4 }}
+        <article class="category-post-card">
+            <h2 class="category-post-title">xxxx</h2>
+            <div class="card-meta">
+                <time class="card-date">xxxx</time>
+                <span class="card-meta-dot" aria-hidden="true">·</span>
+                <span class="card-category">xxxx</span>
+            </div>
+            <p class="card-desc">xxxx xxxx xxxx xxxx xxxx</p>
+        </article>
+        {{ end }}
     </div>
+
+    {{ if lt (len .Pages) 1 }}
+    <div class="category-empty">
+        <p>{{ i18n "search_no_results" }}</p>
+    </div>
+    {{ end }}
+
 </main>
 {{ end }}

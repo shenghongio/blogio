@@ -53,8 +53,8 @@
             {{- if eq .Params.icon "project" -}}
             <div class="nav-item-wrapper nav-item--project">
             {{- end -}}
-            {{- if eq .Params.icon "user" -}}
-            <span class="nav-item nav-item--about-link" tabindex="0">
+            {{- if or (eq .Params.icon "user") (eq .Params.icon "compass") -}}
+            <span class="nav-item{{ if eq .Params.icon "user" }} nav-item--about-link{{ end }}" tabindex="0">
             {{- else -}}
             <a href="{{ $menuURL }}" class="nav-item">
             {{- end -}}
@@ -95,7 +95,7 @@
                 {{ end }}
 
                 <span>{{ .Name }}</span>
-            {{- if eq .Params.icon "user" -}}
+            {{- if or (eq .Params.icon "user") (eq .Params.icon "compass") -}}
             </span>
             {{- else -}}
             </a>
@@ -235,6 +235,13 @@
                                 <span class="blog-column-header-label">{{ $catTitle }}</span>
                             </span>
                             <div class="blog-column-posts">
+                                {{- if eq $catName "SRE 体系" -}}
+                                <a href="https://sre.google/books/" class="blog-column-post" target="_blank" rel="noopener">
+                                    {{ partial "icon.html" "book" }}
+                                    <span class="blog-column-post-title">SRE BOOK</span>
+                                    <span class="blog-column-post-desc">Google SRE 官方资源</span>
+                                </a>
+                                {{- end -}}
                                 {{- range where site.Data.sre_links "category" $catName -}}
                                 <a href="{{ .url | relLangURL }}" class="blog-column-post">
                                     {{ partial "icon.html" .icon }}
