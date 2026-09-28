@@ -6,3 +6,51 @@
 {{ $customCSS = $customCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
 {{ end }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.highlight pre, .chroma pre').forEach(function(pre) {
+    var lang = pre.getAttribute('data-lang') || '';
+    var parent = pre.closest('.highlight, .chroma');
+    if (parent && !parent.getAttribute('data-lang')) {
+      parent.setAttribute('data-lang', lang || 'code');
+    }
+  });
+
+  var toc = document.querySelector('.post-header--flush ~ .toc');
+  if (!toc) return;
+  var links = toc.querySelectorAll('a[href^="#"]');
+  if (!links.length) return;
+  var items = {};
+  var headings = [];
+  links.forEach(function(a) {
+    var id = decodeURIComponent(a.getAttribute('href').replace(/^#/, ''));
+    var el = document.getElementById(id);
+    if (el) {
+      headings.push(el);
+      items[id] = a.parentElement;
+    }
+    if (!a.title) a.title = a.textContent.trim();
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = decodeURIComponent(this.getAttribute('href').replace(/^#/, ''));
+      var target = document.getElementById(targetId);
+      if (target) {
+        var top = target.getBoundingClientRect().top + window.scrollY - 70;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
+  function update() {
+    var scrollY = window.scrollY + 100;
+    var currentId = headings[0] ? headings[0].id : '';
+    for (var i = 0; i < headings.length; i++) {
+      if (headings[i].offsetTop <= scrollY) currentId = headings[i].id; else break;
+    }
+    Object.keys(items).forEach(function(k) { items[k].classList.remove('is-active'); });
+    var active = items[currentId];
+    if (active) active.classList.add('is-active');
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+});
+</script>

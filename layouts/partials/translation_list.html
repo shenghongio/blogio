@@ -1,0 +1,23 @@
+{{- if .IsTranslated -}}
+    {{- if (ne .Layout "search") }}
+        {{- if or (.Param "author") (.Param "ShowReadingTime") (not .Date.IsZero) }}
+            {{- if not (or (eq .Slug "kubernetes-optimization") (eq .File.ContentBaseName "kubernetes-optimization")) }}
+                {{- printf "&nbsp;|&nbsp;" | safeHTML -}}
+            {{- end }}
+        {{- end -}}
+    {{- end -}}
+    <span>{{- i18n "translations" | default "Translations" }}:</span>
+    <ul class="i18n_list">
+        {{- range .Translations }}
+        <li>
+            <a href="{{ .Permalink }}">
+                {{- if (and site.Params.displayFullLangName (.Language.LanguageName)) }}
+                {{- .Language.LanguageName | emojify -}}
+                {{- else }}
+                {{- .Lang | title -}}
+                {{- end -}}
+            </a>
+        </li>
+        {{- end }}
+    </ul>
+{{- end -}}

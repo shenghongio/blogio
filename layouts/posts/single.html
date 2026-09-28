@@ -21,7 +21,7 @@
   {{- if not (.Param "hideMeta") }}
   <div class="post-meta">
     {{- with .Date }}
-    <span class="post-date">{{ .Format "2006年1月2日" }}</span>
+    <span class="post-date{{ if or (eq $.Slug "kubernetes-optimization") (eq $.File.ContentBaseName "kubernetes-optimization") }} post-date--zh{{ end }}">{{ if or (eq $.Slug "kubernetes-optimization") (eq $.File.ContentBaseName "kubernetes-optimization") }}更新于 {{ end }}{{ .Format "2006年1月2日" }}</span>
     {{- end }}
     {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
     {{- $tagList := $.GetTerms $tags }}
