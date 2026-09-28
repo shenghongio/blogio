@@ -22,7 +22,7 @@ enableGitInfo = true
 
       [[languages.en.menu.main]]
         name = "Stack"
-        url = "/categories/"
+        url = "/stack/"
         weight = 20
         [languages.en.menu.main.params]
           icon = "book"
@@ -70,7 +70,7 @@ enableGitInfo = true
 
       [[languages.zh.menu.main]]
         name = "Stack"
-        url = "/categories/"
+        url = "/stack/"
         weight = 20
         [languages.zh.menu.main.params]
           icon = "book"

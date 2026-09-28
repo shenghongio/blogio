@@ -1,0 +1,83 @@
+{{ define "main" }}
+{{- $currentLang := site.Language.Lang -}}
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+  </header>
+
+  <div class="post-content">
+    {{ .Content }}
+    <section class="stack-columns">
+      <div class="blog-columns">
+        {{- range $catName, $_ := site.Taxonomies.categories -}}
+        {{- $catKey := replace $catName "-" "_" -}}
+        {{- $catTitle := i18n (printf "category_%s_title" $catKey) | default (humanize $catName) -}}
+        {{- $catIcon := "default" -}}
+        {{- if eq $catName "ai-engineering" -}}{{- $catIcon = "ai" -}}{{- end -}}
+        {{- if eq $catName "cloud-native" -}}{{- $catIcon = "cn" -}}{{- end -}}
+        <div class="blog-column">
+          <span class="blog-column-header blog-column-header--{{ $catIcon }}">
+            <svg class="tooltip-icon tooltip-icon--{{ $catIcon }}" viewBox="0 0 24 24" aria-hidden="true">
+              {{- if eq $catIcon "ai" -}}
+              <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
+              <circle cx="12" cy="10" r="2"></circle>
+              {{- else if eq $catIcon "cn" -}}
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <path d="M4 22v-7"></path>
+              {{- else -}}
+              <path d="M4 20h16a2 2 0 002-2V8a2 2 0 00-2-2h-7.93a2 2 0 01-1.66-.9l-.82-1.2A2 2 0 007.93 3H4A2 2 0 002 5v13c0 1.1.9 2 2 2z"></path>
+              {{- end -}}
+            </svg>
+            <span class="blog-column-header-label">{{ $catTitle }}</span>
+          </span>
+          <div class="blog-column-posts">
+            {{- range where site.Data.blog_links "category" $catName -}}
+            <a href="{{ .url | relLangURL }}" class="blog-column-post">
+              {{ partial "icon.html" .icon }}
+              <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
+              <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
+            </a>
+            {{- end -}}
+          </div>
+        </div>
+        {{- end -}}
+        <div class="blog-column blog-column--action">
+          <span class="blog-column-header blog-column-header--more">
+            <svg class="tooltip-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="blog-column-header-label">{{ i18n "blog_hint_more" }}</span>
+          </span>
+          <div class="blog-column-posts">
+            <a href="{{ "posts/" | relLangURL }}" class="blog-column-post">
+              {{ partial "icon.html" "book" }}
+              <span class="blog-column-post-title">{{ i18n "header_hugo_title" }}</span>
+              <span class="blog-column-post-desc">{{ i18n "header_hugo_desc" }}</span>
+            </a>
+          </div>
+        </div>
+        <div class="blog-column blog-column--action">
+          <span class="blog-column-header blog-column-header--other">
+            <svg class="tooltip-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            <span class="blog-column-header-label">{{ i18n "blog_hint_other" }}</span>
+          </span>
+          <div class="blog-column-posts">
+            {{- range where site.Data.blog_links "category" "other" -}}
+            <a href="{{ .url | relLangURL }}" class="blog-column-post">
+              {{ partial "icon.html" .icon }}
+              <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
+              <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
+            </a>
+            {{- end -}}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</article>
+{{ end }}

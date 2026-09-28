@@ -891,8 +891,8 @@ html[data-theme="dark"] .site-header--home {
 }
 
 .nav-item-wrapper.nav-item--blog > .nav-item {
-    pointer-events: none;
-    cursor: default;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .nav-item-wrapper.nav-item--blog::after {
@@ -3617,4 +3617,85 @@ html[data-theme="dark"] .profile-detail-section--alt {
     .post-header--flush ~ .toc {
         display: none;
     }
+}
+
+/* ── Stack 分类卡片（/stack/ 页面） ── */
+.stack-columns {
+    margin: 24px 0 32px;
+}
+
+.stack-columns .blog-columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 20px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.stack-columns .blog-column {
+    flex: 1 1 240px;
+    min-width: 220px;
+    padding: 16px 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--code-bg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stack-columns .blog-column:hover {
+    border-color: var(--theme);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.stack-columns .blog-column + .blog-column::before {
+    display: none;
+}
+
+.stack-columns .blog-column-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 10px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--content);
+}
+
+.stack-columns .blog-column-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-left: 0;
+    border-top: none;
+    padding-top: 0;
+}
+
+.stack-columns .blog-column-post {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    color: var(--content);
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.stack-columns .blog-column-post:hover {
+    background: var(--border);
+}
+
+.stack-columns .blog-column-post-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--content);
+}
+
+.stack-columns .blog-column-post-desc {
+    font-size: 12px;
+    color: var(--secondary);
 }
