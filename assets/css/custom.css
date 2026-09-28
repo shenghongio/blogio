@@ -3252,8 +3252,8 @@ html[data-theme="dark"] .profile-detail-section--alt {
     color: #ff9800;
 }
 .post-content--shift-right {
-    margin-left: -170px !important;
-    margin-right: -34px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 .post-content--shift-right > h1:first-child {
     display: none;
@@ -3315,15 +3315,19 @@ html[data-theme="dark"] .profile-detail-section--alt {
     text-align: right;
 }
 .main:has(.post-header--flush) {
-    max-width: 1250px !important;
-    margin-left: 322px;
-    margin-right: -5px;
+    --toc-left: 51px;
+    --toc-width: 300px;
+    --toc-gap: 80px;
+    max-width: 1800px !important;
+    margin-left: calc(var(--toc-left) + var(--toc-width) + var(--toc-gap));
+    margin-right: 0;
     padding-top: 16px !important;
-    padding-left: 180px !important;
+    padding-left: 0 !important;
+    padding-right: 34px !important;
 }
 .post-header--flush {
-    margin-left: -170px;
-    margin-right: -34px;
+    margin-left: 0;
+    margin-right: 0;
     margin-top: 0;
     padding-top: 0;
 }
@@ -3332,9 +3336,9 @@ html[data-theme="dark"] .profile-detail-section--alt {
 }
 .post-header--flush ~ .toc {
     position: fixed;
-    left: 16px;
-    top: 125px;
-    width: 300px;
+    left: var(--toc-left);
+    top: 325px;
+    width: var(--toc-width);
     max-height: calc(100vh - 120px);
     overflow-y: auto;
     z-index: 100;
@@ -3492,8 +3496,6 @@ html[data-theme="dark"] .profile-detail-section--alt {
     border-left-color: var(--quote-accent, #7c4dff);
 }
 .main:has(.post-header--flush) .post-content blockquote strong {
-    display: block;
-    margin-bottom: 4px;
     font-weight: 600;
 }
 .main:has(.post-header--flush) .post-content blockquote:nth-of-type(5n+1) {
@@ -3592,7 +3594,26 @@ html[data-theme="dark"] .profile-detail-section--alt {
     font-size: 0.9em;
     font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1600px) {
+    .main:has(.post-header--flush) {
+        --toc-left: 16px;
+        --toc-width: 210px;
+        margin-left: calc(var(--toc-left) + var(--toc-width) + var(--toc-gap));
+        padding-left: 0 !important;
+        padding-right: 16px !important;
+    }
+    .post-header--flush ~ .toc {
+        left: var(--toc-left);
+        width: var(--toc-width);
+    }
+}
+@media (max-width: 1200px) {
+    .main:has(.post-header--flush) {
+        --toc-left: 0px;
+        --toc-width: 0px;
+        margin-left: 0;
+        padding-left: 34px !important;
+    }
     .post-header--flush ~ .toc {
         display: none;
     }
