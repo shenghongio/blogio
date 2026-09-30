@@ -1,45 +1,43 @@
 <section class="section perspectives">
 
-    <div class="perspectives-row">
+    <div class="section-header">
+        <h2>{{ i18n "perspectives_title" }}</h2>
+    </div>
 
-        <div class="perspectives-left">
-            <div class="section-header">
-                <h2>{{ i18n "perspectives_title" }}</h2>
-            </div>
+    <p class="perspectives-intro">{{ i18n "perspectives_intro" }}</p>
 
-            <div class="perspectives-grid">
-                <p class="perspectives-intro">{{ i18n "perspectives_intro" }}</p>
-                <article class="perspective-card perspective-card--purple">
-                    <span class="perspective-card-index">01</span>
-                    <h3>{{ i18n "perspective_collab_title" }}</h3>
-                    <p>{{ i18n "perspective_collab_desc" }}</p>
-                </article>
-                <article class="perspective-card perspective-card--cyan">
-                    <span class="perspective-card-index">02</span>
-                    <h3>{{ i18n "perspective_dx_title" }}</h3>
-                    <p>{{ i18n "perspective_dx_desc" }}</p>
-                </article>
-                <article class="perspective-card perspective-card--amber">
-                    <span class="perspective-card-index">03</span>
-                    <h3>{{ i18n "perspective_depth_title" }}</h3>
-                    <p>{{ i18n "perspective_depth_desc" }}</p>
-                </article>
-                <article class="perspective-card perspective-card--green">
-                    <span class="perspective-card-index">04</span>
-                    <h3>{{ i18n "perspective_system_title" }}</h3>
-                    <p>{{ i18n "perspective_system_desc" }}</p>
-                </article>
-                <article class="perspective-card perspective-card--pink">
-                    <span class="perspective-card-index">05</span>
-                    <h3>{{ i18n "perspective_feedback_title" }}</h3>
-                    <p>{{ i18n "perspective_feedback_desc" }}</p>
-                </article>
-                <article class="perspective-card perspective-card--indigo">
-                    <span class="perspective-card-index">06</span>
-                    <h3>{{ i18n "perspective_longterm_title" }}</h3>
-                    <p>{{ i18n "perspective_longterm_desc" }}</p>
-                </article>
-            </div>
+    <div class="perspectives-layout">
+        <div class="perspectives-cards">
+            <article class="perspective-card perspective-card--purple">
+                <span class="perspective-card-index">01</span>
+                <h3>{{ i18n "perspective_collab_title" }}</h3>
+                <p>{{ i18n "perspective_collab_desc" }}</p>
+            </article>
+            <article class="perspective-card perspective-card--cyan">
+                <span class="perspective-card-index">02</span>
+                <h3>{{ i18n "perspective_dx_title" }}</h3>
+                <p>{{ i18n "perspective_dx_desc" }}</p>
+            </article>
+            <article class="perspective-card perspective-card--amber">
+                <span class="perspective-card-index">03</span>
+                <h3>{{ i18n "perspective_depth_title" }}</h3>
+                <p>{{ i18n "perspective_depth_desc" }}</p>
+            </article>
+            <article class="perspective-card perspective-card--green">
+                <span class="perspective-card-index">04</span>
+                <h3>{{ i18n "perspective_system_title" }}</h3>
+                <p>{{ i18n "perspective_system_desc" }}</p>
+            </article>
+            <article class="perspective-card perspective-card--pink">
+                <span class="perspective-card-index">05</span>
+                <h3>{{ i18n "perspective_feedback_title" }}</h3>
+                <p>{{ i18n "perspective_feedback_desc" }}</p>
+            </article>
+            <article class="perspective-card perspective-card--indigo">
+                <span class="perspective-card-index">06</span>
+                <h3>{{ i18n "perspective_longterm_title" }}</h3>
+                <p>{{ i18n "perspective_longterm_desc" }}</p>
+            </article>
         </div>
 
         <aside class="profile-card">
@@ -69,25 +67,23 @@
             </ul>
 
             <hr class="profile-divider">
-        </aside>
 
-        <div class="profile-links">
-            <a href="{{ "posts/" | relURL }}" class="profile-link profile-link--explore">
-                {{ partial "icon.html" "compass" }}
-                <span>Explore</span>
-            </a>
-            <a href="https://github.com/shenghongio" class="profile-link profile-link--github" target="_blank" rel="noopener">
-                {{ partial "icon.html" "github" }}
-                <span>GitHub</span>
-            </a>
-        </div>
-
+            <div class="profile-links">
+                <a href="{{ "posts/" | relLangURL }}" class="profile-link profile-link--explore">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    <span>{{ i18n "profile_start_exploring" }}</span>
+                </a>
+                <a href="https://github.com/shenghongio" class="profile-link profile-link--github" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                    <span>{{ i18n "profile_github" }}</span>
+                </a>
+            </div>
+        </aside></div>
     </div>
 
 </section>
 
 <section class="section focus-areas">
-
     <div class="section-header focus-section-header">
         <h2>{{ i18n "focus_title" }}</h2>
         <p class="focus-intro">{{ i18n "focus_intro" }}</p>
@@ -121,6 +117,275 @@
                 <p>{{ i18n "focus_os_desc" }}</p>
             </div>
         </article>
+    </div>
+
+</section>
+
+<section class="section ecosystem">
+
+    <div class="section-header ecosystem-header">
+        <h2>{{ i18n "ecosystem_title" }}</h2>
+    </div>
+
+    <p class="ecosystem-intro">{{ i18n "ecosystem_intro" }}</p>
+
+    <div class="ecosystem-diagram">
+
+        <div class="ecosystem-axis">
+            <div class="axis-item">
+                <span class="axis-label">Value<br>&amp; Use Cases</span>
+            </div>
+            <div class="axis-arrow">↑</div>
+            <div class="axis-item">
+                <span class="axis-label">Orchestration<br>&amp; Governance</span>
+            </div>
+            <div class="axis-arrow">↑</div>
+            <div class="axis-item">
+                <span class="axis-label">Resource<br>Scheduling</span>
+            </div>
+            <div class="axis-arrow">↑</div>
+            <div class="axis-item">
+                <span class="axis-label">Hardware<br>&amp; Acceleration</span>
+            </div>
+        </div>
+
+        <div class="ecosystem-layers">
+
+            <div class="eco-layer eco-layer--purple">
+                <div class="eco-layer-head">
+                    <div class="eco-head-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    </div>
+                    <div class="eco-head-text">
+                        <h3>Applications &amp; Agents</h3>
+                        <p>AI applications, agents<br>and business scenarios</p>
+                    </div>
+                </div>
+                <div class="eco-layer-items">
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <span>AI Agents</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        </div>
+                        <span>AI Applications</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+                        </div>
+                        <span>Copilots</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>
+                        </div>
+                        <span>SaaS / PaaS</span>
+                    </div>
+                </div>
+                <div class="eco-layer-focus">
+                    <h4>Key Focus</h4>
+                    <ul>
+                        <li>Business scenarios and user experience</li>
+                        <li>Agent orchestration and workflow</li>
+                        <li>Application lifecycle and delivery</li>
+                        <li>Developer ecosystem and SDK</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="eco-layer eco-layer--blue">
+                <div class="eco-layer-head">
+                    <div class="eco-head-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <div class="eco-head-text">
+                        <h3>Runtime</h3>
+                        <p>Container, scheduling,<br>service mesh, observability</p>
+                    </div>
+                </div>
+                <div class="eco-layer-items">
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/><line x1="12" y1="22" x2="12" y2="15.5"/><polyline points="22 8.5 12 15.5 2 8.5"/></svg>
+                        </div>
+                        <span>Kubernetes</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                        </div>
+                        <span>Container Runtime</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><line x1="6" y1="7" x2="10" y2="11"/><line x1="18" y1="7" x2="14" y2="11"/><line x1="6" y1="17" x2="10" y2="13"/><line x1="18" y1="17" x2="14" y2="13"/></svg>
+                        </div>
+                        <span>Service Mesh</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                        </div>
+                        <span>Observability</span>
+                    </div>
+                </div>
+                <div class="eco-layer-focus">
+                    <h4>Key Focus</h4>
+                    <ul>
+                        <li>Workload isolation and scheduling</li>
+                        <li>Multi-tenant and multi-cluster management</li>
+                        <li>Service discovery and traffic management</li>
+                        <li>Monitoring, logging and tracing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="eco-layer eco-layer--green">
+                <div class="eco-layer-head">
+                    <div class="eco-head-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.5 2.5-1 3.5C16 10 16 11 15 12c1 1 1 2 0 3 .5 1 1 2 1 3.5a4 4 0 0 1-4 4 4 4 0 0 1-4-4c0-1.5.5-2.5 1-3.5-1-1-1-2 0-3-1-1-1-2 0-3C8.5 8.5 8 7.5 8 6a4 4 0 0 1 4-4z"/></svg>
+                    </div>
+                    <div class="eco-head-text">
+                        <h3>Inference, Training<br>and Governance</h3>
+                        <p>Model serving, training,<br>model management, security</p>
+                    </div>
+                </div>
+                <div class="eco-layer-items">
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
+                        </div>
+                        <span>Inference<br>(LLM / TGI)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/><line x1="7" y1="7" x2="10" y2="10"/><line x1="17" y1="7" x2="14" y2="10"/><line x1="7" y1="17" x2="10" y2="14"/><line x1="17" y1="17" x2="14" y2="14"/></svg>
+                        </div>
+                        <span>Training<br>(PyTorch / TensorFlow)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+                        </div>
+                        <span>Model Management<br>(Registry / Cache)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <span>Governance<br>(Security / Policy)</span>
+                    </div>
+                </div>
+                <div class="eco-layer-focus">
+                    <h4>Key Focus</h4>
+                    <ul>
+                        <li>Model serving and optimization</li>
+                        <li>Training job management</li>
+                        <li>Model lifecycle and versioning</li>
+                        <li>Security, compliance and access control</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="eco-layer eco-layer--teal">
+                <div class="eco-layer-head">
+                    <div class="eco-head-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                    </div>
+                    <div class="eco-head-text">
+                        <h3>GPU &amp; Acceleration<br>Infrastructure</h3>
+                        <p>GPU, NIC, storage, network,<br>heterogeneous computing</p>
+                    </div>
+                </div>
+                <div class="eco-layer-items">
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/><line x1="2" y1="10" x2="6" y2="10"/><line x1="2" y1="14" x2="6" y2="14"/><line x1="18" y1="10" x2="22" y2="10"/><line x1="18" y1="14" x2="22" y2="14"/></svg>
+                        </div>
+                        <span>GPU<br>(NVIDIA / AMD / ...)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                        </div>
+                        <span>Accelerator<br>(Ascend / TPU / ...)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+                        </div>
+                        <span>Storage<br>(PVC / Local / ...)</span>
+                    </div>
+                    <div class="eco-item">
+                        <div class="eco-item-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 0 1 0 18"/><path d="M12 3a14 14 0 0 0 0 18"/></svg>
+                        </div>
+                        <span>Network<br>(RDMA / IB / ...)</span>
+                    </div>
+                </div>
+                <div class="eco-layer-focus">
+                    <h4>Key Focus</h4>
+                    <ul>
+                        <li>GPU sharing, isolation and scheduling</li>
+                        <li>Heterogeneous resource management</li>
+                        <li>Hardware monitoring and fault recovery</li>
+                        <li>High-performance network and storage</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="eco-principles">
+        <div class="eco-principle eco-principle--lead">
+            <div class="eco-principle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h4>Core Principles</h4>
+        </div>
+        <div class="eco-principle">
+            <div class="eco-principle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <div>
+                <h4>Clear Resource Boundaries</h4>
+                <p>Define resource ownership,<br>isolation and quotas at each layer.</p>
+            </div>
+        </div>
+        <div class="eco-principle">
+            <div class="eco-principle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div>
+                <h4>Engineering Abstractions</h4>
+                <p>Provide unified interfaces<br>and easy-to-use abstractions.</p>
+            </div>
+        </div>
+        <div class="eco-principle">
+            <div class="eco-principle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+                <h4>Developer Participation</h4>
+                <p>Lower the learning cost,<br>empower developers and operators.</p>
+            </div>
+        </div>
+        <div class="eco-principle">
+            <div class="eco-principle-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/></svg>
+            </div>
+            <div>
+                <h4>Open &amp; Collaborative</h4>
+                <p>Build an open ecosystem,<br>co-create with the community.</p>
+            </div>
+        </div>
     </div>
 
 </section>
