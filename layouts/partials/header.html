@@ -41,9 +41,6 @@
                 {{- $menuPath := strings.TrimPrefix $siteBasePath .URL -}}
                 {{- $menuURL = printf "%s%s%s" $siteBasePath $langPrefix $menuPath -}}
             {{- end -}}
-            {{- if eq .Params.icon "user" -}}
-            <div class="nav-item-wrapper nav-item--about">
-            {{- end -}}
             {{- if eq .Params.icon "book" -}}
             <div class="nav-item-wrapper nav-item--blog">
             {{- end -}}
@@ -53,8 +50,8 @@
             {{- if eq .Params.icon "project" -}}
             <div class="nav-item-wrapper nav-item--project">
             {{- end -}}
-            {{- if or (eq .Params.icon "user") (eq .Params.icon "compass") -}}
-            <span class="nav-item{{ if eq .Params.icon "user" }} nav-item--about-link{{ end }}" tabindex="0">
+            {{- if eq .Params.icon "compass" -}}
+            <span class="nav-item" tabindex="0">
             {{- else -}}
             <a href="{{ $menuURL }}" class="nav-item">
             {{- end -}}
@@ -95,7 +92,7 @@
                 {{ end }}
 
                 <span>{{ .Name }}</span>
-            {{- if or (eq .Params.icon "user") (eq .Params.icon "compass") -}}
+            {{- if eq .Params.icon "compass" -}}
             </span>
             {{- else -}}
             </a>
@@ -164,6 +161,72 @@
                             </div>
                         </div>
                         {{- end -}}
+                        {{- range $catName := slice "语言与工具" "系统与网络" "安全" "SRE 体系" -}}
+                        {{- $catKey := replace (replace $catName " " "_") "/" "_" -}}
+                        {{- $i18nKey := printf "sre_%s_title" $catKey -}}
+                        {{- $catTitle := i18n $i18nKey | default $catName -}}
+                        {{- $catIcon := "default" -}}
+                        {{- if eq $catName "语言与工具" -}}{{- $catIcon = "ai" -}}{{- end -}}
+                        {{- if eq $catName "系统与网络" -}}{{- $catIcon = "cn" -}}{{- end -}}
+                        {{- if eq $catName "安全" -}}{{- $catIcon = "shield" -}}{{- end -}}
+                        {{- if eq $catName "SRE 体系" -}}{{- $catIcon = "sre" -}}{{- end -}}
+                        <div class="blog-column">
+                            <span class="blog-column-header blog-column-header--{{ $catIcon }}">
+                                <svg class="tooltip-icon tooltip-icon--{{ $catIcon }}" viewBox="0 0 24 24" aria-hidden="true">
+                                    {{- if eq $catIcon "ai" -}}
+                                    <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
+                                    <circle cx="12" cy="10" r="2"></circle>
+                                    {{- else if eq $catIcon "cn" -}}
+                                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                                    <path d="M4 22v-7"></path>
+                                    {{- else if eq $catIcon "shield" -}}
+                                    <path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"></path>
+                                    {{- else if eq $catIcon "sre" -}}
+                                    <circle cx="12" cy="12" r="9"></circle>
+                                    <path d="M12 7v5l3 2"></path>
+                                    {{- else -}}
+                                    <path d="M4 20h16a2 2 0 002-2V8a2 2 0 00-2-2h-7.93a2 2 0 01-1.66-.9l-.82-1.2A2 2 0 007.93 3H4A2 2 0 002 5v13c0 1.1.9 2 2 2z"></path>
+                                    {{- end -}}
+                                </svg>
+                                <span class="blog-column-header-label">{{ $catTitle }}</span>
+                            </span>
+                            <div class="blog-column-posts">
+                                {{- if eq $catName "SRE 体系" -}}
+                                <a href="https://sre.google/books/" class="blog-column-post" target="_blank" rel="noopener">
+                                    {{ partial "icon.html" "book" }}
+                                    <span class="blog-column-post-title">SRE BOOK</span>
+                                    <span class="blog-column-post-desc">Google SRE 官方资源</span>
+                                </a>
+                                {{- end -}}
+                                {{- range where site.Data.sre_links "category" $catName -}}
+                                <a href="{{ .url | relLangURL }}" class="blog-column-post">
+                                    {{ partial "icon.html" .icon }}
+                                    <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
+                                    <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
+                                </a>
+                                {{- end -}}
+                            </div>
+                        </div>
+                        {{- end -}}
+                        <div class="blog-column blog-column--action blog-column--projects">
+                            <span class="blog-column-header blog-column-header--projects">
+                                <svg class="tooltip-icon tooltip-icon--projects" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m8 8-4 4 4 4"></path>
+                                    <path d="m16 8 4 4-4 4"></path>
+                                    <path d="m14 4-4 16"></path>
+                                </svg>
+                                <span class="blog-column-header-label">{{ i18n "projects_title" }}</span>
+                            </span>
+                            <div class="blog-column-posts">
+                                {{- range site.Data.projects -}}
+                                <a href="{{ .url | relLangURL }}" class="blog-column-post">
+                                    {{ partial "icon.html" .icon }}
+                                    <span class="blog-column-post-title">{{ .display | default .title }}</span>
+                                    <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
+                                </a>
+                                {{- end -}}
+                            </div>
+                        </div>
                         <div class="blog-column blog-column--action">
                             <span class="blog-column-header blog-column-header--more">
                                 <svg class="tooltip-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -272,9 +335,6 @@
                     </div>
                 </span>
                 {{ end }}
-            {{- if eq .Params.icon "user" -}}
-            </div>
-            {{- end -}}
             {{- if eq .Params.icon "book" -}}
             </div>
             {{- end -}}
@@ -456,6 +516,54 @@
             document.addEventListener("keydown", function (event) {
                 if (event.key === "Escape") {
                     closeSearch();
+                }
+            });
+
+            var wrappers = document.querySelectorAll(".nav-item-wrapper.nav-item--blog, .nav-item-wrapper.nav-item--focus, .nav-item-wrapper.nav-item--project");
+            wrappers.forEach(function (wrapper) {
+                var btn = wrapper.querySelector(":scope > .nav-item");
+                if (btn) {
+                    btn.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        wrappers.forEach(function (w) {
+                            if (w !== wrapper) {
+                                w.classList.remove("tooltip-open");
+                                w.querySelectorAll(".blog-column.open").forEach(function (c) { c.classList.remove("open"); });
+                            }
+                        });
+                        wrapper.classList.toggle("tooltip-open");
+                        if (!wrapper.classList.contains("tooltip-open")) {
+                            wrapper.querySelectorAll(".blog-column.open").forEach(function (c) { c.classList.remove("open"); });
+                        }
+                    });
+                }
+                wrapper.querySelectorAll(".blog-column-header").forEach(function (header) {
+                    header.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        var col = header.parentElement;
+                        var isOpen = col.classList.contains("open");
+                        wrapper.querySelectorAll(".blog-column.open").forEach(function (c) { c.classList.remove("open"); });
+                        if (!isOpen) {
+                            col.classList.add("open");
+                        }
+                    });
+                });
+            });
+            document.addEventListener("mousedown", function (event) {
+                wrappers.forEach(function (wrapper) {
+                    if (!wrapper.contains(event.target)) {
+                        wrapper.classList.remove("tooltip-open");
+                        wrapper.querySelectorAll(".blog-column.open").forEach(function (c) { c.classList.remove("open"); });
+                    }
+                });
+            }, true);
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    wrappers.forEach(function (wrapper) {
+                        wrapper.classList.remove("tooltip-open");
+                        wrapper.querySelectorAll(".blog-column.open").forEach(function (c) { c.classList.remove("open"); });
+                    });
                 }
             });
         }

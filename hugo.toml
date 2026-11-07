@@ -22,7 +22,7 @@ enableGitInfo = true
 
       [[languages.en.menu.main]]
         name = "Stack"
-        url = "/categories/"
+        url = "/stack/"
         weight = 20
         [languages.en.menu.main.params]
           icon = "book"
@@ -33,20 +33,6 @@ enableGitInfo = true
         weight = 22
         [languages.en.menu.main.params]
           icon = "search"
-
-      [[languages.en.menu.main]]
-        name = "Projects"
-        url = "/projects/"
-        weight = 30
-        [languages.en.menu.main.params]
-          icon = "project"
-
-      [[languages.en.menu.main]]
-        name = "SRE"
-        url = "/directions/"
-        weight = 40
-        [languages.en.menu.main.params]
-          icon = "compass"
 
       [[languages.en.menu.main]]
         name = "About"
@@ -70,7 +56,7 @@ enableGitInfo = true
 
       [[languages.zh.menu.main]]
         name = "Stack"
-        url = "/categories/"
+        url = "/stack/"
         weight = 20
         [languages.zh.menu.main.params]
           icon = "book"
@@ -81,20 +67,6 @@ enableGitInfo = true
         weight = 22
         [languages.zh.menu.main.params]
           icon = "search"
-
-      [[languages.zh.menu.main]]
-        name = "项目"
-        url = "/projects/"
-        weight = 30
-        [languages.zh.menu.main.params]
-          icon = "project"
-
-      [[languages.zh.menu.main]]
-        name = "SRE"
-        url = "/directions/"
-        weight = 40
-        [languages.zh.menu.main.params]
-          icon = "compass"
 
       [[languages.zh.menu.main]]
         name = "关于"
