@@ -59,6 +59,8 @@ category_ai_engineering_title: "AI 工程"
 category_ai_engineering_desc: "人工智能工程、大模型、智能体应用与实践。"
 category_cloud_native_title: "云原生"
 category_cloud_native_desc: "Kubernetes、Service Mesh、Envoy、Gateway 等。"
+sre_book_title: "SRE 官方手册"
+sre_book_desc: "Google SRE 官方资源"
 articles_count: "篇文章"
 
 perspectives_eyebrow: "生态视角"

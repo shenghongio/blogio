@@ -59,6 +59,8 @@ category_ai_engineering_title: "AI Engineering"
 category_ai_engineering_desc: "AI engineering, LLMs, agents, and application practices."
 category_cloud_native_title: "Cloud Native"
 category_cloud_native_desc: "Kubernetes, Service Mesh, Envoy, Gateway, and more."
+sre_book_title: "SRE BOOK"
+sre_book_desc: "Google SRE Official Resources"
 articles_count: "articles"
 
 perspectives_eyebrow: "ECOSYSTEM"

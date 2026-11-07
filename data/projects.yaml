@@ -1,34 +1,28 @@
-- title: "kraken-relayjet"
+- title: ai-native-landscape
+  display: "AI Native Landscape"
   description:
-    en: "A lightweight, high-performance data collection agent focused on log collection, metrics reporting, and data forwarding."
-    zh: "是一款轻量级、高性能的数据采集代理工具，专注于日志采集、指标上报、数据转发等核心场景。"
-  icon: "server"
-  url: "#"
-
-- title: "ai-native-landscape"
+    en: Explore the ecosystem of open source tools, agents, runtimes, platforms, and infrastructure for the AI Native era, curated by hand and evaluated across multiple dimensions.
+    zh: AI Native 开源项目生态目录 — 涵盖 Agent、MCP、RAG、AI Runtime、基础设施等方向
+  icon: layout
+  url: https://github.com/shenghongio/ai-native-landscape
+- title: kubernetes-handbook
+  display: "Kubernetes Handbook"
   description:
-    en: "AI Native open-source project ecosystem directory — covering Agent, MCP, RAG, AI Runtime, infrastructure and more."
-    zh: "AI Native 开源项目生态目录 — 涵盖 Agent、MCP、RAG、AI Runtime、基础设施等方向"
-  icon: "layout"
-  url: "#"
-
-- title: "kubernetes-handbook"
+    en: Kubernetes handbook — a practical guide to container orchestration, covering core architecture, components and real-world applications.
+    zh: Kubernetes 架构与生态：从云原生到 AI 原生基础设施的构建指南
+  icon: book-open
+  url: https://github.com/shenghongio/kubernetes-handbook
+- title: blogio
+  display: "Blogio"
   description:
-    en: "Kubernetes handbook — a practical guide to container orchestration, covering core architecture, components and real-world applications."
-    zh: "Kubernetes 基础教程 - 全面介绍容器编排技术的实战手册，涵盖核心架构、关键组件和实际应用"
-  icon: "book-open"
-  url: "#"
-
-- title: "kraken-Toolkit"
+    en: A personal tech blog focused on infrastructure and AI systems engineering.
+    zh: 一个面向基础设施与 AI 系统工程的个人技术博客
+  icon: github
+  url: https://github.com/shenghongio/blogio
+- title: kraken-ai-platform
+  display: "Kraken AI Platform"
   description:
-    en: "Kubernetes & AI Infrastructure Operations Toolkit"
-    zh: "Kubernetes & AI Infrastructure Operations Toolkit"
-  icon: "box"
-  url: "#"
-
-- title: "blogio"
-  description:
-    en: "A personal tech blog focused on infrastructure and AI systems engineering."
-    zh: "一个面向基础设施与 AI 系统工程的个人技术博客"
-  icon: "github"
-  url: "#"
+    en: Kubernetes & AI Infrastructure Operations Platform.
+    zh: Kubernetes & AI Infrastructure 运维平台
+  icon: server
+  url: https://github.com/shenghongio/kraken-ai-platform
