@@ -4,97 +4,106 @@
 <article class="profile-detail" style="max-width:1400px;margin:0 auto;font-size:1rem;line-height:1.8;display:flex;flex-direction:column;gap:20px;">
 <style>.profile-detail section{scroll-margin-top:80px;}</style>
 
-    <section id="about-blog" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #f97316;background:linear-gradient(90deg,rgba(249,115,22,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">关于 Blog</h2>
-        <p style="margin:0 0 10px 0;">这里主要记录我在云原生、Kubernetes、GPU 虚拟化、异构算力调度、AI 基础设施和运维开发上的实践与思考。会有排障记录、源码阅读、工具开发、架构拆解，也会放一些开源项目和社区协作的进展。</p>
-        <p style="margin:0;">不追求日更，尽量把问题、过程和结论写清楚，能复现、能落地最好。</p>
-    </section>
+    <aside class="profile-card profile-card--strip">
+        <div class="profile-top">
+            <div class="profile-avatar">
+                <img src="{{ "personal_photo.png" | relURL }}" alt="Profile" width="200" height="200" loading="eager">
+            </div>
+            <ul class="profile-practice">
+                <li><strong>{{ i18n "profile_practice_cloud_title" }}</strong>{{ i18n "profile_practice_cloud_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_ai_title" }}</strong>{{ i18n "profile_practice_ai_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_obs_title" }}</strong>{{ i18n "profile_practice_obs_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_devops_title" }}</strong>{{ i18n "profile_practice_devops_desc" }}</li>
+            </ul>
+        </div>
 
-    <section id="bio" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #a855f7;background:linear-gradient(90deg,rgba(168,85,247,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">个人介绍</h2>
-        <p style="margin:0 0 10px 0;">你好，我是升宏，一名云原生 SRE / 运维开发工程师。</p>
-        <p style="margin:0 0 10px 0;">拥有多年一线云原生 SRE 与运维开发经验，长期围绕 Kubernetes、云原生基础设施、自动化运维与平台工程开展工作。实践环境涵盖物理机、公有云、混合云，以及金融、互联网客户的私有化 AI 环境。</p>
-        <p style="margin:0 0 10px 0;">熟悉 Kubernetes 大规模集群治理、Go 运维工具与 Operator 开发、GPU 算力治理、可观测性以及 CI/CD 与 GitOps，并参与过 300+ 节点 Kubernetes 集群、大规模业务容器化迁移和 AI 模型私有化部署等项目。</p>
-        <p style="margin:0;">目前主要关注云原生基础设施、GPU / AI 基础设施与运维工程化，希望把真实项目中的实践、问题排查和工程思考沉淀下来，记录技术，也记录解决问题的方法。</p>
-    </section>
+        <hr class="profile-divider">
+
+        <section id="bio">
+            <h2>{{ i18n "profile_bio_title" }}</h2>
+            <p>{{ i18n "profile_bio_p1" }}</p>
+            <p>{{ i18n "profile_bio_p2" }}</p>
+            <p>{{ i18n "profile_bio_p3" }}</p>
+            <p>{{ i18n "profile_bio_p4" }}</p>
+        </section>
+    </aside>
 
     <section id="experience" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #14b8a6;background:linear-gradient(90deg,rgba(20,184,166,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">历往经历</h2>
+        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_exp_title" }}</h2>
 
         <div id="exp-ai-delivery" style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--header-border);">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">xxxx | AI 应用交付工程师</h3>
+            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_ai_delivery_title" }}</h3>
             <p style="margin:0 0 10px 0;">2026.01 - 2026.07</p>
-            <p style="margin:0;">负责 AI 应用在私有化环境中的部署和技术支持。根据物理机、虚拟机、公有云等不同环境设计部署方案并完成交付。负责 AI 智能体产品部署，包括服务组件、模型服务、依赖环境配置。部署 Qwen、LLaMA 等开源模型服务，使用 vLLM/TGI 进行推理环境优化。根据业务需求调整模型推理参数，包括批处理策略、缓存配置、并行部署等。部署 Embedding、OCR 等 AI 基础服务，协助完成应用集成。处理 GPU 资源配置、模型加载异常、服务调用超时等问题。</p>
+            <p style="margin:0;">{{ i18n "profile_exp_ai_delivery_desc" }}</p>
         </div>
 
         <div id="exp-sre" style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--header-border);">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">xxxx | 云原生 SRE / 运维开发工程师</h3>
+            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_sre_title" }}</h3>
             <p style="margin:0 0 10px 0;">2025.01 - 2025.08</p>
-            <p style="margin:0;">主要做 GPU 和 AI 基础设施。用 Go + NVML API + Kubernetes Event 开发 GPU 故障诊断 Operator，自动识别 XID 错误、PCIe 链路异常，实现 Pod 驱逐与节点隔离。开发轻量级 GPU 监控 Agent，采集显存、温度、功耗、PCIe 带宽等细粒度指标，对接 Prometheus。跨云资源编排方面，用 Terraform 管理 AWS EKS 与火山引擎 VKE，把新环境交付周期从天级压缩到小时级。</p>
+            <p style="margin:0;">{{ i18n "profile_exp_sre_desc" }}</p>
         </div>
 
         <div id="exp-devops">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">xxxx | 运维开发工程师（效能平台）</h3>
+            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_devops_title" }}</h3>
             <p style="margin:0 0 10px 0;">2021.03 - 2024.11</p>
-            <p style="margin:0;">主导 200+ 传统业务从物理机/虚拟机向 Kubernetes 集群的平滑迁移，集群规模 300+ 节点，容器化率达到 90%，实现零故障迁移。搭建 Calico 网络隔离、LDAP + RBAC 权限体系、Jenkins + Harbor、GitLab + ArgoCD GitOps、EFK、Prometheus、SkyWalking 等平台能力。部署从天级缩短至小时级，版本回滚从 20 分钟降至 3 分钟以内，故障定位从小时级压缩到 10 分钟内。中间件通过 Terraform 管理 MySQL MGR、Redis、Kafka，并做性能调优，Kafka 吞吐提升至原来的 3 倍，跨节点通信延迟降低 40%。也落地过金融等保三级合规。</p>
+            <p style="margin:0;">{{ i18n "profile_exp_devops_desc" }}</p>
         </div>
     </section>
 
     <section id="life" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #ec407a;background:linear-gradient(90deg,rgba(236,64,122,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">兴趣与生活</h2>
-        <p style="margin:0 0 10px 0;">做好当下的事情，不辜负自己。</p>
-        <p style="margin:0 0 10px 0;">不自视甚高，也不需要盲目自谦。所谓的权威和专业，也就那么回事。虽然我们看起来是芸芸众生相，但却是这芸芸众生相中独特的存在。</p>
-        <p style="margin:0 0 10px 0;">我们感觉到停滞，觉得无意义、无活力，是因为人除了安全感的需要外，还有着对于获得感和反馈感的需要。这两种动机都被满足时，人才会安住在一种满足中。</p>
-        <p style="margin:0 0 10px 0;">以我自己为例，23 年主要在注重自我成长，也调理好了睡眠问题，不再失眠。长期的主线任务是自我内核稳定。对于问题，注重交互、反馈和输出，是 n>n 的。不管是在老家还是现在的上海，都一样。</p>
-        <p style="margin:0 0 10px 0;">浅浅地理解到，成长是一件长期主义的事情。把眼光拉长到 3 年、5 年，以年为单位慢慢进步。别着急，一年内就想发生质的变化。聚焦和专注永远是最重要的，然后就是去具体行动落地。</p>
-        <p style="margin:0;">低谷和困境会带着我们走向另外一个完全不知道的方向。</p>
+        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_life_title" }}</h2>
+        <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p1" }}</p>
+        <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p2" }}</p>
+        <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p3" }}</p>
+        <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p4" }}</p>
+        <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p5" }}</p>
+        <p style="margin:0;">{{ i18n "profile_life_p6" }}</p>
     </section>
 
     <section id="research" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #7c4dff;background:linear-gradient(90deg,rgba(124,77,255,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">研究与实践主线</h2>
-        <p style="margin:0 0 12px 0;">长期关注点集中在以下方向：</p>
+        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_research_title" }}</h2>
+        <p style="margin:0 0 12px 0;">{{ i18n "profile_research_lead" }}</p>
 
         <ul style="margin:0 0 12px 0;padding-left:20px;">
-            <li style="margin-bottom:6px;"><strong>AI 原生基础设施</strong>：从 AI 工作负载的非确定性出发，重新审视基础设施在资源建模、调度与治理层面的设计假设。</li>
-            <li style="margin-bottom:6px;"><strong>算力治理与 GPU 虚拟化</strong>：在异构硬件环境中提升资源利用效率，研究 GPU 的共享、隔离、调度与治理机制。</li>
-            <li style="margin-bottom:6px;"><strong>云原生架构演进</strong>：关注 Kubernetes 在 AI 工作负载下的能力边界，以及平台工程与系统治理的演进方向。</li>
-            <li><strong>开源生态与标准化</strong>：推动工程可验证、设计可演进的开源协作方式，促进中国与全球社区的深度连接。</li>
+            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag1_title" }}</strong>{{ i18n "profile_research_tag1_desc" }}</li>
+            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag2_title" }}</strong>{{ i18n "profile_research_tag2_desc" }}</li>
+            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag3_title" }}</strong>{{ i18n "profile_research_tag3_desc" }}</li>
+            <li><strong>{{ i18n "profile_research_tag4_title" }}</strong>{{ i18n "profile_research_tag4_desc" }}</li>
         </ul>
 
-        <p style="margin:0;">这些方向共同指向一个核心问题：如何把算力从"稀缺硬件资源"，演进为可治理、可调度、可规模化的基础设施能力。</p>
+        <p style="margin:0;">{{ i18n "profile_research_close" }}</p>
     </section>
 
     <section id="contact" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #00bcd4;background:linear-gradient(90deg,rgba(0,188,212,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">合作与联系</h2>
-        <p style="margin:0 0 12px 0;">当前阶段，主要围绕 Dynamia（密瓜智能）及其相关开源项目，从事 GPU 虚拟化、异构算力调度与开源生态协同工作。</p>
-        <p style="margin:0 0 12px 0;">我目前仅与以下类型的议题保持长期、建设性的交流与协作：</p>
+        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_contact_title" }}</h2>
+        <p style="margin:0 0 12px 0;">{{ i18n "profile_contact_p1" }}</p>
+        <p style="margin:0 0 12px 0;">{{ i18n "profile_contact_p2" }}</p>
 
         <ul style="margin:0 0 12px 0;padding-left:20px;">
-            <li style="margin-bottom:6px;">AI 原生基础设施、算力治理与 GPU 虚拟化相关的技术与生态讨论；</li>
-            <li style="margin-bottom:6px;">CNCF / 开源项目层面的社区共建、工程实践与标准化交流；</li>
-            <li>面向中长期技术演进的研究型讨论或高质量公共分享。</li>
+            <li style="margin-bottom:6px;">{{ i18n "profile_contact_item1" }}</li>
+            <li style="margin-bottom:6px;">{{ i18n "profile_contact_item2" }}</li>
+            <li>{{ i18n "profile_contact_item3" }}</li>
         </ul>
 
-        <p style="margin:0;">如果是上述方向，欢迎邮件联系：<a href="mailto:sshrise206516@163.com">sshrise206516@163.com</a>。其他事项可能不一定回复，见谅。</p>
+        <p style="margin:0;">{{ i18n "profile_contact_close" }}</p>
     </section>
 
 </article>
 
 <nav style="position:fixed;right:32px;top:100px;width:110px;font-size:0.82rem;line-height:1.9;">
     <ul style="list-style:none;padding:0;margin:0;">
-        <li><a href="#about-blog" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#f97316;margin-right:6px;vertical-align:middle;"></span>关于 Blog</a></li>
-        <li><a href="#bio" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#a855f7;margin-right:6px;vertical-align:middle;"></span>个人介绍</a></li>
+        <li><a href="#bio" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#a855f7;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_bio" }}</a></li>
         <li>
-            <a href="#experience" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>历往经历</a>
+            <a href="#experience" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_experience" }}</a>
             <ul style="list-style:none;padding-left:14px;margin:2px 0 0 0;font-size:0.75rem;line-height:1.75;">
-                <li><a href="#exp-ai-delivery" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>AI 应用交付</a></li>
-                <li><a href="#exp-sre" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>云原生 SRE</a></li>
-                <li><a href="#exp-devops" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>运维开发</a></li>
+                <li><a href="#exp-ai-delivery" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_exp_ai" }}</a></li>
+                <li><a href="#exp-sre" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_exp_sre" }}</a></li>
+                <li><a href="#exp-devops" style="color:var(--secondary);text-decoration:none;display:block;padding:1px 0;"><span style="display:inline-block;width:4px;height:1px;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_exp_devops" }}</a></li>
             </ul>
         </li>
-        <li><a href="#life" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#ec407a;margin-right:6px;vertical-align:middle;"></span>兴趣与生活</a></li>
-        <li><a href="#research" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#7c4dff;margin-right:6px;vertical-align:middle;"></span>研究主线</a></li>
-        <li><a href="#contact" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00bcd4;margin-right:6px;vertical-align:middle;"></span>合作与联系</a></li>
+        <li><a href="#life" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#ec407a;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_life" }}</a></li>
+        <li><a href="#research" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#7c4dff;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_research" }}</a></li>
+        <li><a href="#contact" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#00bcd4;margin-right:6px;vertical-align:middle;"></span>{{ i18n "profile_nav_contact" }}</a></li>
     </ul>
 </nav>
 

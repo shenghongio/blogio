@@ -23,13 +23,7 @@
     <div class="site-header-inner">
         <div class="brand">
             <img class="brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="32" height="32" loading="eager">
-            <span class="brand-name">Real ShengHong  Allegedly</span>
-            <span class="brand-tag">
-    <span class="bw bw--left" style="--i:0">AI</span>
-    <span class="bw bw--bottom" style="--i:1">Native</span>
-    <span class="bw bw--right" style="--i:2">Infrastructure</span>
-    <span class="bw bw--top" style="--i:3">Engineer</span>
-</span>
+            <span class="brand-name">ShengHong<span class="brand-handle">@kraken</span></span>
         </div>
 
         <nav class="main-nav" aria-label="{{ $mainNavigationLabel }}">
@@ -161,15 +155,10 @@
                             </div>
                         </div>
                         {{- end -}}
-                        {{- range $catName := slice "语言与工具" "系统与网络" "安全" "SRE 体系" -}}
-                        {{- $catKey := replace (replace $catName " " "_") "/" "_" -}}
-                        {{- $i18nKey := printf "sre_%s_title" $catKey -}}
-                        {{- $catTitle := i18n $i18nKey | default $catName -}}
-                        {{- $catIcon := "default" -}}
-                        {{- if eq $catName "语言与工具" -}}{{- $catIcon = "ai" -}}{{- end -}}
-                        {{- if eq $catName "系统与网络" -}}{{- $catIcon = "cn" -}}{{- end -}}
-                        {{- if eq $catName "安全" -}}{{- $catIcon = "shield" -}}{{- end -}}
-                        {{- if eq $catName "SRE 体系" -}}{{- $catIcon = "sre" -}}{{- end -}}
+                        {{- range $catInfo := slice (dict "name" "语言与工具" "i18n" "sre_lang_tools_title" "icon" "ai") (dict "name" "系统与网络" "i18n" "sre_sys_net_title" "icon" "cn") (dict "name" "安全" "i18n" "sre_security_title" "icon" "shield") (dict "name" "SRE 体系" "i18n" "sre_sre_system_title" "icon" "sre") -}}
+                        {{- $catName := $catInfo.name -}}
+                        {{- $catTitle := i18n $catInfo.i18n -}}
+                        {{- $catIcon := $catInfo.icon -}}
                         <div class="blog-column">
                             <span class="blog-column-header blog-column-header--{{ $catIcon }}">
                                 <svg class="tooltip-icon tooltip-icon--{{ $catIcon }}" viewBox="0 0 24 24" aria-hidden="true">
@@ -194,8 +183,8 @@
                                 {{- if eq $catName "SRE 体系" -}}
                                 <a href="https://sre.google/books/" class="blog-column-post" target="_blank" rel="noopener">
                                     {{ partial "icon.html" "book" }}
-                                    <span class="blog-column-post-title">SRE BOOK</span>
-                                    <span class="blog-column-post-desc">Google SRE 官方资源</span>
+                                    <span class="blog-column-post-title">{{ i18n "sre_book_title" }}</span>
+                                    <span class="blog-column-post-desc">{{ i18n "sre_book_desc" }}</span>
                                 </a>
                                 {{- end -}}
                                 {{- range where site.Data.sre_links "category" $catName -}}
@@ -268,15 +257,10 @@
                 {{ if eq .Params.icon "compass" }}
                 <span class="blog-tooltip" role="tooltip">
                     <div class="blog-columns">
-                        {{- range $catName := slice "语言与工具" "系统与网络" "安全" "SRE 体系" -}}
-                        {{- $catKey := replace (replace $catName " " "_") "/" "_" -}}
-                        {{- $i18nKey := printf "sre_%s_title" $catKey -}}
-                        {{- $catTitle := i18n $i18nKey | default $catName -}}
-                        {{- $catIcon := "default" -}}
-                        {{- if eq $catName "语言与工具" -}}{{- $catIcon = "ai" -}}{{- end -}}
-                        {{- if eq $catName "系统与网络" -}}{{- $catIcon = "cn" -}}{{- end -}}
-                        {{- if eq $catName "安全" -}}{{- $catIcon = "shield" -}}{{- end -}}
-                        {{- if eq $catName "SRE 体系" -}}{{- $catIcon = "sre" -}}{{- end -}}
+                        {{- range $catInfo := slice (dict "name" "语言与工具" "i18n" "sre_lang_tools_title" "icon" "ai") (dict "name" "系统与网络" "i18n" "sre_sys_net_title" "icon" "cn") (dict "name" "安全" "i18n" "sre_security_title" "icon" "shield") (dict "name" "SRE 体系" "i18n" "sre_sre_system_title" "icon" "sre") -}}
+                        {{- $catName := $catInfo.name -}}
+                        {{- $catTitle := i18n $catInfo.i18n -}}
+                        {{- $catIcon := $catInfo.icon -}}
                         <div class="blog-column">
                             <span class="blog-column-header blog-column-header--{{ $catIcon }}">
                                 <svg class="tooltip-icon tooltip-icon--{{ $catIcon }}" viewBox="0 0 24 24" aria-hidden="true">
@@ -301,8 +285,8 @@
                                 {{- if eq $catName "SRE 体系" -}}
                                 <a href="https://sre.google/books/" class="blog-column-post" target="_blank" rel="noopener">
                                     {{ partial "icon.html" "book" }}
-                                    <span class="blog-column-post-title">SRE BOOK</span>
-                                    <span class="blog-column-post-desc">Google SRE 官方资源</span>
+                                    <span class="blog-column-post-title">{{ i18n "sre_book_title" }}</span>
+                                    <span class="blog-column-post-desc">{{ i18n "sre_book_desc" }}</span>
                                 </a>
                                 {{- end -}}
                                 {{- range where site.Data.sre_links "category" $catName -}}
@@ -568,32 +552,4 @@
             });
         }
     })();
-</script>
-
-<!-- Bounce-word cycle: each word pops from a different direction, staggered, every 3 s -->
-<script>
-(function(){
-    var words = document.querySelectorAll('.bw');
-    if (!words.length) return;
-
-    var dirs = ['left', 'bottom', 'right', 'top'];
-
-    function fire() {
-        for (var i = 0; i < words.length; i++) {
-            var w = words[i];
-            w.className = w.className.replace(/\bbw--\S+/g, '');
-            w.style.animation = 'none';
-            void w.offsetWidth;
-            var dir = dirs[i % dirs.length];
-            w.classList.add('bw--' + dir);
-            var delay = i * 0.35;
-            w.style.animation =
-                'bw-in-' + dir + ' 0.7s cubic-bezier(0.34,1.56,0.64,1) ' +
-                delay + 's both';
-        }
-    }
-
-    fire();
-    setInterval(fire, 3000);
-})();
 </script>

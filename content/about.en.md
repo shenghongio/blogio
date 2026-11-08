@@ -1,5 +1,6 @@
 ---
 title: "About"
+layout: about
 date: 2026-09-22
 draft: false
 ---
