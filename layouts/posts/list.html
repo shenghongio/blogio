@@ -5,7 +5,7 @@
 
     <div class="category-post-grid">
         {{ range .Pages }}
-        <article class="category-post-card{{ with .Params.categories }} card-cat-{{ index . 0 }}{{ end }}">
+        <article class="category-post-card{{ with .Params.topics }} card-cat-{{ index . 0 }}{{ end }}">
             <h2 class="category-post-title">
                 <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             </h2>
@@ -19,7 +19,7 @@
                     </svg>
                     {{ .Date.Format "2006-01-02" }}
                 </time>
-                {{ with index .Params.categories 0 }}
+                {{ with index .Params.topics 0 }}
                 <span class="card-meta-dot" aria-hidden="true">·</span>
                 {{ with site.GetPage (printf "/categories/%s" .) }}
                 <a href="{{ .RelPermalink }}" class="card-category">{{ .Title }}</a>

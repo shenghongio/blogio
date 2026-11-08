@@ -123,7 +123,7 @@
                 {{ if eq .Params.icon "book" }}
                 <span class="blog-tooltip" role="tooltip">
                     <div class="blog-columns">
-                        {{- range $catName, $_ := site.Taxonomies.categories -}}
+                        {{- range $catName := slice "ai-engineering" "cloud-native" -}}
                         {{- $catKey := replace $catName "-" "_" -}}
                         {{- $catTitle := i18n (printf "category_%s_title" $catKey) | default (humanize $catName) -}}
                         {{- $catIcon := "default" -}}

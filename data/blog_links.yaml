@@ -105,11 +105,3 @@
   category: "other"
 
 - title:
-    en: "Neural Network Diagram"
-    zh: "神经网络图"
-  description:
-    en: ""
-    zh: ""
-  icon: "git-branch"
-  url: "/categories/"
-  category: "other"

@@ -7,7 +7,7 @@ tags:
   - Kubernetes
   - Service Mesh
   - Envoy
-categories:
+topics:
   - cloud-native
 series: envoy-basics
 ---

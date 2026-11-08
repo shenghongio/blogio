@@ -6,7 +6,7 @@ description: "我的技术博客正式开始。"
 tags:
   - Hugo
   - Infrastructure
-categories:
+topics:
   - ai-engineering
   - cloud-native
 series: ai-agent-building-guide
