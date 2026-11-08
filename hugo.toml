@@ -28,13 +28,6 @@ enableGitInfo = true
           icon = "book"
 
       [[languages.en.menu.main]]
-        name = "Blog"
-        url = "/posts/"
-        weight = 22
-        [languages.en.menu.main.params]
-          icon = "search"
-
-      [[languages.en.menu.main]]
         name = "About"
         url = "/profile/"
         weight = 50
@@ -55,18 +48,11 @@ enableGitInfo = true
           icon = "home"
 
       [[languages.zh.menu.main]]
-        name = "Stack"
+        name = "技术栈"
         url = "/stack/"
         weight = 20
         [languages.zh.menu.main.params]
           icon = "book"
-
-      [[languages.zh.menu.main]]
-        name = "博客"
-        url = "/posts/"
-        weight = 22
-        [languages.zh.menu.main.params]
-          icon = "search"
 
       [[languages.zh.menu.main]]
         name = "关于"

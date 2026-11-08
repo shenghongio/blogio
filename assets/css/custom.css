@@ -47,13 +47,17 @@ html[data-theme="dark"] body {
 }
 
 html,
-body,线·
+body,
 .site-header,
 main,
 .home-page,
 .section,
 .site-footer {
     background-color: var(--page-bg) !important;
+}
+
+html, body {
+    overflow-x: hidden;
 }
 
 html[data-theme="dark"] {
@@ -83,6 +87,7 @@ html:not([data-theme="dark"]) {
     max-width: 1800px !important;
     margin: 0 auto !important;
     padding: 0 !important;
+    min-height: auto !important;
 }
 /* 神经网络关系图页面：取消 .main 的宽度限制，实现全屏效果 */
 .main:has(.category-neural-page) {
@@ -99,9 +104,31 @@ html:not([data-theme="dark"]) {
 
 /* Shift home page content left */
 main.home-page {
-    max-width: none !important;
+    max-width: 1440px !important;
     margin: 0 auto !important;
     padding: 0 48px !important;
+    outline: 2px solid red !important;
+}
+
+.home-page .section {
+    outline: 2px dashed blue !important;
+}
+
+.home-page .section-header {
+    outline: 2px solid green !important;
+    background: rgba(0, 255, 0, 0.08) !important;
+}
+
+.home-page .perspectives-intro,
+.home-page .focus-intro,
+.home-page .ecosystem-intro {
+    outline: 2px dashed orange !important;
+}
+
+.home-page .perspectives-cards,
+.home-page .focus-grid,
+.home-page .ecosystem-diagram {
+    outline: 2px dashed purple !important;
 }
 
 /* Prevent .section from re-centering inside the already-centered .main */
@@ -111,15 +138,19 @@ main.home-page {
 }
 
 .home-page .section.perspectives {
-    margin-top: 60px !important;
+    margin-top: 80px !important;
 }
 
 /* Reset inner containers to align with brand */
 .home-page .hero-content,
-.home-page .section-header,
 .home-page .section > :first-child {
     padding-left: 0;
     margin-left: 0;
+}
+
+.home-page .section-header {
+    padding-left: 0;
+    margin-left: 90px;
 }
 
 /* ── Hero Eyebrow (AI-NATIVE INFRASTRUCTURE ENGINEER) ── */
@@ -450,7 +481,7 @@ html[data-theme="dark"] .site-header--home {
     position: relative;
     max-width: none;
     margin: 0;
-    padding: 16px 24px 16px 24px;
+    padding: 16px 164px 16px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -459,7 +490,7 @@ html[data-theme="dark"] .site-header--home {
 
 .brand-logo {
     position: absolute;
-    left: 154px;
+    left: 234px;
     top: 50%;
     transform: translateY(-50%);
     width: 32px;
@@ -485,7 +516,7 @@ html[data-theme="dark"] .site-header--home {
 
 .brand-name {
     position: absolute;
-    left: 210px;
+    left: 290px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 22px;
@@ -494,13 +525,20 @@ html[data-theme="dark"] .site-header--home {
     white-space: nowrap;
 }
 
+.brand-handle {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--header-muted);
+    margin-left: 4px;
+}
+
 .main-nav {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 24px;
     flex: 1;
-    padding-left: 48px;
+    padding-left: 28px;
 }
 
 .nav-item {
@@ -2568,7 +2606,7 @@ html[data-theme="dark"] .series-chapter {
 /* ── Perspectives ── */
 .section.perspectives {
     padding: 48px 32px 32px;
-    margin-top: 60px;
+    margin-top: 24px;
     overflow: visible;
 }
 
@@ -2584,7 +2622,6 @@ html[data-theme="dark"] .series-chapter {
 .perspectives .section-header {
     display: grid;
     gap: 10px;
-    margin-left: 100px;
 }
 
 .perspectives .section-header h2 {
@@ -2598,33 +2635,36 @@ html[data-theme="dark"] .series-chapter {
 
 .perspectives-intro {
     font-size: 15px;
-    font-weight: 400;
-    line-height: 1.8;
+    font-weight: 600;
+    line-height: 1.85;
     color: var(--header-muted);
-    margin: 20px 0 28px 0;
+    margin: 40px 0 28px 0;
     text-indent: 2em;
-    max-width: calc(100% - 650px - 8px - 185px);
+    max-width: 1000px;
 }
 
 .perspectives-layout {
     display: grid;
-    grid-template-columns: 1fr 650px;
+    grid-template-columns: 1fr;
     gap: 8px;
     align-items: stretch;
+    justify-items: center;
 }
 
 .perspectives-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    max-width: 1200px;
+    width: 100%;
 }
 
 .perspective-card {
     position: relative;
-    padding: 12px 14px 0;
+    padding: 14px 16px;
     margin: 0;
-    justify-self: start;
-    width: calc(100% - 140px) !important;
+    justify-self: stretch;
+    width: 100% !important;
     min-width: 0;
     border: 1px solid var(--header-border);
     border-radius: 16px;
@@ -2632,11 +2672,12 @@ html[data-theme="dark"] .series-chapter {
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     overflow: hidden;
     grid-column: span 1;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0 10px;
-    min-height: 120px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    row-gap: 4px;
+    align-items: start;
 }
 
 
@@ -2657,28 +2698,28 @@ html[data-theme="dark"] .series-chapter {
 
 .perspective-card-index {
     display: inline-block;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     letter-spacing: 0.06em;
     padding: 3px 10px;
     border-radius: 14px;
     margin: 0;
-    vertical-align: middle;
-    flex-shrink: 0;
     line-height: 1;
+    grid-column: 1;
+    grid-row: 1 / 3;
+    align-self: center;
 }
 
 .perspective-card h3 {
-    display: inline-block;
+    display: block;
     font-size: 16px;
     font-weight: 600;
     letter-spacing: 0;
     color: var(--header-text);
     margin: 0;
     line-height: 1.4;
-    vertical-align: middle;
-    flex: 1 1 auto;
-    min-width: 0;
+    grid-column: 2;
+    grid-row: 1;
 }
 
 .perspective-card p {
@@ -2687,15 +2728,15 @@ html[data-theme="dark"] .series-chapter {
     line-height: 1.7;
     color: var(--header-muted);
     margin: 0;
-    flex-basis: 100%;
-    margin-top: auto;
+    grid-column: 2;
+    grid-row: 2;
 }
 
 .perspective-card--purple::before { background: linear-gradient(90deg, #7c4dff, #b388ff); }
 .perspective-card--purple .perspective-card-index { color: #7c4dff; background: rgba(124, 77, 255, 0.10); }
 .perspective-card--purple:hover { border-color: rgba(124, 77, 255, 0.4); }
 
-.perspective-card--cyan { position: relative; left: -45px; }
+.perspective-card--cyan { }
 .perspective-card--cyan::before { background: linear-gradient(90deg, #00bcd4, #4dd0e1); }
 .perspective-card--cyan .perspective-card-index { color: #00acc1; background: rgba(0, 188, 212, 0.10); }
 .perspective-card--cyan:hover { border-color: rgba(0, 188, 212, 0.4); }
@@ -2704,7 +2745,7 @@ html[data-theme="dark"] .series-chapter {
 .perspective-card--amber .perspective-card-index { color: #f57c00; background: rgba(255, 167, 38, 0.12); }
 .perspective-card--amber:hover { border-color: rgba(255, 167, 38, 0.4); }
 
-.perspective-card--green { position: relative; left: -45px; }
+.perspective-card--green { }
 .perspective-card--green::before { background: linear-gradient(90deg, #66bb6a, #a5d6a7); }
 .perspective-card--green .perspective-card-index { color: #43a047; background: rgba(102, 187, 106, 0.10); }
 .perspective-card--green:hover { border-color: rgba(102, 187, 106, 0.4); }
@@ -2713,7 +2754,7 @@ html[data-theme="dark"] .series-chapter {
 .perspective-card--pink .perspective-card-index { color: #d81b60; background: rgba(236, 64, 122, 0.10); }
 .perspective-card--pink:hover { border-color: rgba(236, 64, 122, 0.4); }
 
-.perspective-card--indigo { position: relative; left: -45px; }
+.perspective-card--indigo { }
 .perspective-card--indigo::before { background: linear-gradient(90deg, #5c6bc0, #9fa8da); }
 .perspective-card--indigo .perspective-card-index { color: #3949ab; background: rgba(92, 107, 192, 0.10); }
 .perspective-card--indigo:hover { border-color: rgba(92, 107, 192, 0.4); }
@@ -2933,7 +2974,7 @@ html[data-theme="dark"] .profile-link--explore svg {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 24px 32px 40px;
+    padding: 24px 32px 24px;
     max-width: none;
     margin: 0;
 }
@@ -2941,8 +2982,8 @@ html[data-theme="dark"] .profile-link--explore svg {
 .focus-section-header {
     display: grid;
     gap: 10px;
-    text-align: center;
-    justify-items: center;
+    text-align: left;
+    justify-items: start;
 }
 
 .focus-section-header h2 {
@@ -2960,6 +3001,7 @@ html[data-theme="dark"] .profile-link--explore svg {
     line-height: 1.85;
     color: var(--header-muted);
     margin: 10px 0;
+    text-indent: 2em;
     max-width: 1000px;
 }
 
@@ -2967,6 +3009,7 @@ html[data-theme="dark"] .profile-link--explore svg {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
+    margin-top: 24px;
 }
 
 .focus-card {
@@ -3038,62 +3081,14 @@ html[data-theme="dark"] .profile-link--explore svg {
 
 /* ── Responsive ── */
 @media (max-width: 1280px) {
-    main.home-page {
-        margin: 0 80px !important;
-    }
-
-    .section.perspectives {
-        padding-left: 52px;
-    }
-
-    .perspectives-intro {
-        max-width: calc(100% - 320px - 8px - 185px);
-    }
-
-    .perspectives-layout {
-        grid-template-columns: 1fr 320px;
-        gap: 10px;
-    }
-
-    .perspective-card {
-        width: 100% !important;
-    }
-
-    .profile-card {
-        transform: none;
-    }
-
-    .profile-avatar {
-        width: 100px;
-        height: 100px;
-    }
-
-    .profile-intro {
-        font-size: 13px;
-    }
-
-    .profile-practice li {
-        font-size: 12px;
-    }
-
-    .profile-tag {
-        font-size: 10px;
-        padding: 2px 8px;
-    }
-
-    .profile-link {
-        font-size: 12px;
-        padding: 7px 14px;
+    .perspectives-cards {
+        max-width: 1000px;
     }
 }
 
 @media (max-width: 900px) {
-    main.home-page {
-        margin: 0 100px !important;
-    }
-
-    .perspectives-intro {
-        max-width: none;
+    .perspectives-cards {
+        grid-template-columns: 1fr;
     }
 
     .section.perspectives {
@@ -3104,56 +3099,6 @@ html[data-theme="dark"] .profile-link--explore svg {
 
     .perspectives {
         padding: 36px 24px 24px;
-    }
-
-    .perspectives-left {
-        margin-left: 0 !important;
-    }
-
-    .perspectives .section-header {
-        margin-left: 0 !important;
-    }
-
-    .perspectives-layout {
-        grid-template-columns: 1fr;
-    }
-
-    .perspective-card {
-        width: 100% !important;
-    }
-
-    .perspectives-row {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: 28px;
-    }
-
-    .profile-card {
-        order: -1;
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        transform: none;
-    }
-
-    .profile-avatar {
-        width: 100px;
-        height: 100px;
-    }
-
-    .profile-intro {
-        font-size: 12px;
-    }
-
-    .profile-practice li {
-        font-size: 11px;
-    }
-
-    .profile-links {
-        grid-column: 1;
-        align-self: auto;
-        margin-left: 0;
-        margin-right: 0;
     }
 
     .focus-areas {
@@ -4065,14 +4010,15 @@ html[data-theme="dark"] .profile-detail-section--alt {
     font-weight: 400;
     line-height: 1.8;
     color: var(--header-muted);
-    margin: 0 auto 32px;
-    max-width: 900px;
-    text-align: center;
+    margin: 0 0 32px 0;
+    max-width: none;
+    text-align: left;
 }
 
-.ecosystem-header {
+.home-page .section.ecosystem .ecosystem-header {
     margin-bottom: 16px;
-    text-align: center;
+    margin-left: 100px;
+    text-align: left;
 }
 
 .ecosystem-header h2 {
