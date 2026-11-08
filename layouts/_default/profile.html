@@ -4,19 +4,29 @@
 <article class="profile-detail" style="max-width:1400px;margin:0 auto;font-size:1rem;line-height:1.8;display:flex;flex-direction:column;gap:20px;">
 <style>.profile-detail section{scroll-margin-top:80px;}</style>
 
-    <section id="about-blog" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #f97316;background:linear-gradient(90deg,rgba(249,115,22,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">关于 Blog</h2>
-        <p style="margin:0 0 10px 0;">这里主要记录我在云原生、Kubernetes、GPU 虚拟化、异构算力调度、AI 基础设施和运维开发上的实践与思考。会有排障记录、源码阅读、工具开发、架构拆解，也会放一些开源项目和社区协作的进展。</p>
-        <p style="margin:0;">不追求日更，尽量把问题、过程和结论写清楚，能复现、能落地最好。</p>
-    </section>
+    <aside class="profile-card profile-card--strip">
+        <div class="profile-top">
+            <div class="profile-avatar">
+                <img src="{{ "personal_photo.png" | relURL }}" alt="Profile" width="200" height="200" loading="eager">
+            </div>
+            <ul class="profile-practice">
+                <li><strong>{{ i18n "profile_practice_cloud_title" }}</strong>{{ i18n "profile_practice_cloud_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_ai_title" }}</strong>{{ i18n "profile_practice_ai_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_obs_title" }}</strong>{{ i18n "profile_practice_obs_desc" }}</li>
+                <li><strong>{{ i18n "profile_practice_devops_title" }}</strong>{{ i18n "profile_practice_devops_desc" }}</li>
+            </ul>
+        </div>
 
-    <section id="bio" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #a855f7;background:linear-gradient(90deg,rgba(168,85,247,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">个人介绍</h2>
-        <p style="margin:0 0 10px 0;">你好，我是升宏，一名云原生 SRE / 运维开发工程师。</p>
-        <p style="margin:0 0 10px 0;">拥有多年一线云原生 SRE 与运维开发经验，长期围绕 Kubernetes、云原生基础设施、自动化运维与平台工程开展工作。实践环境涵盖物理机、公有云、混合云，以及金融、互联网客户的私有化 AI 环境。</p>
-        <p style="margin:0 0 10px 0;">熟悉 Kubernetes 大规模集群治理、Go 运维工具与 Operator 开发、GPU 算力治理、可观测性以及 CI/CD 与 GitOps，并参与过 300+ 节点 Kubernetes 集群、大规模业务容器化迁移和 AI 模型私有化部署等项目。</p>
-        <p style="margin:0;">目前主要关注云原生基础设施、GPU / AI 基础设施与运维工程化，希望把真实项目中的实践、问题排查和工程思考沉淀下来，记录技术，也记录解决问题的方法。</p>
-    </section>
+        <hr class="profile-divider">
+
+        <section id="bio">
+            <h2>{{ i18n "profile_bio_title" }}</h2>
+            <p>{{ i18n "profile_bio_p1" }}</p>
+            <p>{{ i18n "profile_bio_p2" }}</p>
+            <p>{{ i18n "profile_bio_p3" }}</p>
+            <p>{{ i18n "profile_bio_p4" }}</p>
+        </section>
+    </aside>
 
     <section id="experience" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #14b8a6;background:linear-gradient(90deg,rgba(20,184,166,0.08) 0%,transparent 40%);">
         <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">历往经历</h2>
@@ -82,7 +92,6 @@
 
 <nav style="position:fixed;right:32px;top:100px;width:110px;font-size:0.82rem;line-height:1.9;">
     <ul style="list-style:none;padding:0;margin:0;">
-        <li><a href="#about-blog" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#f97316;margin-right:6px;vertical-align:middle;"></span>关于 Blog</a></li>
         <li><a href="#bio" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#a855f7;margin-right:6px;vertical-align:middle;"></span>个人介绍</a></li>
         <li>
             <a href="#experience" style="color:var(--secondary);text-decoration:none;display:block;padding:3px 0;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14b8a6;margin-right:6px;vertical-align:middle;"></span>历往经历</a>

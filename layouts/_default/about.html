@@ -1,0 +1,27 @@
+{{- define "main" }}
+
+<aside class="profile-card profile-card--strip">
+    <div class="profile-top">
+        <div class="profile-avatar">
+            <img src="{{ "personal_photo.png" | relURL }}" alt="Profile" width="200" height="200" loading="eager">
+        </div>
+        <ul class="profile-practice">
+            <li><strong>{{ i18n "profile_practice_cloud_title" }}</strong>{{ i18n "profile_practice_cloud_desc" }}</li>
+            <li><strong>{{ i18n "profile_practice_ai_title" }}</strong>{{ i18n "profile_practice_ai_desc" }}</li>
+            <li><strong>{{ i18n "profile_practice_obs_title" }}</strong>{{ i18n "profile_practice_obs_desc" }}</li>
+            <li><strong>{{ i18n "profile_practice_devops_title" }}</strong>{{ i18n "profile_practice_devops_desc" }}</li>
+        </ul>
+    </div>
+
+    <hr class="profile-divider">
+
+    <section id="bio">
+        <h2>{{ i18n "profile_bio_title" }}</h2>
+        <p>{{ i18n "profile_bio_p1" }}</p>
+        <p>{{ i18n "profile_bio_p2" }}</p>
+        <p>{{ i18n "profile_bio_p3" }}</p>
+        <p>{{ i18n "profile_bio_p4" }}</p>
+    </section>
+</aside>
+
+{{- end }}
