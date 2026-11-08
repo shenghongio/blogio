@@ -1,9 +1,7 @@
 # Blog tooltip Layer 3 links
-# Hierarchy: category → series → articles
-# category must match a taxonomy term name (e.g. "ai-engineering").
-# url is the series link (e.g. category page); posts are nested articles.
-# title and description support zh/en keys for bilingual display.
-# icon: per-item SVG icon name (cpu, grid, server, book-open, share-2, box, shield, layers, globe, book, compass)
+# Hierarchy: category -> series -> articles
+# title/description support zh/en keys, icon references partial/icon.html
+
 - title:
     en: "AI Agent Building Guide"
     zh: "AI 智能体构建指南"
@@ -61,37 +59,37 @@
     en: ""
     zh: ""
   icon: "box"
-  url: "/posts/"
+  url: "/series/kubernetes-tutorial/"
   category: "cloud-native"
 
 - title:
-    en: "Istio Basics"
-    zh: "Istio 基础教程"
+    en: "Istio Tutorial"
+    zh: "Istio 教程"
   description:
     en: ""
     zh: ""
   icon: "shield"
-  url: "/posts/"
+  url: "/series/istio-basics/"
   category: "cloud-native"
 
 - title:
-    en: "Cloud Native Patterns"
-    zh: "云原生模式"
-  description:
-    en: ""
-    zh: ""
-  icon: "layers"
-  url: "/posts/"
-  category: "cloud-native"
-
-- title:
-    en: "Envoy Basics"
-    zh: "Envoy 基础教程"
+    en: "Envoy Tutorial"
+    zh: "Envoy 教程"
   description:
     en: ""
     zh: ""
   icon: "globe"
-  url: "/posts/"
+  url: "/series/envoy-basics/"
+  category: "cloud-native"
+
+- title:
+    en: "Notes & SOP"
+    zh: "随笔 & SOP"
+  description:
+    en: ""
+    zh: ""
+  icon: "book-open"
+  url: "/series/cloud-native-notes/"
   category: "cloud-native"
 
 - title:
@@ -103,5 +101,3 @@
   icon: "compass"
   url: "/posts/"
   category: "other"
-
-- title:
