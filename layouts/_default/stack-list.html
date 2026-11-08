@@ -1,5 +1,144 @@
 {{ define "main" }}
 {{- $currentLang := site.Language.Lang -}}
+
+{{- /* ── 神经图数据层 ── */ -}}
+{{- $catNames := slice "ai-engineering" "cloud-native" -}}
+{{- $colorGroups := slice "1" "2" "3" "4" "5" "6" "7" "8" -}}
+
+{{- $posts := where .Site.RegularPages "Section" "posts" -}}
+{{- $catPages := dict -}}
+{{- range $catNames -}}
+  {{- $c := . -}}
+  {{- $pages := slice -}}
+  {{- range $posts -}}
+    {{- if in .Params.topics $c -}}
+      {{- $pages = $pages | append . -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $catPages = $catPages | merge (dict $c $pages) -}}
+{{- end -}}
+
+{{- $nodes := slice -}}
+{{- range $idx, $name := $catNames -}}
+  {{- $descKey := replace $name "-" "_" | printf "category_%s_desc" -}}
+  {{- $desc := i18n $descKey | default "" -}}
+  {{- $labelKey := replace $name "-" "_" | printf "category_%s_title" -}}
+  {{- $i18nLabel := i18n $labelKey | default (humanize $name) -}}
+  {{- $pages := index $catPages $name -}}
+  {{- $count := len $pages -}}
+  {{- $node := dict
+    "id"    $name
+    "label" $i18nLabel
+    "desc"  $desc
+    "weight" (add $count 4)
+    "group" (index $colorGroups $idx)
+    "url"   "#"
+    "count" $count
+  -}}
+  {{- $nodes = $nodes | append $node -}}
+{{- end -}}
+
+{{- $links := slice -}}
+{{- range $i, $nameI := $catNames -}}
+  {{- range $j, $nameJ := $catNames -}}
+    {{- if gt $j $i -}}
+      {{- $pagesI := index $catPages $nameI -}}
+      {{- $pagesJ := index $catPages $nameJ -}}
+      {{- $overlap := 0 -}}
+      {{- range $pagesI -}}
+        {{- if in $pagesJ . -}}
+          {{- $overlap = add $overlap 1 -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if gt $overlap 0 -}}
+        {{- $links = $links | append (dict "source" $nameI "target" $nameJ "value" $overlap) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $centerNode := dict
+    "id"    "ai-infra"
+    "label" "AI Infra"
+    "group" "center"
+    "weight" 24
+    "url"   (.Site.Home.RelPermalink)
+    "count" 0 "desc" ""
+-}}
+{{- $nodes = append $centerNode $nodes -}}
+
+{{- range $catNames -}}
+  {{- $links = $links | append (dict "source" "ai-infra" "target" . "value" 2) -}}
+{{- end -}}
+
+{{- $titleNodes := slice -}}
+{{- range site.Data.blog_links -}}
+  {{- $isSeries := strings.HasPrefix .url "/series/" -}}
+  {{- $slug := "" -}}
+  {{- if $isSeries -}}
+    {{- $slug = .url | strings.TrimPrefix "/series/" | strings.TrimSuffix "/" -}}
+  {{- else -}}
+    {{- $slug = (index .title "en") | lower | replace " " "-" -}}
+  {{- end -}}
+  {{- $nodeId := printf "title-%s" $slug -}}
+  {{- $titleNodes = $titleNodes | append (dict
+      "id"       $nodeId
+      "label"    (index .title "en")
+      "labelZh"  (index .title "zh")
+      "group"    "title"
+      "weight"   6
+      "url"      .url
+      "count"    0
+      "desc"     ""
+      "category" .category
+      "slug"     $slug
+  ) -}}
+{{- end -}}
+
+{{- range $titleNodes -}}
+  {{- $nodes = $nodes | append . -}}
+{{- end -}}
+
+{{- range $titleNodes -}}
+  {{- $links = $links | append (dict "source" .category "target" .id "value" 1) -}}
+{{- end -}}
+
+{{- $postNodes := slice -}}
+{{- range $posts -}}
+  {{- $postSeries := .Params.series | default "" -}}
+  {{- $postCats := .Params.topics | default slice -}}
+  {{- $postNodes = $postNodes | append (dict
+      "id"         .RelPermalink
+      "label"      .Title
+      "labelZh"    .Title
+      "group"      "post"
+      "weight"     3
+      "url"        .RelPermalink
+      "count"      0
+      "desc"       (.Description | default "")
+      "series"     $postSeries
+      "categories" $postCats
+  ) -}}
+{{- end -}}
+
+{{- range $postNodes -}}
+  {{- $nodes = $nodes | append . -}}
+{{- end -}}
+
+{{- range $pn := $postNodes -}}
+  {{- $ps := $pn.series -}}
+  {{- if $ps -}}
+    {{- range $tn := $titleNodes -}}
+      {{- if eq $tn.slug $ps -}}
+        {{- $links = $links | append (dict "source" $tn.id "target" $pn.id "value" 1) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $nodesJSON := $nodes | jsonify -}}
+{{- $linksJSON := $links | jsonify -}}
+
 <article class="post-single">
   <header class="post-header">
     <h1 class="post-title">{{ .Title }}</h1>
@@ -9,7 +148,8 @@
     {{ .Content }}
     <section class="stack-columns">
       <div class="blog-columns">
-        {{- range $catName, $_ := site.Taxonomies.categories -}}
+        {{- range slice "ai-engineering" "cloud-native" -}}
+        {{- $catName := . -}}
         {{- $catKey := replace $catName "-" "_" -}}
         {{- $catTitle := i18n (printf "category_%s_title" $catKey) | default (humanize $catName) -}}
         {{- $catIcon := "default" -}}
@@ -80,4 +220,449 @@
     </section>
   </div>
 </article>
+
+<section class="stack-neural-wrap">
+  <header class="stack-neural-header">
+    <h2 class="stack-neural-title">{{ i18n "stack_neural_title" | default "Knowledge Network" }}</h2>
+    <p class="stack-neural-desc">{{ i18n "stack_neural_desc" | default "An interactive map of categories, series, and posts — hover to highlight connections, scroll to zoom." }}</p>
+  </header>
+
+  <main class="category-neural-page">
+    <div class="neural-canvas" id="neuralCanvas">
+      <svg id="neuralSvg"></svg>
+    </div>
+    <aside class="neural-sidebar" id="neuralSidebar">
+      <div class="sidebar-header">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"></path>
+          <path d="M5 19.5A2.5 2.5 0 0 1 7.5 17H20"></path>
+          <path d="M9 6h7M9 10h5"></path>
+        </svg>
+        <strong>{{ i18n "blog_hint_title" }}</strong>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-list" id="sidebarList"></div>
+    </aside>
+    <div class="neural-legend" id="neuralLegend"></div>
+    <div class="neural-hint" id="neuralHint">
+      <span>🖱 {{ i18n "neural_hint" | default "Scroll to zoom · Drag to pan" }}</span>
+    </div>
+  </main>
+</section>
+
+<style>
+.category-neural-page {
+  --neural-bg: #080c18;
+  --neural-text: #fff;
+  --neural-text-muted: rgba(255,255,255,0.5);
+  --neural-text-dim: rgba(255,255,255,0.15);
+  --neural-panel-bg: rgba(8,12,24,0.82);
+  --neural-panel-border: rgba(255,255,255,0.06);
+  --neural-divider-from: transparent;
+  --neural-divider-to: rgba(255,255,255,0.08);
+  --neural-hover-bg: rgba(255,255,255,0.06);
+  --neural-count-color: rgba(255,255,255,0.3);
+  --neural-label-shadow: 0 0 10px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.7);
+}
+html[data-theme="dark"] .category-neural-page {
+  --neural-bg: #080c18;
+  --neural-text: #fff;
+  --neural-text-muted: rgba(255,255,255,0.5);
+  --neural-text-dim: rgba(255,255,255,0.15);
+  --neural-panel-bg: rgba(8,12,24,0.82);
+  --neural-panel-border: rgba(255,255,255,0.06);
+  --neural-divider-from: transparent;
+  --neural-divider-to: rgba(255,255,255,0.08);
+  --neural-hover-bg: rgba(255,255,255,0.06);
+  --neural-count-color: rgba(255,255,255,0.3);
+  --neural-label-shadow: 0 0 10px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.7);
+}
+html:not([data-theme="dark"]) .category-neural-page {
+  --neural-bg: #eef0f5;
+  --neural-text: #1a1a2e;
+  --neural-text-muted: rgba(26,26,46,0.5);
+  --neural-text-dim: rgba(26,26,46,0.2);
+  --neural-panel-bg: rgba(255,255,255,0.85);
+  --neural-panel-border: rgba(26,26,46,0.08);
+  --neural-divider-from: transparent;
+  --neural-divider-to: rgba(26,26,46,0.08);
+  --neural-hover-bg: rgba(26,26,46,0.06);
+  --neural-count-color: rgba(26,26,46,0.3);
+  --neural-label-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 16px rgba(255,255,255,0.6);
+}
+.category-neural-page {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  background: var(--neural-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--neural-text);
+  user-select: none;
+  margin: 0 48px 48px;
+  max-width: 1344px;
+}
+.neural-canvas { width: 100%; height: 100%; }
+.neural-canvas svg { display: block; width: 100%; height: 100%; cursor: grab; }
+.neural-canvas svg:active { cursor: grabbing; }
+.neural-sidebar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 10;
+  width: 220px;
+  max-height: calc(100% - 160px);
+  overflow-y: auto;
+  background: var(--neural-panel-bg);
+  border: 1px solid var(--neural-panel-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  backdrop-filter: blur(16px);
+  pointer-events: auto;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #d39b2a;
+  padding-bottom: 8px;
+}
+.sidebar-icon { width: 16px; height: 16px; stroke: #d39b2a; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.sidebar-divider { height: 1px; margin: 0 -8px 8px; background: linear-gradient(to right, var(--neural-divider-from), var(--neural-divider-to), var(--neural-divider-from)); }
+.sidebar-list { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sidebar-item { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 10px; border-radius: 8px; cursor: pointer; transition: background 0.2s; text-decoration: none; color: var(--neural-text-muted); font-size: 13px; width: 100%; }
+.sidebar-item:hover { background: var(--neural-hover-bg); color: var(--neural-text); }
+.sidebar-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sidebar-item-label { flex: 1; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-item-count { font-size: 11px; color: var(--neural-count-color); flex-shrink: 0; }
+.neural-legend { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; padding: 8px 18px; background: var(--neural-panel-bg); border: 1px solid var(--neural-panel-border); border-radius: 10px; backdrop-filter: blur(10px); pointer-events: auto; }
+.legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+.legend-label { font-size: 11px; color: var(--neural-text-muted); margin-right: 8px; cursor: default; }
+.legend-label:last-child { margin-right: 0; }
+.legend-label:hover { color: var(--neural-text); }
+.neural-hint { position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 12px; color: var(--neural-text-dim); letter-spacing: 0.3px; text-align: center; pointer-events: none; transition: opacity 1.5s; }
+.neural-label { font-size: 12px; font-weight: 600; fill: var(--neural-text); text-anchor: middle; dominant-baseline: central; pointer-events: none; text-shadow: var(--neural-label-shadow); }
+.stack-neural-wrap { margin-top: 48px; }
+.stack-neural-header { text-align: center; padding: 0 48px 24px; max-width: 1344px; margin: 0 auto; }
+.stack-neural-title { font-size: 1.5rem; font-weight: 600; margin: 0 0 8px; }
+.stack-neural-desc { color: var(--secondary); font-size: 0.95rem; margin: 0; }
+@media (max-width: 768px) {
+  .category-neural-page { margin: 0 16px 24px; height: 400px; }
+  .neural-sidebar { top: 10px; right: 12px; width: 160px; padding: 10px 12px; }
+  .neural-legend { bottom: 12px; gap: 6px; padding: 6px 12px; }
+  .neural-hint { bottom: 48px; font-size: 10px; }
+  .neural-label { font-size: 10px; }
+}
+</style>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+const nodesData = {{ $nodesJSON | safeJS }};
+const linksData = {{ $linksJSON | safeJS }};
+
+const colorScale = d3.scaleOrdinal()
+  .domain(['1', '2', '3', '4', '5', '6', '7', '8'])
+  .range(['#ff4757', '#2ed573', '#1e90ff', '#ffa502', '#a855f7', '#06b6d4', '#f43f5e', '#10b981']);
+
+function getNodeGroup(d) {
+  if (d.group === 'title' || d.group === 'post') {
+    const catNode = nodesData.find(n => n.id === d.category);
+    return catNode ? catNode.group : '1';
+  }
+  if (d.group === 'center') return 'center';
+  return d.group;
+}
+function getNodeColor(d) {
+  const g = getNodeGroup(d);
+  if (g === 'center') return '#f0a040';
+  return colorScale(g);
+}
+function nodeRadius(d) {
+  if (d.group === 'center') return 28;
+  if (d.group === 'title') return 10;
+  if (d.group === 'post')  return 6;
+  return Math.sqrt(Math.max(d.weight, 4)) * 2.2 + 6;
+}
+
+const nodeIds = new Set(nodesData.map(n => n.id));
+const validLinks = linksData.filter(d => {
+  if (!nodeIds.has(d.source) || !nodeIds.has(d.target)) return false;
+  if (d.source === d.target) return false;
+  return true;
+});
+const nodes = nodesData.map(d => ({ ...d }));
+const links = validLinks.map(d => ({ ...d }));
+
+if (nodes.length === 0) {
+  document.querySelector('.category-neural-page').innerHTML +=
+    '<div class="neural-empty"><p>No data yet</p></div>';
+  throw new Error('No data');
+}
+
+const container = document.getElementById('neuralCanvas');
+const svg = d3.select('#neuralSvg');
+const width = container.clientWidth;
+const height = container.clientHeight;
+svg.attr('width', width).attr('height', height);
+
+const g = svg.append('g').attr('class', 'main-group');
+const defs = svg.append('defs');
+
+const glowFilter = defs.append('filter').attr('id', 'glow')
+  .attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+glowFilter.append('feGaussianBlur').attr('stdDeviation', '5').attr('result', 'blur');
+glowFilter.append('feMerge').append('feMergeNode').attr('in', 'blur')
+  .append('feMergeNode').attr('in', 'SourceGraphic');
+
+const particleFilter = defs.append('filter').attr('id', 'particleGlow')
+  .attr('x', '-80%').attr('y', '-80%').attr('width', '260%').attr('height', '260%');
+particleFilter.append('feGaussianBlur').attr('stdDeviation', '2.5').attr('result', 'blur');
+particleFilter.append('feMerge').selectAll('feMergeNode')
+  .data(['blur', 'SourceGraphic']).join('feMergeNode').attr('in', d => d);
+
+const simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links)
+    .id(d => d.id)
+    .distance(d => {
+      const s = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source);
+      const t = typeof d.target === 'object' ? d.target : nodes.find(n => n.id === d.target);
+      if (s && s.group === 'center') return 200;
+      if (s && s.group === 'category' && t && t.group === 'title') return 120;
+      if (s && s.group === 'title' && t && t.group === 'post') return 80;
+      return 160 - (d.value || 1) * 20;
+    })
+    .strength(d => 0.25 + (d.value || 1) * 0.05)
+  )
+  .force('charge', d3.forceManyBody().strength(d => {
+    if (d.group === 'center') return -600;
+    if (d.group === 'title') return -150;
+    if (d.group === 'post') return -80;
+    return -280;
+  }).distanceMax(600))
+  .force('center', d3.forceCenter(width / 2, height / 2))
+  .force('collide', d3.forceCollide().radius(d => nodeRadius(d) + 8));
+
+simulation.on('tick', () => {
+  const cn = nodes.find(n => n.id === 'ai-infra');
+  if (cn) { cn.x = width / 2; cn.y = height / 2; cn.fx = width / 2; cn.fy = height / 2; }
+});
+
+function bezierPath(d) {
+  const dx = d.target.x - d.source.x;
+  const dy = d.target.y - d.source.y;
+  const dr = Math.sqrt(dx * dx + dy * dy) || 1;
+  const curvature = 0.35;
+  const mx = (d.source.x + d.target.x) / 2;
+  const my = (d.source.y + d.target.y) / 2;
+  const nx = -dy / dr * dr * curvature;
+  const ny = dx / dr * dr * curvature;
+  return `M${d.source.x},${d.source.y} Q${mx + nx},${my + ny} ${d.target.x},${d.target.y}`;
+}
+function getBezierPoint(d, t) {
+  const dx = d.target.x - d.source.x;
+  const dy = d.target.y - d.source.y;
+  const dr = Math.sqrt(dx * dx + dy * dy) || 1;
+  const curvature = 0.35;
+  const mx = (d.source.x + d.target.x) / 2;
+  const my = (d.source.y + d.target.y) / 2;
+  const nx = -dy / dr * dr * curvature;
+  const ny = dx / dr * dr * curvature;
+  const cx = (1-t)*(1-t)*d.source.x + 2*(1-t)*t*(mx+nx) + t*t*d.target.x;
+  const cy = (1-t)*(1-t)*d.source.y + 2*(1-t)*t*(my+ny) + t*t*d.target.y;
+  return { x: cx, y: cy };
+}
+
+const linkGroup = g.append('g').attr('class', 'links');
+const linkEls = linkGroup.selectAll('.link').data(links).join('path')
+  .attr('class', 'link').attr('fill', 'none')
+  .attr('stroke', d => d3.interpolateRgb(d3.color(getNodeColor(d.source)), d3.color(getNodeColor(d.target)))(0.5))
+  .attr('stroke-width', d => Math.max(Math.sqrt(d.value || 1) * 1.5, 1))
+  .attr('stroke-opacity', d => 0.12 + (d.value || 1) * 0.06)
+  .attr('d', bezierPath);
+
+linkGroup.selectAll('.link-glow').data(links).join('path')
+  .attr('class', 'link-glow').attr('fill', 'none')
+  .attr('stroke', d => d3.interpolateRgb(d3.color(getNodeColor(d.source)), d3.color(getNodeColor(d.target)))(0.5))
+  .attr('stroke-width', d => Math.max(Math.sqrt(d.value || 1) * 3, 1.5))
+  .attr('stroke-opacity', 0.03).attr('d', bezierPath).attr('filter', 'url(#glow)');
+
+const particleGroup = g.append('g').attr('class', 'particles');
+let particleData = [];
+links.forEach((link, idx) => {
+  const count = Math.min(2, Math.ceil((link.value || 1) / 2) + 1);
+  for (let i = 0; i < count; i++) {
+    particleData.push({ linkIdx: idx, progress: i / count + Math.random() * 0.08, speed: 0.0012 + Math.random() * 0.0012, size: 1.2 + Math.random() * 1.5 });
+  }
+});
+const particleEls = particleGroup.selectAll('.particle').data(particleData).join('circle')
+  .attr('class', 'particle').attr('r', d => d.size)
+  .attr('fill', d => {
+    const link = links[d.linkIdx];
+    return d3.interpolateRgb(d3.color(getNodeColor(link.source)), d3.color(getNodeColor(link.target)))(0.5);
+  })
+  .attr('filter', 'url(#particleGlow)').attr('opacity', 0.5);
+
+const nodeGroup = g.append('g').attr('class', 'nodes');
+nodeGroup.selectAll('.node-glow').data(nodes).join('circle')
+  .attr('class', 'node-glow').attr('r', d => nodeRadius(d) + 8)
+  .attr('fill', d => getNodeColor(d))
+  .attr('opacity', d => d.group === 'center' ? 0.18 : 0.06)
+  .attr('filter', 'url(#glow)');
+
+const nodeEls = nodeGroup.selectAll('.node').data(nodes).join('circle')
+  .attr('class', 'node').attr('r', d => nodeRadius(d))
+  .attr('fill', d => getNodeColor(d))
+  .attr('stroke', d => d.group === 'center' ? '#ffe0a0' : d3.color(getNodeColor(d)).brighter(0.6))
+  .attr('stroke-width', d => d.group === 'center' ? 3 : 1.5)
+  .attr('filter', 'url(#glow)').attr('cursor', 'pointer').attr('data-id', d => d.id);
+
+const labelEls = nodeGroup.selectAll('.neural-label').data(nodes).join('text')
+  .attr('class', 'neural-label')
+  .attr('font-size', d => d.group === 'center' ? '15px' : d.group === 'title' ? '10px' : d.group === 'post' ? '9px' : '12px')
+  .attr('font-weight', d => d.group === 'center' ? '700' : d.group === 'title' ? '500' : '400')
+  .attr('x', d => d.x).attr('y', d => d.y).text(d => d.label);
+
+const drag = d3.drag()
+  .on('start', (event, d) => {
+    if (d.group === 'center') return;
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x; d.fy = d.y;
+  })
+  .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+  .on('end', (event, d) => {
+    if (!event.active) simulation.alphaTarget(0);
+    if (!d._fixed) { d.fx = null; d.fy = null; }
+  });
+nodeEls.call(drag);
+nodeEls.on('click', (event, d) => { event.stopPropagation(); if (d.url) { window.location.href = d.url; } });
+
+function highlightNode(d) {
+  const neighborIds = new Set([d.id]);
+  links.forEach(l => {
+    const s = typeof l.source === 'object' ? l.source.id : l.source;
+    const t = typeof l.target === 'object' ? l.target.id : l.target;
+    if (s === d.id) neighborIds.add(t);
+    if (t === d.id) neighborIds.add(s);
+  });
+  nodeEls.transition().duration(200).attr('opacity', n => neighborIds.has(n.id) ? 1 : 0.08);
+  labelEls.transition().duration(200).attr('opacity', n => neighborIds.has(n.id) ? 1 : 0.06);
+  g.selectAll('.node-glow').transition().duration(200)
+    .attr('opacity', n => neighborIds.has(n.id) ? (n.group === 'center' ? 0.35 : 0.25) : 0.02);
+  linkEls.transition().duration(200)
+    .attr('stroke-opacity', l => {
+      const s = typeof l.source === 'object' ? l.source.id : l.source;
+      const t = typeof l.target === 'object' ? l.target.id : l.target;
+      return (s === d.id || t === d.id) ? 0.4 + (l.value || 1) * 0.05 : 0.02;
+    })
+    .attr('stroke-width', l => {
+      const s = typeof l.source === 'object' ? l.source.id : l.source;
+      const t = typeof l.target === 'object' ? l.target.id : l.target;
+      return (s === d.id || t === d.id) ? Math.max(Math.sqrt(l.value || 1) * 2.5, 1.5) : Math.max(Math.sqrt(l.value || 1) * 0.6, 0.5);
+    });
+  particleEls.transition().duration(200).attr('opacity', p => {
+    const link = links[p.linkIdx];
+    const s = typeof link.source === 'object' ? link.source.id : link.source;
+    const t = typeof link.target === 'object' ? link.target.id : link.target;
+    return (s === d.id || t === d.id) ? 0.85 : 0.03;
+  });
+}
+function resetHighlight() {
+  nodeEls.transition().duration(300).attr('opacity', 1);
+  labelEls.transition().duration(300).attr('opacity', 1);
+  g.selectAll('.node-glow').transition().duration(300)
+    .attr('opacity', d => d.group === 'center' ? 0.18 : 0.06);
+  linkEls.transition().duration(300)
+    .attr('stroke-opacity', l => 0.12 + (l.value || 1) * 0.06)
+    .attr('stroke-width', l => Math.max(Math.sqrt(l.value || 1) * 1.5, 1));
+  particleEls.transition().duration(300).attr('opacity', 0.5);
+}
+nodeEls.on('mouseenter', (event, d) => highlightNode(d));
+nodeEls.on('mouseleave', resetHighlight);
+
+const zoom = d3.zoom().scaleExtent([0.3, 4]).on('zoom', (event) => { g.attr('transform', event.transform); });
+svg.call(zoom);
+
+simulation.on('tick', () => {
+  linkEls.attr('d', bezierPath);
+  g.selectAll('.link-glow').attr('d', bezierPath);
+  nodeEls.attr('cx', d => d.x).attr('cy', d => d.y);
+  g.selectAll('.node-glow').attr('cx', d => d.x).attr('cy', d => d.y);
+  labelEls.attr('x', d => d.x).attr('y', d => d.y);
+});
+
+function animateParticles() {
+  particleEls.each(function(p) {
+    p.progress += p.speed;
+    if (p.progress > 1) { p.progress = 0; p.speed = 0.0012 + Math.random() * 0.0012; }
+    const link = links[p.linkIdx];
+    if (link && link.source && link.target) {
+      const pos = getBezierPoint(link, p.progress);
+      d3.select(this).attr('cx', pos.x).attr('cy', pos.y);
+    }
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+let breathePhase = 0;
+function animateBreathing() {
+  breathePhase += 0.025;
+  const pulse = 1 + Math.sin(breathePhase) * 0.025;
+  nodeEls.attr('transform', d => {
+    return `translate(${-d.x * (pulse-1)},${-d.y * (pulse-1)}) scale(${pulse})`;
+  });
+  requestAnimationFrame(animateBreathing);
+}
+
+(function buildSidebar() {
+  const list = document.getElementById('sidebarList');
+  const displayNodes = nodesData.filter(n => n.group !== 'center' && n.group !== 'title' && n.group !== 'post');
+  displayNodes.forEach(n => {
+    const a = document.createElement('a');
+    a.className = 'sidebar-item';
+    a.href = n.url || '#';
+    a.innerHTML = `
+      <span class="sidebar-dot" style="background:${getNodeColor(n)}"></span>
+      <span class="sidebar-item-label">${n.label}</span>
+      <span class="sidebar-item-count">${n.count}</span>
+    `;
+    a.addEventListener('mouseenter', () => {
+      const node = nodes.find(x => x.id === n.id);
+      if (node) highlightNode(node);
+    });
+    a.addEventListener('mouseleave', resetHighlight);
+    list.appendChild(a);
+  });
+})();
+
+(function buildLegend() {
+  const el = document.getElementById('neuralLegend');
+  const seen = new Set();
+  nodesData.forEach(n => {
+    const gKey = getNodeGroup(n);
+    if (seen.has(gKey)) return;
+    seen.add(gKey);
+    const span = document.createElement('span');
+    span.className = 'legend-label';
+    span.innerHTML = `<span class="legend-dot" style="background:${getNodeColor(n)}"></span>${n.label}`;
+    el.appendChild(span);
+  });
+})();
+
+window.addEventListener('resize', () => {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  svg.attr('width', w).attr('height', h);
+  simulation.force('center', d3.forceCenter(w / 2, h / 2));
+  simulation.alpha(0.3).restart();
+});
+
+requestAnimationFrame(animateParticles);
+requestAnimationFrame(animateBreathing);
+setTimeout(() => {
+  document.getElementById('neuralHint').style.opacity = '0';
+}, 5000);
+</script>
 {{ end }}

@@ -6,7 +6,7 @@ description: "My technical blog is now online."
 tags:
   - Hugo
   - Infrastructure
-categories:
+topics:
   - ai-engineering
   - cloud-native
 series: ai-agent-building-guide

@@ -5,7 +5,7 @@ draft: false
 description: "生产环境 Kubernetes 集群的资源配置、调度优化与成本控制实践。"
 tags:
   - Kubernetes
-categories:
+topics:
   - cloud-native
 series: kubernetes-tutorial
 ShowToc: true

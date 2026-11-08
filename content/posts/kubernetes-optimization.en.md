@@ -6,7 +6,7 @@ description: "Resource allocation, scheduling optimization, and cost control pra
 tags:
   - Kubernetes
   - Performance
-categories:
+topics:
   - cloud-native
 series: kubernetes-tutorial
 ---

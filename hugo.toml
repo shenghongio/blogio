@@ -61,11 +61,12 @@ enableGitInfo = true
         [languages.zh.menu.main.params]
           icon = "user"
 
+disableKinds = ["taxonomy", "term"]
+
 [pagination]
   pagerSize = 10
 
 [taxonomies]
-  category = "categories"
   tag = "tags"
 
 [markup]

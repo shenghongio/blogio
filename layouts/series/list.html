@@ -67,7 +67,7 @@
             {{ range .Params.posts }}
             {{ $post := site.GetPage . }}
             {{ if $post }}
-            <article class="category-post-card{{ with $post.Params.categories }} card-cat-{{ index . 0 }}{{ end }}">
+            <article class="category-post-card{{ with $post.Params.topics }} card-cat-{{ index . 0 }}{{ end }}">
                 <h2 class="category-post-title">
                     <a href="{{ $post.RelPermalink }}">{{ $post.Title }}</a>
                 </h2>
@@ -81,7 +81,7 @@
                         </svg>
                         {{ $post.Date.Format "2006-01-02" }}
                     </time>
-                    {{ with index $post.Params.categories 0 }}
+                    {{ with index $post.Params.topics 0 }}
                     <span class="card-meta-dot" aria-hidden="true">·</span>
                     {{ with site.GetPage (printf "/categories/%s" .) }}
                     <a href="{{ .RelPermalink }}" class="card-category">{{ .Title }}</a>
