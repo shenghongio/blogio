@@ -8,6 +8,103 @@
 {{ end }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  var viewer = document.getElementById('kt-article-viewer');
+  if (!viewer) return;
+
+  var tocEl = document.getElementById('kt-toc');
+  var partTemplates = document.getElementById('kt-part-templates');
+  if (!tocEl) {
+    tocEl = document.createElement('aside');
+    tocEl.className = 'kt-toc';
+    tocEl.id = 'kt-toc';
+    viewer.parentElement.appendChild(tocEl);
+  }
+
+  var cache = {};
+  var loading = null;
+  var currentPartIdx = 0;
+
+  function generateToc() {
+    var headings = viewer.querySelectorAll('h2, h3');
+    var items = [];
+    headings.forEach(function(h) {
+      var id = h.id || h.textContent.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-+|-+$/g, '');
+      if (!h.id && id) h.id = id;
+      if (h.id) items.push({ id: h.id, text: h.textContent.trim(), level: h.tagName.toLowerCase() });
+    });
+    var titleHtml = '<div class="kt-toc-title">章节导航</div>';
+    if (items.length === 0) {
+      tocEl.innerHTML = titleHtml + '<div class="kt-toc-placeholder">暂无章节</div>';
+      return;
+    }
+    tocEl.innerHTML = titleHtml;
+    var ul = document.createElement('ul');
+    ul.className = 'kt-toc-list';
+    items.forEach(function(item) {
+      var li = document.createElement('li');
+      li.className = 'kt-toc-' + item.level;
+      var a = document.createElement('a');
+      a.href = '#' + item.id;
+      a.textContent = item.text;
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.getElementById(item.id);
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    tocEl.innerHTML = '';
+    tocEl.appendChild(ul);
+  }
+
+  function showPartOverview(idx) {
+    currentPartIdx = parseInt(idx);
+    if (partTemplates) {
+      var tmpl = partTemplates.querySelector('[data-overview="' + idx + '"]');
+      if (tmpl) {
+        viewer.innerHTML = tmpl.innerHTML;
+        generateToc();
+        return;
+      }
+    }
+  }
+
+  function loadArticle(url) {
+    if (!url) return;
+    if (cache[url]) {
+      renderArticle(cache[url], url);
+      return;
+    }
+    viewer.innerHTML = '<div class="kt-article-loading">加载中...</div>';
+    loading = fetch(url)
+      .then(function(r) { return r.text(); })
+      .then(function(html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var main = doc.querySelector('.post-single, .post-content, main');
+        if (!main) {
+          viewer.innerHTML = '<div class="kt-article-loading">无法加载文章</div>';
+          return;
+        }
+        cache[url] = main.innerHTML;
+        renderArticle(main.innerHTML, url);
+      })
+      .catch(function() {
+        viewer.innerHTML = '<div class="kt-article-loading">加载失败</div>';
+      })
+      .finally(function() { loading = null; });
+  }
+
+  function renderArticle(html) {
+    viewer.innerHTML = html;
+    generateToc();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
   document.querySelectorAll('[data-section-head]').forEach(function(head) {
     head.addEventListener('click', function() {
       this.closest('.kt-section').classList.toggle('kt-section--open');
@@ -37,159 +134,15 @@ document.addEventListener('DOMContentLoaded', function() {
       showPartOverview(idx);
     });
     document.addEventListener('click', function(e) {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('kt-part-dropdown--open');
-      }
+      if (!dropdown.contains(e.target)) dropdown.classList.remove('kt-part-dropdown--open');
     });
   }
 
   document.querySelectorAll('.highlight pre, .chroma pre').forEach(function(pre) {
     var lang = pre.getAttribute('data-lang') || '';
     var parent = pre.closest('.highlight, .chroma');
-    if (parent && !parent.getAttribute('data-lang')) {
-      parent.setAttribute('data-lang', lang || 'code');
-    }
+    if (parent && !parent.getAttribute('data-lang')) parent.setAttribute('data-lang', lang || 'code');
   });
-
-  var toc = document.querySelector('.post-header--flush ~ .toc');
-  if (toc) {
-    var links = toc.querySelectorAll('a[href^="#"]');
-    if (links.length) {
-      var items = {};
-      var headings = [];
-      links.forEach(function(a) {
-        var id = decodeURIComponent(a.getAttribute('href').replace(/^#/, ''));
-        var el = document.getElementById(id);
-        if (el) {
-          headings.push(el);
-          items[id] = a.parentElement;
-        }
-        if (!a.title) a.title = a.textContent.trim();
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          var targetId = decodeURIComponent(this.getAttribute('href').replace(/^#/, ''));
-          var target = document.getElementById(targetId);
-          if (target) {
-            var top = target.getBoundingClientRect().top + window.scrollY - 70;
-            window.scrollTo({ top: top, behavior: 'smooth' });
-          }
-        });
-      });
-      function update() {
-        var scrollY = window.scrollY + 100;
-        var currentId = headings[0] ? headings[0].id : '';
-        for (var i = 0; i < headings.length; i++) {
-          if (headings[i].offsetTop <= scrollY) currentId = headings[i].id; else break;
-        }
-        Object.keys(items).forEach(function(k) { items[k].classList.remove('is-active'); });
-        var active = items[currentId];
-        if (active) active.classList.add('is-active');
-      }
-      window.addEventListener('scroll', update, { passive: true });
-      update();
-    }
-  }
-});
-
-(function() {
-  var viewer = document.getElementById('kt-article-viewer');
-  var tocEl = document.getElementById('kt-toc');
-  var partTemplates = document.getElementById('kt-part-templates');
-  if (!viewer || !tocEl) return;
-
-  var cache = {};
-  var loading = null;
-  var currentPartIdx = 0;
-
-  function showPartOverview(idx) {
-    currentPartIdx = parseInt(idx);
-    if (partTemplates) {
-      var tmpl = partTemplates.querySelector('[data-overview="' + idx + '"]');
-      if (tmpl) {
-        viewer.innerHTML = tmpl.innerHTML;
-        tocEl.innerHTML = '<div class="kt-toc-placeholder">章节导航</div>';
-        return;
-      }
-    }
-    viewer.innerHTML = '<div class="kt-article-loading">加载中...</div>';
-  }
-
-  function loadArticle(url) {
-    if (!url) {
-      viewer.innerHTML = '<div class="kt-article-loading">暂无可预览文章</div>';
-      tocEl.innerHTML = '<div class="kt-toc-placeholder">章节导航</div>';
-      return;
-    }
-
-    if (cache[url]) {
-      renderArticle(cache[url], url);
-      return;
-    }
-
-    viewer.innerHTML = '<div class="kt-article-loading">加载中...</div>';
-    loading = fetch(url)
-      .then(function(r) { return r.text(); })
-      .then(function(html) {
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(html, 'text/html');
-        var main = doc.querySelector('.main');
-        if (!main) {
-          viewer.innerHTML = '<div class="kt-article-loading">无法加载文章</div>';
-          return;
-        }
-        cache[url] = main.innerHTML;
-        renderArticle(main.innerHTML, url);
-      })
-      .catch(function() {
-        viewer.innerHTML = '<div class="kt-article-loading">加载失败</div>';
-      })
-      .finally(function() { loading = null; });
-  }
-
-  function renderArticle(html, url) {
-    viewer.innerHTML = html;
-
-    var content = viewer.querySelector('.post-content');
-    var tocItems = [];
-    if (content) {
-      var headings = content.querySelectorAll('h2, h3');
-      headings.forEach(function(h) {
-        var id = h.id || h.textContent.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-+|-+$/g, '');
-        if (!h.id && id) h.id = id;
-        if (h.id) {
-          tocItems.push({ id: h.id, text: h.textContent.trim(), level: h.tagName.toLowerCase() });
-        }
-      });
-    }
-
-    if (tocItems.length > 0) {
-      var ul = document.createElement('ul');
-      ul.className = 'kt-toc-list';
-      tocItems.forEach(function(item) {
-        var li = document.createElement('li');
-        li.className = 'kt-toc-' + item.level;
-        var a = document.createElement('a');
-        a.href = '#' + item.id;
-        a.textContent = item.text;
-        a.addEventListener('click', function(e) {
-          e.preventDefault();
-          var target = document.getElementById(item.id);
-          if (target) {
-            var top = target.getBoundingClientRect().top + window.scrollY - 90;
-            window.scrollTo({ top: top, behavior: 'smooth' });
-          }
-        });
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      tocEl.innerHTML = '';
-      tocEl.appendChild(ul);
-    } else {
-      tocEl.innerHTML = '<div class="kt-toc-placeholder">章节导航</div>';
-    }
-
-    window.scrollTo({ top: 0, behavior: 'auto' });
-  }
 
   document.addEventListener('click', function(e) {
     var link = e.target.closest('.kt-article-link');
@@ -203,15 +156,12 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('popstate', function(e) {
     if (history.state && history.state.ktArticle) {
       loadArticle(history.state.ktArticle);
-    } else {
-      showPartOverview(currentPartIdx);
     }
   });
 
   if (location.pathname.indexOf('/posts/') !== -1) {
     loadArticle(location.pathname);
-  } else {
-    showPartOverview(0);
   }
-})();
+  generateToc();
+});
 </script>

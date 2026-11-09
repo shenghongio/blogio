@@ -2,6 +2,7 @@
 {{ $currentPath := .currentPath }}
 {{ $partIndex := .partIndex | default 0 }}
 {{ $part := index $nav $partIndex }}
+{{ $basePath := (urls.Parse site.BaseURL).Path | strings.TrimRight "/" }}
 {{ with $part }}
 <div class="kt-nav">
     <div class="kt-section kt-section--open">
@@ -13,7 +14,8 @@
     {{ range $section := $group.sections }}
     {{ $sectionHasActive := false }}
     {{ range $article := $section.articles }}
-        {{ if eq (relURL $article.path) $currentPath }}
+        {{ $articleFullPath := printf "%s%s" $basePath $article.path }}
+        {{ if eq $articleFullPath $currentPath }}
             {{ $sectionHasActive = true }}
         {{ end }}
     {{ end }}
@@ -26,7 +28,7 @@
         </button>
         <ul class="kt-articles">
             {{ range $article := $section.articles }}
-            {{ $articleURL := relURL $article.path }}
+            {{ $articleURL := printf "%s%s" $basePath $article.path }}
             {{ $isActive := eq $articleURL $currentPath }}
             <li class="kt-article{{ if $isActive }} kt-article--active{{ end }}{{ if eq $article.status "draft" }} kt-article--draft{{ end }}">
                 {{ if $isActive }}
