@@ -79,12 +79,14 @@ dev:
 
 preview:
 	@echo "==> Starting Hugo production preview..."
-	@echo "==> http://localhost:$(PORT)"
+	@echo "==> http://localhost:$(PORT)/blogio/"
 	@echo ""
 	$(HUGO) server \
 		--bind $(HOST) \
 		--port $(PORT) \
-		--disableFastRender
+		--baseURL http://localhost:$(PORT)/blogio/ \
+		--disableFastRender \
+		--noHTTPCache
 
 # ============================================================
 # Content

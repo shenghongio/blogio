@@ -1,0 +1,27 @@
+{{ define "main" }}
+{{ $kt := hugo.Data.kubernetes_tutorial }}
+<main class="kt-page kt-page--standalone">
+    <div class="kt-hero-head">
+        <div class="kt-hero-head-left">
+            <img class="kt-brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="44" height="44">
+            <span class="kt-brand-name">ShengHong<span style="opacity:.55">@kraken</span></span>
+        </div>
+    </div>
+    <div class="kt-layout">
+        <aside class="kt-sidebar">
+            <div class="kt-sidebar-inner" id="kt-sidebar-inner">
+                {{ range $i, $part := $kt.nav }}
+                <div class="kt-nav-pane">
+                    {{ partial "kubernetes-tutorial/nav" (dict "nav" $kt.nav "currentPath" (relURL $.RelPermalink) "partIndex" $i) }}
+                </div>
+                {{ end }}
+            </div>
+        </aside>
+        <div class="kt-content">
+            <div class="kt-content-inner">
+                <div class="kt-markdown kt-overview-body">{{ .Content }}</div>
+            </div>
+        </div>
+    </div>
+</main>
+{{ end }}

@@ -9,7 +9,7 @@
     en: ""
     zh: ""
   icon: "cpu"
-  url: "/series/ai-agent-building-guide/"
+  url: "series/ai-agent-building-guide/"
   category: "ai-engineering"
 
 - title:
@@ -19,7 +19,7 @@
     en: ""
     zh: ""
   icon: "grid"
-  url: "/posts/"
+  url: "posts/"
   category: "ai-engineering"
 
 - title:
@@ -29,7 +29,7 @@
     en: ""
     zh: ""
   icon: "server"
-  url: "/posts/"
+  url: "posts/"
   category: "ai-engineering"
 
 - title:
@@ -39,7 +39,7 @@
     en: ""
     zh: ""
   icon: "book-open"
-  url: "/posts/"
+  url: "posts/"
   category: "ai-engineering"
 
 - title:
@@ -49,7 +49,7 @@
     en: ""
     zh: ""
   icon: "share-2"
-  url: "/series/service-mesh-intro/"
+  url: "series/service-mesh-intro/"
   category: "cloud-native"
 
 - title:
@@ -59,7 +59,7 @@
     en: ""
     zh: ""
   icon: "box"
-  url: "/series/kubernetes-tutorial/"
+  url: "series/kubernetes-tutorial/"
   category: "cloud-native"
 
 - title:
@@ -69,7 +69,7 @@
     en: ""
     zh: ""
   icon: "shield"
-  url: "/series/istio-basics/"
+  url: "series/istio-basics/"
   category: "cloud-native"
 
 - title:
@@ -79,7 +79,7 @@
     en: ""
     zh: ""
   icon: "globe"
-  url: "/series/envoy-basics/"
+  url: "series/envoy-basics/"
   category: "cloud-native"
 
 - title:
@@ -89,7 +89,7 @@
     en: ""
     zh: ""
   icon: "book-open"
-  url: "/series/cloud-native-notes/"
+  url: "series/cloud-native-notes/"
   category: "cloud-native"
 
 - title:
@@ -99,5 +99,5 @@
     en: ""
     zh: ""
   icon: "compass"
-  url: "/posts/"
+  url: "posts/"
   category: "other"

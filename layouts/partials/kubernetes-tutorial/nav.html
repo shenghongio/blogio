@@ -1,0 +1,48 @@
+{{ $nav := .nav }}
+{{ $currentPath := .currentPath }}
+{{ $partIndex := .partIndex | default 0 }}
+{{ $part := index $nav $partIndex }}
+{{ with $part }}
+<div class="kt-nav">
+    <div class="kt-section kt-section--open">
+        <button type="button" class="kt-section-head" disabled>
+            <span class="kt-part-title-inline">{{ $part.name }}</span>
+        </button>
+    </div>
+    {{ range $group := $part.groups }}
+    {{ range $section := $group.sections }}
+    {{ $sectionHasActive := false }}
+    {{ range $article := $section.articles }}
+        {{ if eq (relURL $article.path) $currentPath }}
+            {{ $sectionHasActive = true }}
+        {{ end }}
+    {{ end }}
+    <div class="kt-section{{ if $sectionHasActive }} kt-section--open{{ end }}">
+        <button type="button" class="kt-section-head" data-section-head>
+            <span class="kt-section-title">{{ $section.name }}</span>
+            <svg class="kt-section-caret" viewBox="0 0 16 16" width="10" height="10" fill="currentColor">
+                <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        <ul class="kt-articles">
+            {{ range $article := $section.articles }}
+            {{ $articleURL := relURL $article.path }}
+            {{ $isActive := eq $articleURL $currentPath }}
+            <li class="kt-article{{ if $isActive }} kt-article--active{{ end }}{{ if eq $article.status "draft" }} kt-article--draft{{ end }}">
+                {{ if $isActive }}
+                <span class="kt-article-mark"></span>
+                {{ end }}
+                <a href="{{ $articleURL }}" class="kt-article-link" data-article="{{ $articleURL }}">
+                    <span class="kt-article-title">{{ $article.name }}</span>
+                    {{ if eq $article.status "draft" }}
+                    <span class="kt-article-tag">Draft</span>
+                    {{ end }}
+                </a>
+            </li>
+            {{ end }}
+        </ul>
+    </div>
+    {{ end }}
+    {{ end }}
+</div>
+{{ end }}
