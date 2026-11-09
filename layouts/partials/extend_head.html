@@ -8,15 +8,19 @@
 {{ end }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var viewer = document.getElementById('kt-article-viewer');
+  var viewer = document.querySelector('[id$="-article-viewer"]');
   if (!viewer) return;
 
-  var tocEl = document.getElementById('kt-toc');
-  var partTemplates = document.getElementById('kt-part-templates');
+  var prefix = viewer.id.replace('-article-viewer', '');
+
+  function cls(name) { return name.replace(/\\bkt-/g, prefix + '-'); }
+
+  var tocEl = document.getElementById(prefix + '-toc');
+  var partTemplates = document.getElementById(prefix + '-part-templates');
   if (!tocEl) {
     tocEl = document.createElement('aside');
-    tocEl.className = 'kt-toc';
-    tocEl.id = 'kt-toc';
+    tocEl.className = prefix + '-toc';
+    tocEl.id = prefix + '-toc';
     viewer.parentElement.appendChild(tocEl);
   }
 
@@ -32,17 +36,17 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!h.id && id) h.id = id;
       if (h.id) items.push({ id: h.id, text: h.textContent.trim(), level: h.tagName.toLowerCase() });
     });
-    var titleHtml = '<div class="kt-toc-title">章节导航</div>';
+    var titleHtml = '<div class="' + prefix + '-toc-title">章节导航</div>';
     if (items.length === 0) {
-      tocEl.innerHTML = titleHtml + '<div class="kt-toc-placeholder">暂无章节</div>';
+      tocEl.innerHTML = titleHtml + '<div class="' + prefix + '-toc-placeholder">暂无章节</div>';
       return;
     }
     tocEl.innerHTML = titleHtml;
     var ul = document.createElement('ul');
-    ul.className = 'kt-toc-list';
+    ul.className = prefix + '-toc-list';
     items.forEach(function(item) {
       var li = document.createElement('li');
-      li.className = 'kt-toc-' + item.level;
+      li.className = prefix + '-toc-' + item.level;
       var a = document.createElement('a');
       a.href = '#' + item.id;
       a.textContent = item.text;
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
       renderArticle(cache[url], url);
       return;
     }
-    viewer.innerHTML = '<div class="kt-article-loading">加载中...</div>';
+    viewer.innerHTML = '<div class="' + prefix + '-article-loading">加载中...</div>';
     loading = fetch(url)
       .then(function(r) { return r.text(); })
       .then(function(html) {
@@ -87,14 +91,14 @@ document.addEventListener('DOMContentLoaded', function() {
         var doc = parser.parseFromString(html, 'text/html');
         var main = doc.querySelector('.post-single, .post-content, main');
         if (!main) {
-          viewer.innerHTML = '<div class="kt-article-loading">无法加载文章</div>';
+          viewer.innerHTML = '<div class="' + prefix + '-article-loading">无法加载文章</div>';
           return;
         }
         cache[url] = main.innerHTML;
         renderArticle(main.innerHTML, url);
       })
       .catch(function() {
-        viewer.innerHTML = '<div class="kt-article-loading">加载失败</div>';
+        viewer.innerHTML = '<div class="' + prefix + '-article-loading">加载失败</div>';
       })
       .finally(function() { loading = null; });
   }
@@ -107,34 +111,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelectorAll('[data-section-head]').forEach(function(head) {
     head.addEventListener('click', function() {
-      this.closest('.kt-section').classList.toggle('kt-section--open');
+      head.closest('[class*="-section"]').classList.toggle(prefix + '-section--open');
     });
   });
 
-  var dropdown = document.getElementById('kt-part-dropdown');
-  var trigger = document.getElementById('kt-part-trigger');
-  var menu = document.getElementById('kt-part-menu');
+  var dropdown = document.getElementById(prefix + '-part-dropdown');
+  var trigger = document.getElementById(prefix + '-part-trigger');
+  var menu = document.getElementById(prefix + '-part-menu');
   if (dropdown && trigger && menu) {
     trigger.addEventListener('click', function(e) {
       e.stopPropagation();
-      dropdown.classList.toggle('kt-part-dropdown--open');
+      dropdown.classList.toggle(prefix + '-part-dropdown--open');
     });
     menu.addEventListener('click', function(e) {
-      var item = e.target.closest('.kt-part-menu-item');
+      var item = e.target.closest('.' + prefix + '-part-menu-item');
       if (!item) return;
       var idx = item.getAttribute('data-part-index');
-      document.querySelectorAll('.kt-part-menu-item').forEach(function(it) {
-        it.classList.toggle('kt-part-menu-item--active', it === item);
+      document.querySelectorAll('.' + prefix + '-part-menu-item').forEach(function(it) {
+        it.classList.toggle(prefix + '-part-menu-item--active', it === item);
       });
       document.querySelectorAll('[data-part-pane]').forEach(function(pane) {
-        pane.classList.toggle('kt-nav-pane--hidden', pane.getAttribute('data-part-pane') !== idx);
+        pane.classList.toggle(prefix + '-nav-pane--hidden', pane.getAttribute('data-part-pane') !== idx);
       });
-      dropdown.classList.remove('kt-part-dropdown--open');
+      dropdown.classList.remove(prefix + '-part-dropdown--open');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       showPartOverview(idx);
     });
     document.addEventListener('click', function(e) {
-      if (!dropdown.contains(e.target)) dropdown.classList.remove('kt-part-dropdown--open');
+      if (!dropdown.contains(e.target)) dropdown.classList.remove(prefix + '-part-dropdown--open');
     });
   }
 
@@ -145,23 +149,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.addEventListener('click', function(e) {
-    var link = e.target.closest('.kt-article-link');
+    var link = e.target.closest('.' + prefix + '-article-link');
     if (!link) return;
     e.preventDefault();
     var url = link.getAttribute('data-article');
-    if (history.pushState) history.pushState({ ktArticle: url }, '', url);
+    if (history.pushState) history.pushState({ sectionArticle: url }, '', url);
     loadArticle(url);
   });
 
   window.addEventListener('popstate', function(e) {
-    if (history.state && history.state.ktArticle) {
-      loadArticle(history.state.ktArticle);
+    if (history.state && history.state.sectionArticle) {
+      loadArticle(history.state.sectionArticle);
     }
   });
 
-  if (location.pathname.indexOf('/posts/') !== -1) {
-    loadArticle(location.pathname);
-  }
   generateToc();
 });
-</script>

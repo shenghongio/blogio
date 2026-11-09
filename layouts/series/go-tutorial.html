@@ -1,0 +1,220 @@
+{{ define "main" }}
+{{ $gt := site.Data.go_tutorial }}
+{{ $pages := $.RegularPages }}
+<main class="gt-page gt-page--standalone">
+
+    <div class="gt-hero-head">
+        <div class="gt-hero-head-left">
+            <img class="gt-brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="44" height="44">
+            <span class="gt-brand-name">ShengHong<span style="opacity:.55">@kraken</span></span>
+        </div>
+        <div class="gt-part-dropdown" id="gt-part-dropdown">
+            <button type="button" class="gt-part-trigger" id="gt-part-trigger" aria-label="选择 Part">
+                <span class="gt-part-trigger-bar"></span>
+                <span class="gt-part-trigger-bar"></span>
+                <span class="gt-part-trigger-bar"></span>
+            </button>
+            <div class="gt-part-menu" id="gt-part-menu">
+                {{ range $i, $part := $gt.nav }}
+                <button type="button" class="gt-part-menu-item{{ if eq $i 0 }} gt-part-menu-item--active{{ end }}" data-part-index="{{ $i }}" data-overview="{{ $part.overview }}">
+                    <span class="gt-part-menu-num">Part {{ $part.part }}</span>
+                    <span class="gt-part-menu-title">{{ $part.name }}</span>
+                </button>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+
+    <section class="gt-hero">
+        <div class="gt-inner">
+            <div class="gt-hero-main">
+                <h1 class="gt-hero-title">{{ $gt.hero.title }}</h1>
+                {{ with $gt.hero.subtitle }}
+                <p class="gt-hero-subtitle">{{ . }}</p>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    <div class="gt-stack-logo" id="gt-stack-trigger" aria-label="导航" aria-expanded="false">
+        <img src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="48" height="48">
+        <span class="gt-stack-logo-handle"></span>
+    </div>
+
+    <div class="gt-stack-modal" id="gt-stack-modal" aria-hidden="true">
+        <div class="gt-stack-modal-backdrop" data-close></div>
+        <div class="gt-stack-modal-panel">
+            <button type="button" class="gt-stack-modal-close" data-close aria-label="关闭">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+            </button>
+            {{ partial "stack-columns.html" . }}
+        </div>
+    </div>
+
+    <div class="gt-layout">
+        <aside class="gt-sidebar">
+            <div class="gt-sidebar-inner" id="gt-sidebar-inner">
+                {{ range $i, $part := $gt.nav }}
+                <div class="gt-nav-pane{{ if ne $i 0 }} gt-nav-pane--hidden{{ end }}" data-part-pane="{{ $i }}">
+                    {{ partial "go-tutorial/nav" (dict "nav" $gt.nav "currentPath" (relURL $.RelPermalink) "partIndex" $i) }}
+                </div>
+                {{ end }}
+            </div>
+        </aside>
+        <div class="gt-content">
+            <div class="gt-content-inner">
+                <div class="gt-article-viewer" id="gt-article-viewer">
+                    {{ range $i, $part := $gt.nav }}
+                        {{ if eq $i 0 }}
+                            {{ $partPage := index $pages $i }}
+                            {{ with $partPage }}
+                            <div class="gt-part-overview" data-overview="{{ $i }}">
+                                <h2 class="gt-overview-title">{{ $part.name }}</h2>
+                                <div class="gt-overview-meta">
+                                    {{ if gt .Lastmod.Year 1 }}
+                                    <span class="gt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                                    {{ else if gt .Date.Year 1 }}
+                                    <span class="gt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                                    {{ end }}
+                                    <span class="gt-badge">持续维护</span>
+                                </div>
+                                <div class="gt-markdown gt-overview-body">{{ .Content }}</div>
+                            </div>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                </div>
+                <aside class="gt-toc" id="gt-toc"><div class="gt-toc-placeholder">章节导航</div></aside>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/template" id="gt-part-templates">
+        {{ range $i, $part := $gt.nav }}
+        {{ $partPage := index $pages $i }}
+        {{ with $partPage }}
+        <div class="gt-part-overview" data-overview="{{ $i }}">
+            <h2 class="gt-overview-title">{{ $part.name }}</h2>
+            <div class="gt-overview-meta">
+                {{ if gt .Lastmod.Year 1 }}
+                <span class="gt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                {{ else if gt .Date.Year 1 }}
+                <span class="gt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                {{ end }}
+                <span class="gt-badge">持续维护</span>
+            </div>
+            <div class="gt-markdown gt-overview-body">{{ .Content }}</div>
+        </div>
+        {{ end }}
+        {{ end }}
+    </script>
+
+    <script>
+    (function(){
+        var btn = document.getElementById('gt-stack-trigger');
+        var modal = document.getElementById('gt-stack-modal');
+        if (!btn || !modal) return;
+        var STORAGE_KEY = 'gt-stack-logo-pos';
+        var DRAG_THRESHOLD = 5;
+        var dragging = false;
+        var didDrag = false;
+        var startX, startY, origLeft, origTop;
+
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+        if (saved && typeof saved.left === 'number') {
+            btn.style.left = saved.left + 'px';
+            btn.style.top = saved.top + 'px';
+            btn.style.transform = 'none';
+            btn.style.right = 'auto';
+        } else {
+            var hero = document.querySelector('.gt-hero');
+            if (hero) {
+                var hRect = hero.getBoundingClientRect();
+                btn.style.top = (hRect.bottom - 26) + 'px';
+                btn.style.right = '32px';
+            }
+        }
+
+        var clampPos = function(l, t){
+            var w = btn.offsetWidth, h = btn.offsetHeight;
+            var maxL = window.innerWidth - w - 4;
+            var maxT = window.innerHeight - h - 4;
+            return {
+                left: Math.max(4, Math.min(l, maxL)),
+                top: Math.max(4, Math.min(t, maxT))
+            };
+        };
+
+        btn.addEventListener('pointerdown', function(e){
+            dragging = true;
+            didDrag = false;
+            btn.classList.add('gt-stack-logo--dragging');
+            btn.setPointerCapture(e.pointerId);
+            var rect = btn.getBoundingClientRect();
+            startX = e.clientX;
+            startY = e.clientY;
+            origLeft = rect.left;
+            origTop = rect.top;
+        });
+
+        btn.addEventListener('pointermove', function(e){
+            if (!dragging) return;
+            var dx = e.clientX - startX;
+            var dy = e.clientY - startY;
+            if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+            didDrag = true;
+            var p = clampPos(origLeft + dx, origTop + dy);
+            btn.style.right = 'auto';
+            btn.style.left = p.left + 'px';
+            btn.style.top = p.top + 'px';
+            btn.style.transform = 'none';
+        });
+
+        var endDrag = function(e){
+            if (!dragging) return;
+            dragging = false;
+            btn.classList.remove('gt-stack-logo--dragging');
+            if (didDrag) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                        left: parseInt(btn.style.left),
+                        top: parseInt(btn.style.top)
+                    }));
+                } catch(e) {}
+            }
+        };
+        btn.addEventListener('pointerup', endDrag);
+        btn.addEventListener('pointercancel', endDrag);
+
+        btn.addEventListener('click', function(e){
+            if (didDrag) { e.stopPropagation(); return; }
+            var open = modal.classList.contains('gt-stack-modal--open');
+            if (open) closeModal(); else openModal();
+        });
+
+        var openModal = function(){
+            modal.classList.add('gt-stack-modal--open');
+            modal.setAttribute('aria-hidden', 'false');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        };
+        var closeModal = function(){
+            modal.classList.remove('gt-stack-modal--open');
+            modal.setAttribute('aria-hidden', 'true');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        };
+        modal.addEventListener('click', function(e){
+            if (e.target.hasAttribute('data-close')) closeModal();
+        });
+        document.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') closeModal();
+        });
+    })();
+    </script>
+
+</main>
+{{ end }}
