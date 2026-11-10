@@ -22,7 +22,7 @@
             <span class="blog-column-header-label">{{ $catTitle }}</span>
         </span>
         <div class="blog-column-posts">
-            {{- range where site.Data.blog_links "category" $catName -}}
+            {{- range where hugo.Data.blog_links "category" $catName -}}
             <a href="{{ if and .urlZh (ne $currentLang "zh") }}{{ .urlZh | relLangURL }}{{ else }}{{ .url | relLangURL }}{{ end }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
@@ -64,7 +64,7 @@
                 <span class="blog-column-post-desc">{{ i18n "sre_book_desc" }}</span>
             </a>
             {{- end -}}
-            {{- range where site.Data.sre_links "category" $catName -}}
+            {{- range where hugo.Data.sre_links "category" $catName -}}
             <a href="{{ if and .urlZh (ne $currentLang "zh") }}{{ .urlZh | relLangURL }}{{ else }}{{ .url | relLangURL }}{{ end }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
@@ -84,7 +84,7 @@
             <span class="blog-column-header-label">{{ i18n "projects_title" }}</span>
         </span>
         <div class="blog-column-posts">
-            {{- range site.Data.projects -}}
+            {{- range hugo.Data.projects -}}
             <a href="{{ .url | relLangURL }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ .display | default .title }}</span>
@@ -119,7 +119,7 @@
             <span class="blog-column-header-label">{{ i18n "blog_hint_other" }}</span>
         </span>
         <div class="blog-column-posts">
-            {{- range where site.Data.blog_links "category" "other" -}}
+            {{- range where hugo.Data.blog_links "category" "other" -}}
             <a href="{{ .url | relLangURL }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ index .title $currentLang }}</span>

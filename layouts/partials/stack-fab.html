@@ -1,0 +1,145 @@
+{{- if ne .Kind "home" -}}
+<div class="gs-stack-logo" id="gs-stack-trigger" aria-label="导航" aria-expanded="false">
+    <img src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="48" height="48">
+    <span class="gs-stack-logo-handle"></span>
+</div>
+
+<div class="gs-stack-modal" id="gs-stack-modal" aria-hidden="true">
+    <div class="gs-stack-modal-backdrop" data-close></div>
+    <div class="gs-stack-modal-panel">
+        <button type="button" class="gs-stack-modal-close" data-close aria-label="关闭">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>
+        </button>
+        <div class="gs-stack-modal-top">
+            <a class="gs-stack-modal-home" href="{{ "" | relLangURL }}">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 10.5 12 3l9 7.5"></path>
+                    <path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"></path>
+                </svg>
+                <span>首页</span>
+            </a>
+            <span class="gs-stack-modal-sep"></span>
+            <button type="button" class="gs-stack-modal-search" id="gs-stack-modal-search">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="m16 16 5 5"></path>
+                </svg>
+                <span>搜索</span>
+            </button>
+        </div>
+        <div class="gs-stack-modal-body">
+            {{ partial "series/stack-picker.html" . }}
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    var btn = document.getElementById('gs-stack-trigger');
+    var modal = document.getElementById('gs-stack-modal');
+    if (!btn || !modal) return;
+    var STORAGE_KEY = 'gs-stack-logo-pos';
+    var DRAG_THRESHOLD = 5;
+    var dragging = false;
+    var didDrag = false;
+    var startX, startY, origLeft, origTop;
+
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+    if (saved && typeof saved.left === 'number') {
+        btn.style.left = saved.left + 'px';
+        btn.style.top = saved.top + 'px';
+        btn.style.transform = 'none';
+        btn.style.right = 'auto';
+    }
+
+    var clampPos = function(l, t){
+        var w = btn.offsetWidth, h = btn.offsetHeight;
+        var maxL = window.innerWidth - w - 4;
+        var maxT = window.innerHeight - h - 4;
+        return {
+            left: Math.max(4, Math.min(l, maxL)),
+            top: Math.max(4, Math.min(t, maxT))
+        };
+    };
+
+    btn.addEventListener('pointerdown', function(e){
+        dragging = true;
+        didDrag = false;
+        btn.classList.add('gs-stack-logo--dragging');
+        btn.setPointerCapture(e.pointerId);
+        var rect = btn.getBoundingClientRect();
+        startX = e.clientX;
+        startY = e.clientY;
+        origLeft = rect.left;
+        origTop = rect.top;
+    });
+
+    btn.addEventListener('pointermove', function(e){
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        var dy = e.clientY - startY;
+        if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+        didDrag = true;
+        var p = clampPos(origLeft + dx, origTop + dy);
+        btn.style.right = 'auto';
+        btn.style.left = p.left + 'px';
+        btn.style.top = p.top + 'px';
+        btn.style.transform = 'none';
+    });
+
+    var endDrag = function(e){
+        if (!dragging) return;
+        dragging = false;
+        btn.classList.remove('gs-stack-logo--dragging');
+        if (didDrag) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    left: parseInt(btn.style.left),
+                    top: parseInt(btn.style.top)
+                }));
+            } catch(e) {}
+        }
+    };
+    btn.addEventListener('pointerup', endDrag);
+    btn.addEventListener('pointercancel', endDrag);
+
+    var openModal = function(){
+        modal.classList.add('gs-stack-modal--open');
+        modal.setAttribute('aria-hidden', 'false');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    };
+    var closeModal = function(){
+        modal.classList.remove('gs-stack-modal--open');
+        modal.setAttribute('aria-hidden', 'true');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    };
+
+    btn.addEventListener('click', function(e){
+        if (didDrag) { e.stopPropagation(); return; }
+        if (modal.classList.contains('gs-stack-modal--open')) closeModal(); else openModal();
+    });
+
+    modal.addEventListener('click', function(e){
+        if (e.target.hasAttribute('data-close')) closeModal();
+    });
+
+    var searchBtn = document.getElementById('gs-stack-modal-search');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function(){
+            closeModal();
+            var trigger = document.querySelector('.search-trigger-pill');
+            if (trigger) trigger.click();
+        });
+    }
+
+    document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape' && modal.classList.contains('gs-stack-modal--open')) closeModal();
+    });
+})();
+</script>
+{{- end -}}

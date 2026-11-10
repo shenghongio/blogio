@@ -1,4 +1,4 @@
-{{ $kt := site.Data.kubernetes_tutorial }}
+{{ $kt := hugo.Data.kubernetes_tutorial }}
 {{ $zh := index (where hugo.Sites "Language.Lang" "zh") 0 }}
 {{ $partPages := slice }}
 {{ range $zh.RegularPages }}
@@ -24,23 +24,6 @@
             </div>
         </div>
     </section>
-
-    <div class="kt-stack-logo" id="kt-stack-trigger" aria-label="导航" aria-expanded="false">
-        <img src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="48" height="48">
-        <span class="kt-stack-logo-handle"></span>
-    </div>
-
-    <div class="kt-stack-modal" id="kt-stack-modal" aria-hidden="true">
-        <div class="kt-stack-modal-backdrop" data-close></div>
-        <div class="kt-stack-modal-panel">
-            <button type="button" class="kt-stack-modal-close" data-close aria-label="关闭">
-                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>
-            </button>
-            {{ partial "stack-columns.html" . }}
-        </div>
-    </div>
 
     <div class="kt-layout">
         <aside class="kt-sidebar">
@@ -113,111 +96,6 @@
         </div>
         {{ end }}
         {{ end }}
-    </script>
-
-    <script>
-    (function(){
-        var btn = document.getElementById('kt-stack-trigger');
-        var modal = document.getElementById('kt-stack-modal');
-        if (!btn || !modal) return;
-        var STORAGE_KEY = 'kt-stack-logo-pos';
-        var DRAG_THRESHOLD = 5;
-        var dragging = false;
-        var didDrag = false;
-        var startX, startY, origLeft, origTop;
-
-        var saved = null;
-        try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
-        if (saved && typeof saved.left === 'number') {
-            btn.style.left = saved.left + 'px';
-            btn.style.top = saved.top + 'px';
-            btn.style.transform = 'none';
-            btn.style.right = 'auto';
-        } else {
-            var hero = document.querySelector('.kt-hero');
-            if (hero) {
-                var hRect = hero.getBoundingClientRect();
-                btn.style.top = (hRect.bottom - 26) + 'px';
-                btn.style.right = '32px';
-            }
-        }
-
-        var clampPos = function(l, t){
-            var w = btn.offsetWidth, h = btn.offsetHeight;
-            var maxL = window.innerWidth - w - 4;
-            var maxT = window.innerHeight - h - 4;
-            return {
-                left: Math.max(4, Math.min(l, maxL)),
-                top: Math.max(4, Math.min(t, maxT))
-            };
-        };
-
-        btn.addEventListener('pointerdown', function(e){
-            dragging = true;
-            didDrag = false;
-            btn.classList.add('kt-stack-logo--dragging');
-            btn.setPointerCapture(e.pointerId);
-            var rect = btn.getBoundingClientRect();
-            startX = e.clientX;
-            startY = e.clientY;
-            origLeft = rect.left;
-            origTop = rect.top;
-        });
-
-        btn.addEventListener('pointermove', function(e){
-            if (!dragging) return;
-            var dx = e.clientX - startX;
-            var dy = e.clientY - startY;
-            if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-            didDrag = true;
-            var p = clampPos(origLeft + dx, origTop + dy);
-            btn.style.right = 'auto';
-            btn.style.left = p.left + 'px';
-            btn.style.top = p.top + 'px';
-            btn.style.transform = 'none';
-        });
-
-        var endDrag = function(e){
-            if (!dragging) return;
-            dragging = false;
-            btn.classList.remove('kt-stack-logo--dragging');
-            if (didDrag) {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-                        left: parseInt(btn.style.left),
-                        top: parseInt(btn.style.top)
-                    }));
-                } catch(e) {}
-            }
-        };
-        btn.addEventListener('pointerup', endDrag);
-        btn.addEventListener('pointercancel', endDrag);
-
-        btn.addEventListener('click', function(e){
-            if (didDrag) { e.stopPropagation(); return; }
-            var open = modal.classList.contains('kt-stack-modal--open');
-            if (open) closeModal(); else openModal();
-        });
-
-        var openModal = function(){
-            modal.classList.add('kt-stack-modal--open');
-            modal.setAttribute('aria-hidden', 'false');
-            btn.setAttribute('aria-expanded', 'true');
-            document.body.style.overflow = 'hidden';
-        };
-        var closeModal = function(){
-            modal.classList.remove('kt-stack-modal--open');
-            modal.setAttribute('aria-hidden', 'true');
-            btn.setAttribute('aria-expanded', 'false');
-            document.body.style.overflow = '';
-        };
-        modal.addEventListener('click', function(e){
-            if (e.target.hasAttribute('data-close')) closeModal();
-        });
-        document.addEventListener('keydown', function(e){
-            if (e.key === 'Escape') closeModal();
-        });
-    })();
     </script>
 
     <script>
