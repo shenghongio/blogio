@@ -2,28 +2,7 @@
 <main class="category-page series-page">
     <div class="category-page-inner">
 
-        <nav class="category-breadcrumb" aria-label="Breadcrumb">
-            <a href="{{ "posts/" | relLangURL }}" class="crumb-pill crumb-pill--home">
-                <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m3 10 9-7 9 7"></path>
-                    <path d="M5 9v11h14V9"></path>
-                    <path d="M9 20v-6h6v6"></path>
-                </svg>
-                <span>{{ i18n "breadcrumb_home" }}</span>
-            </a>
-            <span class="crumb-sep" aria-hidden="true">
-                <svg class="crumb-chevron" viewBox="0 0 24 24">
-                    <path d="m9 6 6 6-6 6"></path>
-                </svg>
-            </span>
-            <span class="crumb-pill crumb-pill--current" aria-current="page">
-                <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
-                    <circle cx="12" cy="10" r="2"></circle>
-                </svg>
-                <span>{{ .Title }}</span>
-            </span>
-        </nav>
+        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "label" .Title "currentAria" true) }}
 
         <header class="category-header">
             <h1 class="category-title">{{ .Title }}</h1>
