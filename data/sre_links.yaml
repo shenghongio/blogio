@@ -5,8 +5,9 @@
     en: ''
     zh: ''
   icon: go
-  url: '#'
+  url: 'series/go-tutorial/'
   category: 语言与工具
+  urlZh: "zh/series/go-tutorial/"
 - title:
     en: Python
     zh: Python

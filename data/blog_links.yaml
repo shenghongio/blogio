@@ -61,6 +61,7 @@
   icon: "box"
   url: "series/kubernetes-tutorial/"
   category: "cloud-native"
+  urlZh: "zh/series/kubernetes-tutorial/"
 
 - title:
     en: "Istio Tutorial"

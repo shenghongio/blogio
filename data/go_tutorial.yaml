@@ -1,0 +1,123 @@
+hero:
+  title: "Go 语言工程实践"
+  subtitle: "从语法基础到高性能微服务的完整学习路径"
+
+nav:
+  - part: "I"
+    name: "语言基础与核心特性"
+    overview: "/series/go-tutorial/part-i/"
+    groups:
+      - label: "语言入门"
+        sections:
+          - name: "快速上手"
+            articles:
+              - name: "Go 是什么？"
+                path: "/zh/series/go-tutorial/what-is-go/"
+              - name: "开发环境搭建"
+                path: "/zh/series/go-tutorial/dev-setup/"
+              - name: "第一个 Go 程序"
+                path: "/zh/series/go-tutorial/hello-world/"
+          - name: "语法基础"
+            articles:
+              - name: "变量、常量与类型"
+                path: "/zh/series/go-tutorial/variables-types/"
+              - name: "流程控制"
+                path: "/zh/series/go-tutorial/flow-control/"
+              - name: "函数与方法"
+                path: "/zh/series/go-tutorial/functions-methods/"
+      - label: "核心数据结构"
+        sections:
+          - name: "复合类型"
+            articles:
+              - name: "数组与切片"
+                path: "/zh/series/go-tutorial/arrays-slices/"
+              - name: "Map 与 Set"
+                path: "/zh/series/go-tutorial/map-set/"
+              - name: "Struct 结构体"
+                path: "/zh/series/go-tutorial/struct/"
+              - name: "Interface 接口"
+                path: "/zh/series/go-tutorial/interface/"
+          - name: "指针与内存"
+            articles:
+              - name: "指针详解"
+                path: "/zh/series/go-tutorial/pointers/"
+              - name: "逃逸分析"
+                path: "/zh/series/go-tutorial/escape-analysis/"
+  - part: "II"
+    name: "并发编程与工程化"
+    overview: "/series/go-tutorial/part-ii/"
+    groups:
+      - label: "并发编程"
+        sections:
+          - name: "Goroutine 与 Channel"
+            articles:
+              - name: "Goroutine 基础"
+                path: "/zh/series/go-tutorial/goroutine/"
+              - name: "Channel 通信"
+                path: "/zh/series/go-tutorial/channel/"
+              - name: "Select 与超时控制"
+                path: "/zh/series/go-tutorial/select-timeout/"
+          - name: "同步与并发模式"
+            articles:
+              - name: "Mutex 与 RWMutex"
+                path: "/zh/series/go-tutorial/mutex/"
+              - name: "WaitGroup 与 Once"
+                path: "/zh/series/go-tutorial/waitgroup-once/"
+              - name: "Context 上下文"
+                path: "/zh/series/go-tutorial/context/"
+              - name: "常见并发模式"
+                path: "/zh/series/go-tutorial/concurrency-patterns/"
+      - label: "工程化"
+        sections:
+          - name: "模块与依赖"
+            articles:
+              - name: "Go Modules"
+                path: "/zh/series/go-tutorial/go-modules/"
+              - name: "包管理与 vendor"
+                path: "/zh/series/go-tutorial/package-vendor/"
+          - name: "测试与质量"
+            articles:
+              - name: "单元测试与表驱动"
+                path: "/zh/series/go-tutorial/unit-testing/"
+              - name: "Benchmark 性能测试"
+                path: "/zh/series/go-tutorial/benchmark/"
+              - name: "Error 处理最佳实践"
+                path: "/zh/series/go-tutorial/error-handling/"
+  - part: "III"
+    name: "微服务与高性能实践"
+    overview: "/series/go-tutorial/part-iii/"
+    groups:
+      - label: "Web 与 API"
+        sections:
+          - name: "HTTP 服务"
+            articles:
+              - name: "net/http 详解"
+                path: "/zh/series/go-tutorial/net-http/"
+              - name: "Gin 框架实战"
+                path: "/zh/series/go-tutorial/gin-framework/"
+              - name: "RESTful API 设计"
+                path: "/zh/series/go-tutorial/restful-api/"
+          - name: "数据存储"
+            articles:
+              - name: "数据库与 SQL"
+                path: "/zh/series/go-tutorial/database-sql/"
+              - name: "Redis 缓存"
+                path: "/zh/series/go-tutorial/redis/"
+      - label: "云原生实践"
+        sections:
+          - name: "微服务构建"
+            articles:
+              - name: "gRPC 与 Protobuf"
+                path: "/zh/series/go-tutorial/grpc-protobuf/"
+              - name: "Docker 容器化"
+                path: "/zh/series/go-tutorial/docker/"
+              - name: "Kubernetes 部署"
+                path: "/zh/series/go-tutorial/kubernetes-deploy/"
+          - name: "可观测与性能"
+            articles:
+              - name: "日志、指标与链路追踪"
+                path: "/zh/series/go-tutorial/observability/"
+              - name: "pprof 性能剖析"
+                path: "/zh/series/go-tutorial/pprof/"
+              - name: "高性能 Go 实战"
+                path: "/zh/series/go-tutorial/high-performance/"

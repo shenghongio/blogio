@@ -23,7 +23,7 @@
         </span>
         <div class="blog-column-posts">
             {{- range where site.Data.blog_links "category" $catName -}}
-            <a href="{{ .url | relLangURL }}" class="blog-column-post">
+            <a href="{{ if and .urlZh (ne $currentLang "zh") }}{{ .urlZh | relLangURL }}{{ else }}{{ .url | relLangURL }}{{ end }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
                 <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
@@ -65,7 +65,7 @@
             </a>
             {{- end -}}
             {{- range where site.Data.sre_links "category" $catName -}}
-            <a href="{{ .url | relLangURL }}" class="blog-column-post">
+            <a href="{{ if and .urlZh (ne $currentLang "zh") }}{{ .urlZh | relLangURL }}{{ else }}{{ .url | relLangURL }}{{ end }}" class="blog-column-post">
                 {{ partial "icon.html" .icon }}
                 <span class="blog-column-post-title">{{ index .title $currentLang }}</span>
                 <span class="blog-column-post-desc">{{ index .description $currentLang }}</span>
