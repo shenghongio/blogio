@@ -1,0 +1,117 @@
+{{- $dataKey    := .dataKey -}}
+{{- $seriesId   := .seriesId -}}
+{{- $prefix     := .prefix -}}
+{{- $partSwitch := .enablePartSwitch | default false -}}
+{{- $data       := index hugo.Data $dataKey -}}
+{{- $zh         := index (where hugo.Sites "Language.Lang" "zh") 0 -}}
+{{- $partPages  := slice -}}
+{{- range $zh.RegularPages -}}
+  {{- if in .File.Path (printf "series/%s/part-" $seriesId) -}}
+    {{- $partPages = $partPages | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $partPages = sort $partPages "File.Path" -}}
+{{- $page := .page -}}
+<div class="{{ $prefix }}-page {{ $prefix }}-page--standalone">
+
+    <div class="{{ $prefix }}-hero-head">
+        <div class="{{ $prefix }}-hero-head-left">
+            <img class="{{ $prefix }}-brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="44" height="44">
+            <span class="{{ $prefix }}-brand-name">ShengHong<span style="opacity:.55">@kraken</span></span>
+        </div>
+    </div>
+
+    <section class="{{ $prefix }}-hero">
+        <div class="{{ $prefix }}-inner">
+            <div class="{{ $prefix }}-hero-main">
+                <h1 class="{{ $prefix }}-hero-title">{{ $data.hero.title }}</h1>
+                {{ with $data.hero.subtitle }}
+                <p class="{{ $prefix }}-hero-subtitle">{{ $data.hero.subtitle }}</p>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    <div class="{{ $prefix }}-layout">
+        <aside class="{{ $prefix }}-sidebar">
+            <div class="{{ $prefix }}-sidebar-inner" id="{{ $prefix }}-sidebar-inner">
+                {{ range $i, $part := $data.nav }}
+                <div class="{{ $prefix }}-nav-pane{{ if ne $i 0 }} {{ $prefix }}-nav-pane--hidden{{ end }}" data-part-pane="{{ $i }}">
+                    {{ partial "series/nav.html" (dict "nav" $data.nav "currentPath" (relURL $page.RelPermalink) "partIndex" $i "prefix" $prefix "enablePartSwitch" $partSwitch) }}
+                </div>
+                {{ end }}
+            </div>
+        </aside>
+        <div class="{{ $prefix }}-content">
+            <div class="{{ $prefix }}-content-inner">
+                <div class="{{ $prefix }}-article-viewer" id="{{ $prefix }}-article-viewer" data-toc-managed="page"{{ if eq $page.Kind "page" }} data-single="1"{{ end }}>
+                    {{ if eq $page.Kind "page" }}
+                    <h2 class="{{ $prefix }}-overview-title">{{ $page.Title }}</h2>
+                    <div class="{{ $prefix }}-overview-meta">
+                        {{ if gt $page.Lastmod.Year 1 }}
+                        <span class="{{ $prefix }}-date-tag">最后更新：{{ $page.Lastmod.Format "2006-01-02" }}</span>
+                        {{ else if gt $page.Date.Year 1 }}
+                        <span class="{{ $prefix }}-date-tag">最后更新：{{ $page.Date.Format "2006-01-02" }}</span>
+                        {{ end }}
+                        {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if $page.Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                    </div>
+                    <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ $page.Content }}</div>
+                    {{ else }}
+                    {{ range $i, $part := $data.nav }}
+                        {{ if eq $i 0 }}
+                            {{ $partPage := index $partPages $i }}
+                            {{ with $partPage }}
+                            <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
+                                <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
+                                <div class="{{ $prefix }}-overview-meta">
+                                    {{ if gt .Lastmod.Year 1 }}
+                                    <span class="{{ $prefix }}-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                                    {{ else if gt .Date.Year 1 }}
+                                    <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                                    {{ end }}
+                                    {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                                </div>
+                                <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
+                            </div>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                    {{ end }}
+                </div>
+            </div>
+            {{ if .tocInsideContent }}
+            <aside class="{{ $prefix }}-toc" id="{{ $prefix }}-toc" hidden>
+                <div class="{{ $prefix }}-toc-inner"></div>
+            </aside>
+            {{ end }}
+        </div>
+        {{ if not .tocInsideContent }}
+        <aside class="{{ $prefix }}-toc" id="{{ $prefix }}-toc" hidden>
+            <div class="{{ $prefix }}-toc-inner"></div>
+        </aside>
+        {{ end }}
+    </div>
+
+    <script type="text/template" id="{{ $prefix }}-part-templates">
+        {{ range $i, $part := $data.nav }}
+        {{ $partPage := index $partPages $i }}
+        {{ with $partPage }}
+        <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
+            <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
+            <div class="{{ $prefix }}-overview-meta">
+                {{ if gt .Lastmod.Year 1 }}
+                <span class="{{ $prefix }}-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                {{ else if gt .Date.Year 1 }}
+                <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                {{ end }}
+                {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+            </div>
+            <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
+        </div>
+        {{ end }}
+        {{ end }}
+    </script>
+
+    {{ partial "series/body-script.html" (dict "prefix" $prefix "enablePartSwitch" $partSwitch) }}
+
+</div>
