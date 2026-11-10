@@ -147,12 +147,14 @@
                     </svg>
                 </button>
 
+                {{ if not .IsHome }}
                 <button class="search-trigger-pill" type="button" aria-label="{{ $searchLabel }}"
                     aria-expanded="false" aria-controls="site-search-modal">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
                     <span>{{ $searchLabel }}</span>
                     <kbd>⌘K</kbd>
                 </button>
+                {{ end }}
             </div>
 
             <div class="search-modal-backdrop" id="site-search-modal" hidden>
@@ -237,19 +239,19 @@
     const searchClose = document.querySelector(".search-modal-close");
     let searchFilter = "all";
 
-    if (searchTrigger && searchModal && searchInput && searchResults) {
+    if (searchModal && searchInput && searchResults) {
         const searchIndex = JSON.parse(document.getElementById("site-search-index").textContent);
 
         const openSearch = function () {
             searchModal.hidden = false;
-            searchTrigger.setAttribute("aria-expanded", "true");
+            if (searchTrigger) searchTrigger.setAttribute("aria-expanded", "true");
             document.body.style.overflow = "hidden";
             setTimeout(() => searchInput.focus(), 10);
             renderResults(searchInput.value);
         };
         const closeSearch = function () {
             searchModal.hidden = true;
-            searchTrigger.setAttribute("aria-expanded", "false");
+            if (searchTrigger) searchTrigger.setAttribute("aria-expanded", "false");
             document.body.style.overflow = "";
         };
         const setFilter = function (f) {
@@ -298,7 +300,7 @@
             </a>`;
         }
 
-        searchTrigger.addEventListener("click", openSearch);
+        if (searchTrigger) searchTrigger.addEventListener("click", openSearch);
         searchClose.addEventListener("click", closeSearch);
         searchModal.addEventListener("click", function (e) { if (e.target === searchModal) closeSearch(); });
         searchInput.addEventListener("input", function () { renderResults(searchInput.value); });
