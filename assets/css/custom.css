@@ -11,6 +11,12 @@
     --breadcrumb-bar-bg: rgba(124, 77, 255, 0.03);
 
     --header-height: 61px;
+
+    --footer-padding-y: 12px;
+    --footer-padding-x: 24px;
+    --footer-font-size: 13px;
+    --footer-line-height: 1.8;
+    --footer-sep-margin: 8px;
     --footer-height: 36px;
 }
 
@@ -336,14 +342,16 @@ main.home-page {
     right: 0;
     z-index: 4;
     text-align: center;
-    padding: 16px 24px;
-    font-size: 13px;
-    line-height: 1.8;
+    padding: var(--footer-padding-y) var(--footer-padding-x);
+    font-size: var(--footer-font-size);
+    line-height: var(--footer-line-height);
     color: var(--header-muted);
 }
 
 .hero-footer p {
     margin: 0;
+    font-size: var(--footer-font-size);
+    line-height: var(--footer-line-height);
 }
 
 .hero-footer a {
@@ -358,7 +366,7 @@ main.home-page {
 }
 
 .hero-footer-sep {
-    margin: 0 8px;
+    margin: 0 var(--footer-sep-margin);
 }
 
 /* Disable body scroll on homepage */
@@ -1864,9 +1872,9 @@ html:not([data-theme="dark"]) .search-empty {
 .site-footer {
     background-color: var(--page-bg);
     color: var(--header-muted);
-    padding: 6px 24px;
+    padding: var(--footer-padding-y) var(--footer-padding-x);
     font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", Arial, sans-serif;
-    font-size: 13px;
+    font-size: var(--footer-font-size);
     font-variant-numeric: tabular-nums;
 }
 
@@ -1878,8 +1886,8 @@ html:not([data-theme="dark"]) .search-empty {
 
 .site-footer p {
     margin: 0;
-    font-size: 13px;
-    line-height: 1.8;
+    font-size: var(--footer-font-size);
+    line-height: var(--footer-line-height);
 }
 
 .site-footer a {
@@ -1909,20 +1917,14 @@ html:not([data-theme="dark"]) .search-empty {
 }
 
 .footer-separator {
-    margin: 0 8px;
+    margin: 0 var(--footer-sep-margin);
 }
 
 @media (max-width: 640px) {
-    .site-footer {
-        padding: 6px 16px;
-    }
-
-    .site-footer p {
-        font-size: 12px;
-    }
-
-    .footer-separator {
-        margin: 0 4px;
+    :root {
+        --footer-padding-x: 16px;
+        --footer-font-size: 12px;
+        --footer-sep-margin: 4px;
     }
 }
 
