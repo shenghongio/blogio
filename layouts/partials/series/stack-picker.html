@@ -1,58 +1,57 @@
 {{- $currentLang := site.Language.Lang -}}
-{{- $categories := slice
-    (dict "name" "ai-engineering" "i18n" "category_ai_engineering_title" "icon" "ai")
-    (dict "name" "cloud-native" "i18n" "category_cloud_native_title" "icon" "cn")
-    (dict "name" "语言与工具" "i18n" "sre_lang_tools_title" "icon" "ai")
-    (dict "name" "系统与网络" "i18n" "sre_sys_net_title" "icon" "cn")
-    (dict "name" "安全" "i18n" "sre_security_title" "icon" "shield")
-    (dict "name" "SRE 体系" "i18n" "sre_sre_system_title" "icon" "sre")
+{{- $groups := slice
+    (dict "name" "AI 工程"    "icon" "ai")
+    (dict "name" "云原生"      "icon" "cn")
+    (dict "name" "语言与工具"  "icon" "ai")
+    (dict "name" "系统与网络"  "icon" "cn")
+    (dict "name" "安全"        "icon" "shield")
+    (dict "name" "SRE 体系"    "icon" "sre")
+    (dict "name" "个人思考"    "icon" "sre")
 -}}
 <div class="gs-stack-picker">
-    {{- range $categories -}}
-    {{- $catName := .name -}}
-    {{- $catIcon := .icon -}}
-    {{- $catTitle := i18n .i18n | default (humanize $catName) -}}
-    {{- $links := slice -}}
-    {{- if eq $catName "ai-engineering" -}}
-        {{- $links = where hugo.Data.blog_links "category" $catName -}}
-    {{- else if eq $catName "cloud-native" -}}
-        {{- $links = where hugo.Data.blog_links "category" $catName -}}
-    {{- else -}}
-        {{- $links = where hugo.Data.sre_links "category" $catName -}}
+    {{- range $group := $groups -}}
+    {{- $groupName := $group.name -}}
+    {{- $groupIcon := $group.icon -}}
+    {{- $series := slice -}}
+    {{- range site.Sections -}}
+        {{- if eq .Section "series" -}}
+            {{- range .Sections -}}
+                {{- $sg := .Params.stackGroup | default "" -}}
+                {{- if eq $sg $groupName -}}
+                    {{- if gt (len .RegularPages) 0 -}}
+                        {{- $series = $series | append . -}}
+                    {{- end -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
     {{- end -}}
-    {{- if or $links (eq $catName "SRE 体系") -}}
+    {{- $series = sort $series "Weight" "desc" -}}
+    {{- if gt (len $series) 0 -}}
     <div class="gs-stack-group">
         <div class="gs-stack-group-head">
-            <svg class="gs-stack-group-icon gs-stack-group-icon--{{ $catIcon }}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                {{- if eq $catIcon "ai" -}}
+            <svg class="gs-stack-group-icon gs-stack-group-icon--{{ $groupIcon }}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                {{- if eq $groupIcon "ai" -}}
                 <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
                 <circle cx="12" cy="10" r="2"></circle>
-                {{- else if eq $catIcon "cn" -}}
+                {{- else if eq $groupIcon "cn" -}}
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
                 <path d="M4 22v-7"></path>
-                {{- else if eq $catIcon "shield" -}}
+                {{- else if eq $groupIcon "shield" -}}
                 <path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"></path>
-                {{- else if eq $catIcon "sre" -}}
+                {{- else if eq $groupIcon "sre" -}}
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M12 7v5l3 2"></path>
                 {{- else -}}
                 <path d="M4 20h16a2 2 0 002-2V8a2 2 0 00-2-2h-7.93a2 2 0 01-1.66-.9l-.82-1.2A2 2 0 007.93 3H4A2 2 0 002 5v13c0 1.1.9 2 2 2z"></path>
                 {{- end -}}
             </svg>
-            <span class="gs-stack-group-title">{{ $catTitle }}</span>
+            <span class="gs-stack-group-title">{{ $groupName }}</span>
         </div>
         <ul class="gs-stack-group-list">
-            {{- if eq $catName "SRE 体系" -}}
+            {{- range $series -}}
             <li>
-                <a href="https://sre.google/books/" target="_blank" rel="noopener">{{ i18n "sre_book_title" }}</a>
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
             </li>
-            {{- end -}}
-            {{- range $links -}}
-            {{- if or (not .lang) (eq .lang $currentLang) -}}
-            <li>
-                <a href="{{ if and .urlZh (ne $currentLang "zh") }}{{ .urlZh | relLangURL }}{{ else }}{{ .url | relLangURL }}{{ end }}">{{ index .title $currentLang }}</a>
-            </li>
-            {{- end -}}
             {{- end -}}
         </ul>
     </div>
