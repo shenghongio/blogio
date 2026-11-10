@@ -43,7 +43,7 @@
             {{- $menuURL := .URL -}}
             {{- if eq .Params.icon "home" -}}
                 {{- $menuURL = site.Home.RelPermalink -}}
-            {{- else -}}
+            {{- else if ne .Params.icon "book" -}}
                 {{- $menuPath := strings.TrimPrefix $siteBasePath .URL -}}
                 {{- $menuURL = printf "%s%s%s" $siteBasePath $langPrefix $menuPath -}}
             {{- end -}}

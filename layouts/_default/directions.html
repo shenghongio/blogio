@@ -4,36 +4,7 @@
 <article class="post-single">
   <header class="post-header">
     <h1 class="post-title">{{ .Title }}</h1>
-    <nav class="category-breadcrumb" aria-label="Breadcrumb">
-      <a href="{{ "/" | relLangURL }}" class="crumb-pill crumb-pill--home">
-        <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m3 10 9-7 9 7"></path>
-          <path d="M5 9v11h14V9"></path>
-          <path d="M9 20v-6h6v6"></path>
-        </svg>
-        <span>{{ i18n "breadcrumb_home" }}</span>
-      </a>
-      <span class="crumb-sep" aria-hidden="true">
-        <svg class="crumb-chevron" viewBox="0 0 24 24">
-          <path d="m9 6 6 6-6 6"></path>
-        </svg>
-      </span>
-      <a href="{{ "directions/" | relLangURL }}" class="crumb-pill">
-        <svg class="crumb-pill-icon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
-          <circle cx="12" cy="10" r="2"></circle>
-        </svg>
-        <span>{{ i18n "breadcrumb_sre" }}</span>
-      </a>
-      <span class="crumb-sep" aria-hidden="true">
-        <svg class="crumb-chevron" viewBox="0 0 24 24">
-          <path d="m9 6 6 6-6 6"></path>
-        </svg>
-      </span>
-      <span class="crumb-pill crumb-pill--current" aria-current="page">
-        <span>{{ .File.TranslationBaseName }}</span>
-      </span>
-    </nav>
+    {{ partial "breadcrumb.html" (dict "label" .File.TranslationBaseName "mid" (dict "url" ("directions/" | relLangURL) "label" (i18n "breadcrumb_sre")) "currentAria" true "noIcon" true) }}
     <div class="post-meta">
       {{ with .Date }}
       <svg class="meta-icon" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14">
