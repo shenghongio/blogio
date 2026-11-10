@@ -84,14 +84,10 @@
   category: "cloud-native"
 
 - title:
-    en: "Notes & SOP"
-    zh: "随笔 & SOP"
-  description:
-    en: ""
-    zh: ""
-  icon: "book-open"
-  url: "series/cloud-native-notes/"
-  category: "cloud-native"
+    en: "Articles"
+    zh: "文章"
+  url: "articles/"
+  category: "articles"
 
 - title:
     en: "Daily Thoughts"

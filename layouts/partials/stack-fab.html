@@ -20,14 +20,6 @@
                 </svg>
                 <span>首页</span>
             </a>
-            <span class="gs-stack-modal-sep"></span>
-            <button type="button" class="gs-stack-modal-search" id="gs-stack-modal-search">
-                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="6.5"></circle>
-                    <path d="m16 16 5 5"></path>
-                </svg>
-                <span>搜索</span>
-            </button>
         </div>
         <div class="gs-stack-modal-body">
             {{ partial "series/stack-picker.html" . }}
@@ -127,15 +119,6 @@
     modal.addEventListener('click', function(e){
         if (e.target.hasAttribute('data-close')) closeModal();
     });
-
-    var searchBtn = document.getElementById('gs-stack-modal-search');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', function(){
-            closeModal();
-            var trigger = document.querySelector('.search-trigger-pill');
-            if (trigger) trigger.click();
-        });
-    }
 
     document.addEventListener('keydown', function(e){
         if (e.key === 'Escape' && modal.classList.contains('gs-stack-modal--open')) closeModal();

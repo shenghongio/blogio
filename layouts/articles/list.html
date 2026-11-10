@@ -1,0 +1,73 @@
+{{ define "main" }}
+<main class="category-page articles-page">
+    <div class="category-page-inner">
+
+        {{ if .Parent.IsSection }}
+        {{- $crumbMid := dict "url" .Parent.RelPermalink "label" .Parent.Title -}}
+        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "mid" $crumbMid "label" .Title "currentAria" true) }}
+        {{ else }}
+        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "label" .Title "currentAria" true) }}
+        {{ end }}
+
+        <header class="category-header">
+            <h1 class="category-title">{{ .Title }}</h1>
+            {{ with .Description }}
+            <p class="category-desc">{{ . }}</p>
+            {{ end }}
+        </header>
+
+        {{- $articles := slice -}}
+        {{ if .Parent.IsSection }}
+        {{- $articles = .RegularPages.ByDate.Reverse -}}
+        {{ else }}
+        {{- range .Sections -}}
+        {{- $articles = $articles | append .RegularPages -}}
+        {{- end -}}
+        {{- $articles = $articles.ByDate.Reverse -}}
+        {{ end }}
+
+        {{ if gt (len $articles) 0 }}
+        <div class="category-post-grid">
+            {{ range $articles }}
+            <article class="category-post-card">
+                <h2 class="category-post-title">
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                </h2>
+                <div class="card-meta">
+                    {{ if gt .Date.Year 1 }}
+                    <time class="card-date" datetime="{{ .Date.Format "2006-01-02" }}">
+                        <svg class="card-date-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        {{ .Date.Format "2006-01-02" }}
+                    </time>
+                    {{ end }}
+                    {{ if not $.Parent.IsSection }}
+                    {{ with .CurrentSection }}
+                    <span class="card-meta-dot" aria-hidden="true">·</span>
+                    <span class="card-category">{{ .Title }}</span>
+                    {{ end }}
+                    {{ end }}
+                    {{ with .Params.tcf }}
+                    <span class="card-meta-dot" aria-hidden="true">·</span>
+                    <span class="card-category">{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ with .Description }}
+                <p class="card-desc">{{ . }}</p>
+                {{ end }}
+            </article>
+            {{ end }}
+        </div>
+        {{ else }}
+        <div class="category-empty">
+            <p>{{ i18n "search_no_results" }}</p>
+        </div>
+        {{ end }}
+
+    </div>
+</main>
+{{ end }}

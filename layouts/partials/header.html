@@ -1,17 +1,11 @@
 {{- $mainNavigationLabel := i18n "main_navigation" -}}
-{{- $searchLabel := i18n "search" -}}
 {{- $languageSwitchLabel := i18n "language_switch" -}}
 {{- $themeSwitchLabel := i18n "theme_switch" -}}
-{{- $searchPlaceholder := i18n "search_placeholder" -}}
-{{- $searchNoResults := i18n "search_no_results" -}}
 {{- $aboutHintTitle := i18n "about_hint_title" -}}
 {{- $aboutHintDescription := i18n "about_hint_description" -}}
 {{- $contactHintTitle := i18n "contact_hint_title" -}}
 {{- $contactHintDescription := i18n "contact_hint_description" -}}
 {{- $siteBasePath := (urls.Parse site.BaseURL).Path | strings.TrimSuffix "/" -}}
-{{- $searchPages := slice -}}
-{{- range site.RegularPages -}}{{- $searchPages = $searchPages | append (dict "title" .Title "url" .RelPermalink "description" .Description "content" .Plain "topics" (.Params.topics | default slice) "tags" (.Params.tags | default slice) "series" (cond (reflect.IsSlice .Params.series) .Params.series (slice .Params.series)) "kind" .Kind) -}}{{- end -}}
-{{- $searchIndex := $searchPages | jsonify | safeHTML -}}
 {{- $currentLang := site.Language.Lang -}}
 {{- $otherLang := cond (eq $currentLang "zh") "en" "zh" -}}
 {{- $langPrefix := "" -}}
@@ -146,39 +140,10 @@
                         <path d="m17.66 6.34 1.41-1.41"></path>
                     </svg>
                 </button>
-
-                {{ if not .IsHome }}
-                <button class="search-trigger-pill" type="button" aria-label="{{ $searchLabel }}"
-                    aria-expanded="false" aria-controls="site-search-modal">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
-                    <span>{{ $searchLabel }}</span>
-                    <kbd>⌘K</kbd>
-                </button>
-                {{ end }}
-            </div>
-
-            <div class="search-modal-backdrop" id="site-search-modal" hidden>
-                <div class="search-modal" role="dialog" aria-modal="true" aria-label="{{ $searchLabel }}">
-                    <div class="search-modal-header">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
-                        <input id="site-search-input" type="search" placeholder="{{ $searchPlaceholder }}" autocomplete="off">
-                        <button class="search-modal-close" type="button" aria-label="close">✕</button>
-                    </div>
-                    <div class="search-modal-filters">
-                        <button class="search-filter active" data-filter="all">{{ i18n "search_filter_all" | default "All" }}</button>
-                        <button class="search-filter" data-filter="post">{{ i18n "search_filter_post" | default "Posts" }}</button>
-                        <button class="search-filter" data-filter="series">{{ i18n "search_filter_series" | default "Series" }}</button>
-                        <button class="search-filter" data-filter="cloud-native">{{ i18n "search_filter_cloud_native" | default "Cloud Native" }}</button>
-                        <button class="search-filter" data-filter="ai-engineering">{{ i18n "search_filter_ai" | default "AI Eng" }}</button>
-                    </div>
-                    <div class="search-results" aria-live="polite"></div>
-                </div>
             </div>
         </div>
     </div>
 </header>
-
-<script id="site-search-index" type="application/json">{{ $searchIndex }}</script>
 
 <script>
     (function () {
@@ -231,91 +196,6 @@
                 window.location.href = "{{ $otherLangURL }}";
             });
         }
-
-    const searchTrigger = document.querySelector(".search-trigger-pill");
-    const searchModal = document.querySelector(".search-modal-backdrop");
-    const searchInput = document.getElementById("site-search-input");
-    const searchResults = document.querySelector(".search-results");
-    const searchClose = document.querySelector(".search-modal-close");
-    let searchFilter = "all";
-
-    if (searchModal && searchInput && searchResults) {
-        const searchIndex = JSON.parse(document.getElementById("site-search-index").textContent);
-
-        const openSearch = function () {
-            searchModal.hidden = false;
-            if (searchTrigger) searchTrigger.setAttribute("aria-expanded", "true");
-            document.body.style.overflow = "hidden";
-            setTimeout(() => searchInput.focus(), 10);
-            renderResults(searchInput.value);
-        };
-        const closeSearch = function () {
-            searchModal.hidden = true;
-            if (searchTrigger) searchTrigger.setAttribute("aria-expanded", "false");
-            document.body.style.overflow = "";
-        };
-        const setFilter = function (f) {
-            searchFilter = f;
-            document.querySelectorAll(".search-filter").forEach(b => {
-                b.classList.toggle("active", b.dataset.filter === f);
-            });
-            renderResults(searchInput.value);
-        };
-
-        const renderResults = function (query) {
-            const q = query.trim().toLowerCase();
-            let pool = searchIndex;
-            if (searchFilter === "post") {
-                pool = searchIndex.filter(p => p.kind === "page");
-            } else if (searchFilter === "series") {
-                pool = searchIndex.filter(p => p.kind === "section");
-            } else if (searchFilter === "cloud-native" || searchFilter === "ai-engineering") {
-                pool = searchIndex.filter(p => (p.topics || []).includes(searchFilter));
-            }
-            if (!q) {
-                searchResults.innerHTML = pool.length
-                    ? `<div class="search-hint">${pool.length} {{ i18n "search_available" | default "items available" }}</div>` + pool.slice(0, 6).map(renderItem).join("")
-                    : `<p class="search-empty">{{ $searchNoResults }}</p>`;
-                return;
-            }
-            const matches = pool.filter(function (page) {
-                const hay = [page.title, page.description, page.content, (page.tags || []).join(" "), (page.topics || []).join(" "), (page.series || []).join(" ")].filter(Boolean).join(" ").toLowerCase();
-                return hay.includes(q);
-            }).slice(0, 20);
-            searchResults.innerHTML = matches.length
-                ? matches.map(renderItem).join("")
-                : `<p class="search-empty">{{ $searchNoResults }}</p>`;
-        };
-
-        function renderItem(p) {
-            const badges = [];
-            if (p.topics && p.topics.length) badges.push(`<span class="search-badge search-badge-topic">${p.topics[0]}</span>`);
-            if (p.series && p.series.length) badges.push(`<span class="search-badge search-badge-series">${p.series[0]}</span>`);
-            return `<a class="search-result" href="${p.url}">
-                <div class="search-result-main">
-                    <strong>${p.title}</strong>
-                    ${badges.join("")}
-                </div>
-                <div class="search-result-sub">${p.description || ""}</div>
-            </a>`;
-        }
-
-        if (searchTrigger) searchTrigger.addEventListener("click", openSearch);
-        searchClose.addEventListener("click", closeSearch);
-        searchModal.addEventListener("click", function (e) { if (e.target === searchModal) closeSearch(); });
-        searchInput.addEventListener("input", function () { renderResults(searchInput.value); });
-        document.querySelectorAll(".search-filter").forEach(btn => {
-            btn.addEventListener("click", function () { setFilter(btn.dataset.filter); });
-        });
-        document.addEventListener("keydown", function (event) {
-            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-                event.preventDefault();
-                if (searchModal.hidden) openSearch(); else closeSearch();
-            } else if (event.key === "Escape" && !searchModal.hidden) {
-                closeSearch();
-            }
-        });
-    }
 
 
             var wrappers = document.querySelectorAll(".nav-item-wrapper");
