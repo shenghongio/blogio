@@ -34,6 +34,7 @@ focus_cloud_desc: "从 Kubernetes、服务网格和平台工程出发，观察�
 focus_os_title: "开源生态与开发者体验"
 focus_os_desc: "关注文档、教程、贡献路径、社区沟通和开发者活动，让复杂基础软件从代码仓库成长为可理解、可参与的生态。"
 projects_title: "精选项目"
+articles_title: "文章"
 projects_description: "开源项目与正在构建的基础设施工具。"
 latest_posts: "最新文章"
 view_all: "查看全部"

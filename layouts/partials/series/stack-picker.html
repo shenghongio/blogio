@@ -8,6 +8,13 @@
     (dict "name" "SRE 体系"    "icon" "sre")
     (dict "name" "个人思考"    "icon" "sre")
 -}}
+{{- $articles := site.GetPage "/articles" -}}
+{{- $articleCount := 0 -}}
+{{- with $articles -}}
+    {{- range .Sections -}}
+        {{- $articleCount = add $articleCount (len .RegularPages) -}}
+    {{- end -}}
+{{- end -}}
 <div class="gs-stack-picker">
     {{- range $group := $groups -}}
     {{- $groupName := $group.name -}}
@@ -56,6 +63,19 @@
         </ul>
     </div>
     {{- end -}}
+    {{- end -}}
+    {{- if and $articles (gt $articleCount 0) -}}
+    <div class="gs-stack-group gs-stack-group--link">
+        <a class="gs-stack-group-head gs-stack-group-head--link" href="{{ $articles.RelPermalink }}">
+            <svg class="gs-stack-group-icon gs-stack-group-icon--article" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="gs-stack-group-title">{{ i18n "articles_title" }}</span>
+            <svg class="gs-stack-group-arrow" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m9 6 6 6-6 6"></path>
+            </svg>
+        </a>
+    </div>
     {{- end -}}
     <div class="gs-stack-group">
         <div class="gs-stack-group-head">

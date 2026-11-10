@@ -74,6 +74,17 @@
         </div>
     </div>
     {{- end -}}
+    {{- with where hugo.Data.blog_links "category" "articles" -}}
+    {{- $first := index . 0 -}}
+    <div class="blog-column blog-column--action">
+        <a class="blog-column-header blog-column-header--article" href="{{ if and $first.urlZh (ne $currentLang "zh") }}{{ $first.urlZh | relLangURL }}{{ else }}{{ $first.url | relLangURL }}{{ end }}">
+            <svg class="tooltip-icon tooltip-icon--article" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span class="blog-column-header-label">{{ i18n "articles_title" }}</span>
+        </a>
+    </div>
+    {{- end -}}
     <div class="blog-column blog-column--action blog-column--projects">
         <span class="blog-column-header blog-column-header--projects">
             <svg class="tooltip-icon tooltip-icon--projects" viewBox="0 0 24 24" aria-hidden="true">

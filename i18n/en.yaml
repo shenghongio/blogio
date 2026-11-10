@@ -34,6 +34,7 @@ focus_cloud_desc: "From Kubernetes and service mesh to platform engineering, obs
 focus_os_title: "Open Source Ecosystem & DX"
 focus_os_desc: "Documentation, tutorials, contribution paths, community communication, and developer events — turning complex infrastructure from a code repository into a comprehensible, participatory ecosystem."
 projects_title: "Selected projects"
+articles_title: "Articles"
 projects_description: "Open-source projects and infrastructure tools in progress."
 latest_posts: "Latest posts"
 view_all: "View all"
