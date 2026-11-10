@@ -1,0 +1,549 @@
+{{ $gt := site.Data.go_tutorial }}
+{{ $zh := index (where hugo.Sites "Language.Lang" "zh") 0 }}
+{{ $partPages := slice }}
+{{ range $zh.RegularPages }}
+  {{ if in .File.Path "series/go-tutorial/part-" }}{{ $partPages = $partPages | append . }}{{ end }}
+{{ end }}
+{{ $partPages = sort $partPages "File.Path" }}
+<main class="gt-page gt-page--standalone">
+
+    <div class="gt-hero-head">
+        <div class="gt-hero-head-left">
+            <img class="gt-brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="44" height="44">
+            <span class="gt-brand-name">ShengHong<span style="opacity:.55">@kraken</span></span>
+        </div>
+    </div>
+
+    <section class="gt-hero">
+        <div class="gt-inner">
+            <div class="gt-hero-main">
+                <h1 class="gt-hero-title">{{ $gt.hero.title }}</h1>
+                {{ with $gt.hero.subtitle }}
+                <p class="gt-hero-subtitle">{{ . }}</p>
+                {{ end }}
+            </div>
+        </div>
+    </section>
+
+    <div class="gt-stack-logo" id="gt-stack-trigger" aria-label="导航" aria-expanded="false">
+        <img src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="48" height="48">
+        <span class="gt-stack-logo-handle"></span>
+    </div>
+
+    <div class="gt-stack-modal" id="gt-stack-modal" aria-hidden="true">
+        <div class="gt-stack-modal-backdrop" data-close></div>
+        <div class="gt-stack-modal-panel">
+            <button type="button" class="gt-stack-modal-close" data-close aria-label="关闭">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+            </button>
+            {{ partial "stack-columns.html" . }}
+        </div>
+    </div>
+
+    <div class="gt-layout">
+        <aside class="gt-sidebar">
+            <div class="gt-sidebar-inner" id="gt-sidebar-inner">
+                {{ range $i, $part := $gt.nav }}
+                <div class="gt-nav-pane{{ if ne $i 0 }} gt-nav-pane--hidden{{ end }}" data-part-pane="{{ $i }}">
+                    {{ partial "go-tutorial/nav" (dict "nav" $gt.nav "currentPath" (relURL $.RelPermalink) "partIndex" $i) }}
+                </div>
+                {{ end }}
+            </div>
+        </aside>
+        <div class="gt-content">
+            <div class="gt-content-inner">
+                <div class="gt-article-viewer" id="gt-article-viewer" data-toc-managed="page"{{ if eq .Kind "page" }} data-single="1"{{ end }}>
+                    {{ if eq .Kind "page" }}
+                    <h2 class="gt-overview-title">{{ .Title }}</h2>
+                    <div class="gt-overview-meta">
+                        {{ if gt .Lastmod.Year 1 }}
+                        <span class="gt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                        {{ else if gt .Date.Year 1 }}
+                        <span class="gt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                        {{ end }}
+                        {{ if isset .Params "sustain" }}<span class="gt-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                    </div>
+                    <div class="gt-markdown gt-overview-body">{{ .Content }}</div>
+                    {{ else }}
+                    {{ range $i, $part := $gt.nav }}
+                        {{ if eq $i 0 }}
+                            {{ $partPage := index $partPages $i }}
+                            {{ with $partPage }}
+                            <div class="gt-part-overview" data-overview="{{ $i }}">
+                                <h2 class="gt-overview-title">{{ $part.name }}</h2>
+                                <div class="gt-overview-meta">
+                                    {{ if gt .Lastmod.Year 1 }}
+                                    <span class="gt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                                    {{ else if gt .Date.Year 1 }}
+                                    <span class="gt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                                    {{ end }}
+                                    {{ if isset .Params "sustain" }}<span class="gt-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                                </div>
+                                <div class="gt-markdown gt-overview-body">{{ .Content }}</div>
+                            </div>
+                            {{ end }}
+                        {{ end }}
+                    {{ end }}
+                    {{ end }}
+                </div>
+            </div>
+            <aside class="gt-toc" id="gt-toc" hidden>
+                <div class="gt-toc-inner"></div>
+            </aside>
+        </div>
+    </div>
+
+    <script type="text/template" id="gt-part-templates">
+        {{ range $i, $part := $gt.nav }}
+        {{ $partPage := index $partPages $i }}
+        {{ with $partPage }}
+        <div class="gt-part-overview" data-overview="{{ $i }}">
+            <h2 class="gt-overview-title">{{ $part.name }}</h2>
+            <div class="gt-overview-meta">
+                {{ if gt .Lastmod.Year 1 }}
+                <span class="gt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                {{ else if gt .Date.Year 1 }}
+                <span class="gt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                {{ end }}
+                {{ if isset .Params "sustain" }}<span class="gt-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+            </div>
+            <div class="gt-markdown gt-overview-body">{{ .Content }}</div>
+        </div>
+        {{ end }}
+        {{ end }}
+    </script>
+
+    <script>
+    (function(){
+        var btn = document.getElementById('gt-stack-trigger');
+        var modal = document.getElementById('gt-stack-modal');
+        if (!btn || !modal) return;
+        var STORAGE_KEY = 'gt-stack-logo-pos';
+        var DRAG_THRESHOLD = 5;
+        var dragging = false;
+        var didDrag = false;
+        var startX, startY, origLeft, origTop;
+
+        var saved = null;
+        try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+        if (saved && typeof saved.left === 'number') {
+            btn.style.left = saved.left + 'px';
+            btn.style.top = saved.top + 'px';
+            btn.style.transform = 'none';
+            btn.style.right = 'auto';
+        } else {
+            var hero = document.querySelector('.gt-hero');
+            if (hero) {
+                var hRect = hero.getBoundingClientRect();
+                btn.style.top = (hRect.bottom - 26) + 'px';
+                btn.style.right = '32px';
+            }
+        }
+
+        var clampPos = function(l, t){
+            var w = btn.offsetWidth, h = btn.offsetHeight;
+            var maxL = window.innerWidth - w - 4;
+            var maxT = window.innerHeight - h - 4;
+            return {
+                left: Math.max(4, Math.min(l, maxL)),
+                top: Math.max(4, Math.min(t, maxT))
+            };
+        };
+
+        btn.addEventListener('pointerdown', function(e){
+            dragging = true;
+            didDrag = false;
+            btn.classList.add('gt-stack-logo--dragging');
+            btn.setPointerCapture(e.pointerId);
+            var rect = btn.getBoundingClientRect();
+            startX = e.clientX;
+            startY = e.clientY;
+            origLeft = rect.left;
+            origTop = rect.top;
+        });
+
+        btn.addEventListener('pointermove', function(e){
+            if (!dragging) return;
+            var dx = e.clientX - startX;
+            var dy = e.clientY - startY;
+            if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+            didDrag = true;
+            var p = clampPos(origLeft + dx, origTop + dy);
+            btn.style.right = 'auto';
+            btn.style.left = p.left + 'px';
+            btn.style.top = p.top + 'px';
+            btn.style.transform = 'none';
+        });
+
+        var endDrag = function(e){
+            if (!dragging) return;
+            dragging = false;
+            btn.classList.remove('gt-stack-logo--dragging');
+            if (didDrag) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                        left: parseInt(btn.style.left),
+                        top: parseInt(btn.style.top)
+                    }));
+                } catch(e) {}
+            }
+        };
+        btn.addEventListener('pointerup', endDrag);
+        btn.addEventListener('pointercancel', endDrag);
+
+        btn.addEventListener('click', function(e){
+            if (didDrag) { e.stopPropagation(); return; }
+            var open = modal.classList.contains('gt-stack-modal--open');
+            if (open) closeModal(); else openModal();
+        });
+
+        var openModal = function(){
+            modal.classList.add('gt-stack-modal--open');
+            modal.setAttribute('aria-hidden', 'false');
+            btn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        };
+        var closeModal = function(){
+            modal.classList.remove('gt-stack-modal--open');
+            modal.setAttribute('aria-hidden', 'true');
+            btn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        };
+        modal.addEventListener('click', function(e){
+            if (e.target.hasAttribute('data-close')) closeModal();
+        });
+        document.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') closeModal();
+        });
+    })();
+    </script>
+
+    <script>
+    (function(){
+        var viewer = document.getElementById('gt-article-viewer');
+        if (!viewer) return;
+        var templates = document.getElementById('gt-part-templates');
+        var cache = {};
+        var currentIdx = 0;
+
+        var syncPanes = function(idx){
+            document.querySelectorAll('[data-part-pane]').forEach(function(pane){
+                pane.classList.toggle('gt-nav-pane--hidden', pane.getAttribute('data-part-pane') !== String(idx));
+            });
+        };
+
+        var activeLink = function(){
+            return document.querySelector('.gt-article--active .gt-article-link');
+        };
+
+        var markActive = function(link){
+            document.querySelectorAll('.gt-article--active').forEach(function(li){
+                li.classList.remove('gt-article--active');
+                var m = li.querySelector('.gt-article-mark');
+                if (m) m.remove();
+            });
+            var li = link.closest('.gt-article');
+            if (!li) return;
+            li.classList.add('gt-article--active');
+            if (!li.querySelector('.gt-article-mark')) {
+                var mark = document.createElement('span');
+                mark.className = 'gt-article-mark';
+                li.insertBefore(mark, li.firstChild);
+            }
+        };
+
+        var renderTitle = function(title, dateStr, sustain){
+            var h = document.createElement('h2');
+            h.className = 'gt-overview-title';
+            h.textContent = title || '';
+            var meta = document.createElement('div');
+            meta.className = 'gt-overview-meta';
+            if (dateStr) {
+                var dt = document.createElement('span');
+                dt.className = 'gt-date-tag';
+                dt.textContent = '最后更新：' + dateStr;
+                meta.appendChild(dt);
+            }
+            if (sustain !== null) {
+                var badge = document.createElement('span');
+                badge.className = 'gt-badge';
+                badge.textContent = '持续维护：' + (sustain ? '是' : '否');
+                meta.appendChild(badge);
+            }
+            return [h, meta];
+        };
+
+        var renderArticle = function(title, contentHtml, dateStr, sustain){
+            viewer.innerHTML = '';
+            var nodes = renderTitle(title, dateStr, sustain);
+            viewer.appendChild(nodes[0]);
+            viewer.appendChild(nodes[1]);
+            var body = document.createElement('div');
+            body.className = 'gt-markdown gt-overview-body';
+            body.innerHTML = contentHtml;
+            viewer.appendChild(body);
+            buildToc(true);
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        };
+
+        var extractArticle = function(doc){
+            var content = doc.querySelector('.post-content');
+            var header = doc.querySelector('.post-header');
+            var titleEl = header ? header.querySelector('.post-title') : null;
+            var dateEl = header ? header.querySelector('.post-meta') : null;
+            var sustain = null;
+            if (!content && doc.getElementById('gt-article-viewer')) {
+                var singleViewer = doc.getElementById('gt-article-viewer');
+                content = singleViewer.querySelector('.gt-overview-body');
+                titleEl = singleViewer.querySelector('.gt-overview-title');
+                dateEl = singleViewer.querySelector('.gt-overview-meta');
+                var badge = singleViewer.querySelector('.gt-badge');
+                if (badge) sustain = badge.textContent.indexOf('是') !== -1;
+            }
+            var dateStr = '';
+            if (dateEl) {
+                var raw = dateEl.textContent;
+                var m = raw.match(/\d{4}-\d{2}-\d{2}/);
+                if (m) {
+                    dateStr = m[0];
+                } else {
+                    var cn = raw.match(/(\d{4})年(\d{1,2})月(\d{1,2})/);
+                    if (cn) {
+                        dateStr = cn[1] + '-' + ('0' + cn[2]).slice(-2) + '-' + ('0' + cn[3]).slice(-2);
+                    }
+                }
+            }
+            if (sustain === null && header) {
+                var sustainEl = header.querySelector('[data-sustain]');
+                if (sustainEl) sustain = sustainEl.getAttribute('data-sustain') === 'true';
+            }
+            return {
+                title: titleEl ? titleEl.textContent.trim() : '',
+                date: dateStr,
+                sustain: sustain,
+                html: content ? content.innerHTML : ''
+            };
+        };
+
+        var loadArticle = function(url, link){
+            var finish = function(data){
+                renderArticle(data.title, data.html, data.date, data.sustain);
+                markActive(link);
+            };
+            if (cache[url]) { finish(cache[url]); return; }
+            viewer.innerHTML = '<div class="gt-article-loading">加载中...</div>';
+            fetch(url)
+                .then(function(r){ return r.text(); })
+                .then(function(html){
+                    var doc = new DOMParser().parseFromString(html, 'text/html');
+                    var data = extractArticle(doc);
+                    if (!data.html) {
+                        viewer.innerHTML = '<div class="gt-article-loading">无法加载文章</div>';
+                        return;
+                    }
+                    cache[url] = data;
+                    finish(data);
+                })
+                .catch(function(){
+                    viewer.innerHTML = '<div class="gt-article-loading">加载失败</div>';
+                });
+        };
+
+        var clearActive = function(){
+            document.querySelectorAll('.gt-article--active').forEach(function(li){
+                li.classList.remove('gt-article--active');
+                var m = li.querySelector('.gt-article-mark');
+                if (m) m.remove();
+            });
+        };
+
+        var tocEl = document.getElementById('gt-toc');
+        var tocInner = tocEl ? tocEl.querySelector('.gt-toc-inner') : null;
+
+        var tocSpy = function(){
+            if (!tocInner) return;
+            var heads = viewer.querySelectorAll('h2, h3');
+            var cur = null;
+            heads.forEach(function(h){
+                if (h.classList.contains('gt-overview-title')) return;
+                if (h.getBoundingClientRect().top <= 100) cur = h.id;
+            });
+            tocInner.querySelectorAll('a').forEach(function(a){
+                var target = a.getAttribute('data-target');
+                a.parentElement.classList.toggle('gt-toc-active', !!cur && target === cur);
+            });
+        };
+
+        var headText = function(h){
+            var c = h.cloneNode(true);
+            c.querySelectorAll('.anchor').forEach(function(a){ a.remove(); });
+            return c.textContent.trim();
+        };
+
+        var setTocVisible = function(show){
+            if (!tocEl) return;
+            tocEl.hidden = !show;
+            if (!show) tocInner.innerHTML = '';
+        };
+
+        var TOC_MIN_WIDTH = 150;
+        var TOC_PAD_X = 20;
+        var TOC_INDENT = {
+            'gt-toc-h2': 12,
+            'gt-toc-h3': 28
+        };
+
+        var textWidth = function(text, weight){
+            var probe = document.createElement('span');
+            probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-size:13px;line-height:1.6;font-family:inherit;font-weight:' + (weight || 600);
+            probe.textContent = text;
+            document.body.appendChild(probe);
+            var w = probe.offsetWidth;
+            probe.parentNode.removeChild(probe);
+            return w;
+        };
+
+        var syncTocWidth = function(){
+            if (!tocEl || tocEl.hidden || !tocInner) return;
+            var widest = 0;
+            tocInner.querySelectorAll('.gt-toc-title, .gt-toc-list a').forEach(function(el){
+                var indent = 0;
+                var weight = 600;
+                if (el.tagName === 'A') {
+                    indent = TOC_INDENT[el.parentElement.className] || 0;
+                    weight = el.parentElement.className === 'gt-toc-h3' ? 400 : 600;
+                }
+                widest = Math.max(widest, Math.ceil(textWidth(el.textContent, weight)) + indent);
+            });
+            if (!widest) return;
+            var width = widest + TOC_PAD_X * 2 + 2;
+            width = Math.max(TOC_MIN_WIDTH, width);
+            var limit = Math.max(TOC_MIN_WIDTH, Math.round(window.innerWidth * 0.3));
+            if (width > limit) width = limit;
+            document.documentElement.style.setProperty('--gt-toc-width', width + 'px');
+        };
+
+        var buildToc = function(showToc){
+            if (!tocEl || !tocInner) return;
+            if (!showToc) {
+                setTocVisible(false);
+                return;
+            }
+            var heads = viewer.querySelectorAll('h2, h3');
+            var items = [];
+            heads.forEach(function(h, i){
+                if (h.classList.contains('gt-overview-title')) return;
+                if (!h.id) h.id = 'gt-sec-' + i;
+                items.push({ id: h.id, text: headText(h), level: h.tagName.toLowerCase() });
+            });
+            if (!items.length) {
+                setTocVisible(false);
+                return;
+            }
+            setTocVisible(true);
+            var ul = document.createElement('ul');
+            ul.className = 'gt-toc-list';
+            var title = document.createElement('div');
+            title.className = 'gt-toc-title';
+            title.textContent = '本章目录';
+            tocInner.innerHTML = '';
+            tocInner.appendChild(title);
+            items.forEach(function(it){
+                var li = document.createElement('li');
+                li.className = 'gt-toc-' + it.level;
+                var a = document.createElement('a');
+                a.href = '#' + it.id;
+                a.setAttribute('data-target', it.id);
+                a.textContent = it.text;
+                a.addEventListener('click', function(e){
+                    e.preventDefault();
+                    var t = document.getElementById(it.id);
+                    if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+                });
+                li.appendChild(a);
+                ul.appendChild(li);
+            });
+            tocInner.appendChild(ul);
+            syncTocWidth();
+            tocSpy();
+        };
+
+        window.addEventListener('scroll', tocSpy, { passive: true });
+        window.addEventListener('resize', syncTocWidth, { passive: true });
+
+        var showOverview = function(idx){
+            currentIdx = parseInt(idx) || 0;
+            if (!templates) return;
+            var tmpl = templates.querySelector('[data-overview="' + currentIdx + '"]');
+            if (!tmpl) return;
+            viewer.innerHTML = tmpl.innerHTML;
+            clearActive();
+            syncPanes(currentIdx);
+            buildToc(false);
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        };
+
+        var saveState = function(extra){
+            var st = { gtOverview: currentIdx };
+            if (extra) {
+                for (var k in extra) st[k] = extra[k];
+            }
+            return st;
+        };
+
+        history.replaceState(saveState(), '', location.href);
+
+        document.addEventListener('click', function(e){
+            var link = e.target.closest('.gt-article-link');
+            if (!link) return;
+            if (link.closest('.gt-article--draft')) return;
+            var url = link.getAttribute('data-article');
+            if (!url) return;
+            if (document.getElementById('gt-article-viewer').hasAttribute('data-single')) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            if (history.pushState) history.pushState(saveState({ gtArticle: url }), '', location.href);
+            loadArticle(url, link);
+        }, true);
+
+        window.addEventListener('popstate', function(e){
+            var st = e.state || {};
+            if (st.gtArticle) {
+                var link = document.querySelector('.gt-article-link[data-article="' + st.gtArticle + '"]');
+                if (link) {
+                    loadArticle(st.gtArticle, link);
+                    return;
+                }
+            }
+            showOverview(st.gtOverview || 0);
+        });
+
+        document.querySelectorAll('[data-section-head]').forEach(function(head){
+            if (head.getAttribute('data-section-bound') === '1') return;
+            head.setAttribute('data-section-bound', '1');
+            head.addEventListener('click', function(){
+                var section = head.closest('.gt-section');
+                if (section) section.classList.toggle('gt-section--open');
+            });
+        });
+
+        var current = activeLink();
+        if (current && current.getAttribute('data-article')) {
+            markActive(current);
+            var activePane = current.closest('[data-part-pane]');
+            if (activePane) {
+                currentIdx = parseInt(activePane.getAttribute('data-part-pane')) || 0;
+                syncPanes(currentIdx);
+                history.replaceState(saveState(), '', location.href);
+            }
+            return;
+        }
+        syncPanes(currentIdx);
+    })();
+    </script>
+
+</main>

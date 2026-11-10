@@ -15,14 +15,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function cls(name) { return name.replace(/\\bkt-/g, prefix + '-'); }
 
+  document.querySelectorAll('[data-section-head]').forEach(function(head) {
+    if (head.getAttribute('data-section-bound') === '1') return;
+    head.setAttribute('data-section-bound', '1');
+    head.addEventListener('click', function() {
+      var section = head.parentElement;
+      if (!section) return;
+      if (!section.classList.contains(prefix + '-section')) return;
+      section.classList.toggle(prefix + '-section--open');
+    });
+  });
+
+  if (viewer.hasAttribute('data-toc-managed')) return;
+
   var tocEl = document.getElementById(prefix + '-toc');
   var partTemplates = document.getElementById(prefix + '-part-templates');
-  if (!tocEl) {
-    tocEl = document.createElement('aside');
-    tocEl.className = prefix + '-toc';
-    tocEl.id = prefix + '-toc';
-    viewer.parentElement.appendChild(tocEl);
-  }
+  if (!tocEl) return;
 
   var cache = {};
   var loading = null;
@@ -38,9 +46,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     var titleHtml = '<div class="' + prefix + '-toc-title">章节导航</div>';
     if (items.length === 0) {
-      tocEl.innerHTML = titleHtml + '<div class="' + prefix + '-toc-placeholder">暂无章节</div>';
+      tocEl.innerHTML = '';
+      tocEl.style.display = 'none';
       return;
     }
+    tocEl.style.display = '';
     tocEl.innerHTML = titleHtml;
     var ul = document.createElement('ul');
     ul.className = prefix + '-toc-list';
@@ -89,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(function(html) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(html, 'text/html');
-        var main = doc.querySelector('.post-single, .post-content, main');
+        var main = doc.querySelector('.post-content');
         if (!main) {
           viewer.innerHTML = '<div class="' + prefix + '-article-loading">无法加载文章</div>';
           return;
@@ -108,12 +118,6 @@ document.addEventListener('DOMContentLoaded', function() {
     generateToc();
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
-
-  document.querySelectorAll('[data-section-head]').forEach(function(head) {
-    head.addEventListener('click', function() {
-      head.closest('[class*="-section"]').classList.toggle(prefix + '-section--open');
-    });
-  });
 
   var dropdown = document.getElementById(prefix + '-part-dropdown');
   var trigger = document.getElementById(prefix + '-part-trigger');
@@ -164,4 +168,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   generateToc();
-});
+});</script>

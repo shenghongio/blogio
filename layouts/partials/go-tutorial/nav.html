@@ -2,41 +2,52 @@
 {{ $currentPath := .currentPath }}
 {{ $partIndex := .partIndex | default 0 }}
 {{ $part := index $nav $partIndex }}
+{{ $opened := false }}
 {{ $basePath := (urls.Parse site.BaseURL).Path | strings.TrimRight "/" }}
 {{ with $part }}
 <div class="gt-nav">
-    <div class="gt-section gt-section--open">
-        <button type="button" class="gt-section-head" disabled>
-            <span class="gt-part-title-inline">{{ $part.name }}</span>
-        </button>
-    </div>
     {{ range $group := $part.groups }}
     {{ range $section := $group.sections }}
     {{ $sectionHasActive := false }}
     {{ range $article := $section.articles }}
-        {{ $articleFullPath := printf "%s%s" $basePath $article.path }}
-        {{ if eq $articleFullPath $currentPath }}
+        {{ if eq (printf "%s%s" $basePath $article.path) $currentPath }}
             {{ $sectionHasActive = true }}
         {{ end }}
     {{ end }}
-    <div class="gt-section{{ if $sectionHasActive }} gt-section--open{{ end }}">
-        <button type="button" class="gt-section-head" data-section-head>
+    {{ $defaultOpen := false }}
+    {{ if not $opened }}
+        {{ if $section.articles }}
+            {{ $defaultOpen = true }}
+            {{ $opened = true }}
+        {{ end }}
+    {{ end }}
+    <div class="gt-section{{ if or $sectionHasActive $defaultOpen }} gt-section--open{{ end }}{{ if not $section.articles }} gt-section--empty{{ end }}">
+        <button type="button" class="gt-section-head"{{ if $section.articles }} data-section-head{{ else }} disabled{{ end }}>
             <span class="gt-section-title">{{ $section.name }}</span>
+            {{ if $section.articles }}
             <svg class="gt-section-caret" viewBox="0 0 16 16" width="10" height="10" fill="currentColor">
                 <path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            {{ end }}
         </button>
         <ul class="gt-articles">
             {{ range $article := $section.articles }}
             {{ $articleURL := printf "%s%s" $basePath $article.path }}
             {{ $isActive := eq $articleURL $currentPath }}
-            <li class="gt-article{{ if $isActive }} gt-article--active{{ end }}{{ if eq $article.status "draft" }} gt-article--draft{{ end }}">
+            {{ $articleTitle := path.Base $article.path }}
+            {{ $pagePath := replaceRE "^/zh/" "/" $article.path }}
+            {{ $isDraft := true }}
+            {{ with site.GetPage $pagePath }}
+                {{ $articleTitle = .Title }}
+                {{ $isDraft = .Draft }}
+            {{ end }}
+            <li class="gt-article{{ if $isActive }} gt-article--active{{ end }}{{ if $isDraft }} gt-article--draft{{ end }}">
                 {{ if $isActive }}
                 <span class="gt-article-mark"></span>
                 {{ end }}
                 <a href="{{ $articleURL }}" class="gt-article-link" data-article="{{ $articleURL }}">
-                    <span class="gt-article-title">{{ $article.name }}</span>
-                    {{ if eq $article.status "draft" }}
+                    <span class="gt-article-title">{{ $articleTitle }}</span>
+                    {{ if $isDraft }}
                     <span class="gt-article-tag">Draft</span>
                     {{ end }}
                 </a>
