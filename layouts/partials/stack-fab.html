@@ -7,11 +7,6 @@
 <div class="gs-stack-modal" id="gs-stack-modal" aria-hidden="true">
     <div class="gs-stack-modal-backdrop" data-close></div>
     <div class="gs-stack-modal-panel">
-        <button type="button" class="gs-stack-modal-close" data-close aria-label="关闭">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
-            </svg>
-        </button>
         <div class="gs-stack-modal-top">
             <a class="gs-stack-modal-home" href="{{ "" | relLangURL }}">
                 <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -20,12 +15,36 @@
                 </svg>
                 <span>首页</span>
             </a>
+            <span class="gs-stack-modal-sep"></span>
+            <div class="gs-stack-modal-search" id="gs-stack-search-wrap">
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="6.5"></circle>
+                    <path d="m16 16 5 5"></path>
+                </svg>
+                <input id="gs-stack-search-input" type="text" placeholder="{{ i18n "search_placeholder" }}" autocomplete="off" aria-label="{{ i18n "search" }}" role="combobox" aria-expanded="false" aria-controls="gs-stack-search-results" aria-autocomplete="list">
+                <button type="button" class="gs-stack-search-clear" id="gs-stack-search-clear" aria-label="clear" hidden>
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M6 6l12 12M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="gs-stack-modal-body">
-            {{ partial "series/stack-picker.html" . }}
+        <div class="gs-stack-modal-body" id="gs-stack-nav-body">
+            <div class="gs-stack-nav-pane" id="gs-stack-nav-pane">
+                {{ partial "series/stack-picker.html" . }}
+            </div>
+            <div class="gs-stack-search-pane" id="gs-stack-search-results" hidden aria-live="polite"></div>
         </div>
     </div>
 </div>
+
+<script id="gs-stack-search-index" type="application/json">
+{{- $idx := slice -}}
+{{- range site.RegularPages -}}
+{{- $idx = $idx | append (dict "title" .Title "url" .RelPermalink "description" (.Description | default "") "tcf" (.Params.tcf | default "") "section" (.CurrentSection.Title | default "") "kind" .Kind "content" (.Plain | default "") "tags" (delimit (.Params.tags | default slice) " ") "topics" (delimit (.Params.topics | default slice) " ")) -}}
+{{- end -}}
+{{- $idx | jsonify | safeJS -}}
+</script>
 
 <script>
 (function(){
@@ -109,6 +128,17 @@
         modal.setAttribute('aria-hidden', 'true');
         btn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        if (searchInput) {
+            searchInput.value = '';
+            searchInput.setAttribute('aria-expanded', 'false');
+        }
+        if (searchResults) {
+            searchResults.hidden = true;
+            searchResults.innerHTML = '';
+        }
+        if (navPane) navPane.hidden = false;
+        if (navBody) { navBody.style.height = ''; lockedHeight = 0; }
+        if (searchClear) searchClear.hidden = true;
     };
 
     btn.addEventListener('click', function(e){
@@ -119,6 +149,200 @@
     modal.addEventListener('click', function(e){
         if (e.target.hasAttribute('data-close')) closeModal();
     });
+
+    var searchInput = document.getElementById('gs-stack-search-input');
+    var searchClear = document.getElementById('gs-stack-search-clear');
+    var searchResults = document.getElementById('gs-stack-search-results');
+    var navBody = document.getElementById('gs-stack-nav-body');
+    var navPane = document.getElementById('gs-stack-nav-pane');
+    var searchIndex = null;
+    var activeIndex = -1;
+    var currentMatches = [];
+    var mouseMode = false;
+    if (searchInput && searchResults && navBody && navPane) {
+        var noResults = {{ i18n "search_no_results" }};
+        var lockedHeight = 0;
+
+        var lockHeight = function(){
+            if (lockedHeight || !navPane || navPane.hidden) return;
+            var h = navPane.getBoundingClientRect().height;
+            if (!h) return;
+            lockedHeight = Math.min(h, Math.max(200, window.innerHeight - 200));
+            navBody.style.height = lockedHeight + 'px';
+        };
+
+        var loadIndex = function(){
+            if (searchIndex) return searchIndex;
+            try {
+                searchIndex = JSON.parse(document.getElementById('gs-stack-search-index').textContent);
+            } catch(e) {
+                searchIndex = [];
+            }
+            return searchIndex;
+        };
+        var renderItem = function(p, i, info){
+            var badges = [];
+            if (p.tcf) badges.push('<span class="gs-search-badge gs-search-badge-tcf">' + p.tcf + '</span>');
+            if (p.section && p.kind === 'page') badges.push('<span class="gs-search-badge gs-search-badge-section">' + p.section + '</span>');
+            var meta = '';
+            if (info && info.fields.length) {
+                var labels = info.fields.map(function(f){
+                    return '<span class="gs-search-hit">' + (FIELD_LABELS[f] || f) + '</span>';
+                }).join('');
+                meta = '<span class="gs-search-result-meta">' + labels +
+                    (info.snippet ? '<span class="gs-search-snippet">' + info.snippet + '</span>' : '') +
+                    '</span>';
+            }
+            return '<a class="gs-search-result" href="' + p.url + '" data-index="' + i + '">' +
+                '<span class="gs-search-result-main"><span class="gs-search-result-title"><strong>' + p.title + '</strong>' + badges.join('') + '</span>' + meta + '</span>' +
+                '</a>';
+        };
+        var setActive = function(i){
+            var items = searchResults.querySelectorAll('.gs-search-result');
+            if (!items.length) { activeIndex = -1; return; }
+            if (i < 0) i = items.length - 1;
+            if (i >= items.length) i = 0;
+            activeIndex = i;
+            for (var k = 0; k < items.length; k++) {
+                items[k].classList.toggle('is-active', k === i);
+            }
+            var el = items[i];
+            if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+        };
+        var FIELD_LABELS = {
+            title: {{ i18n "search_hit_title" | jsonify | safeJS }},
+            description: {{ i18n "search_hit_description" | jsonify | safeJS }},
+            content: {{ i18n "search_hit_content" | jsonify | safeJS }},
+            tags: {{ i18n "search_hit_tags" | jsonify | safeJS }},
+            topics: {{ i18n "search_hit_topics" | jsonify | safeJS }},
+            tcf: {{ i18n "search_hit_tcf" | jsonify | safeJS }},
+            section: {{ i18n "search_hit_section" | jsonify | safeJS }}
+        };
+
+        var snippet = function(text, q, radius){
+            if (!text) return '';
+            var lower = text.toLowerCase();
+            var pos = lower.indexOf(q);
+            if (pos === -1) return '';
+            var start = Math.max(0, pos - radius);
+            var end = Math.min(text.length, pos + q.length + radius);
+            var frag = text.slice(start, end);
+            if (start > 0) frag = '…' + frag;
+            if (end < text.length) frag = frag + '…';
+            return frag;
+        };
+
+        var matchInfo = function(p, q){
+            var fields = [
+                ['title', p.title],
+                ['description', p.description],
+                ['content', p.content],
+                ['tags', p.tags],
+                ['topics', p.topics],
+                ['tcf', p.tcf],
+                ['section', p.section]
+            ];
+            var hit = [];
+            for (var i = 0; i < fields.length; i++) {
+                var key = fields[i][0];
+                var val = fields[i][1];
+                if (val && String(val).toLowerCase().indexOf(q) !== -1) hit.push(key);
+            }
+            if (!hit.length) return null;
+            var frag = '';
+            if (hit.indexOf('content') !== -1) frag = snippet(p.content, q, 34);
+            else if (hit.indexOf('description') !== -1) frag = snippet(p.description, q, 34);
+            else if (hit.indexOf('tags') !== -1) frag = snippet(p.tags, q, 20);
+            else if (hit.indexOf('topics') !== -1) frag = snippet(p.topics, q, 20);
+            return { fields: hit, snippet: frag };
+        };
+
+        var renderResults = function(query){
+            var q = query.trim().toLowerCase();
+            activeIndex = -1;
+            currentMatches = [];
+            mouseMode = false;
+            if (!q) {
+                closeDropdown();
+                if (searchClear) searchClear.hidden = true;
+                return;
+            }
+            if (searchClear) searchClear.hidden = false;
+            var pool = loadIndex();
+            currentMatches = pool.map(function(p){
+                var info = matchInfo(p, q);
+                return info ? { page: p, info: info } : null;
+            }).filter(Boolean).slice(0, 12);
+            if (!currentMatches.length) {
+                searchResults.innerHTML = '<p class="gs-search-empty">' + noResults + '</p>';
+            } else {
+                searchResults.innerHTML = currentMatches.map(function(m, i){
+                    return renderItem(m.page, i, m.info);
+                }).join('');
+            }
+            openDropdown();
+        };
+        var openDropdown = function(){
+            lockHeight();
+            searchResults.hidden = false;
+            navPane.hidden = true;
+            searchInput.setAttribute('aria-expanded', 'true');
+        };
+        var closeDropdown = function(){
+            searchResults.hidden = true;
+            searchResults.innerHTML = '';
+            navPane.hidden = false;
+            searchInput.setAttribute('aria-expanded', 'false');
+            navBody.style.height = '';
+            lockedHeight = 0;
+        };
+        searchInput.addEventListener('input', function(){
+            renderResults(searchInput.value);
+        });
+        searchInput.addEventListener('keydown', function(e){
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                mouseMode = false;
+                if (currentMatches.length) setActive(activeIndex + 1);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                mouseMode = false;
+                if (currentMatches.length) setActive(activeIndex <= 0 ? currentMatches.length - 1 : activeIndex - 1);
+            } else if (e.key === 'Enter') {
+                if (activeIndex >= 0 && currentMatches[activeIndex]) {
+                    e.preventDefault();
+                    window.location.href = currentMatches[activeIndex].page.url;
+                }
+            } else if (e.key === 'Escape') {
+                if (!searchResults.hidden) {
+                    e.stopPropagation();
+                    closeDropdown();
+                }
+            }
+        });
+        if (searchClear) {
+            searchClear.addEventListener('click', function(){
+                searchInput.value = '';
+                renderResults('');
+                searchInput.focus();
+            });
+        }
+        searchResults.addEventListener('mouseenter', function(e){
+            if (e.target.closest('.gs-search-result')) mouseMode = true;
+        }, true);
+        searchResults.addEventListener('mousemove', function(e){
+            if (!mouseMode) return;
+            var link = e.target.closest('.gs-search-result');
+            if (!link) return;
+            var idx = parseInt(link.dataset.index, 10);
+            if (idx === activeIndex) return;
+            setActive(idx);
+        });
+        searchResults.addEventListener('click', function(e){
+            var link = e.target.closest('a');
+            if (link) closeModal();
+        });
+    }
 
     document.addEventListener('keydown', function(e){
         if (e.key === 'Escape' && modal.classList.contains('gs-stack-modal--open')) closeModal();
