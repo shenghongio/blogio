@@ -16,14 +16,36 @@
         </header>
 
         {{- $groups := slice -}}
+        {{- $fallbackSite := false -}}
+        {{- range site.Sites -}}
+            {{- if ne .Language.Lang site.Language.Lang -}}
+                {{- $fallbackSite = . -}}
+            {{- end -}}
+        {{- end -}}
+
         {{- if .Parent.IsSection -}}
             {{- if gt (len .RegularPages) 0 -}}
                 {{- $groups = slice (dict "title" "" "pages" .RegularPages.ByDate.Reverse) -}}
             {{- end -}}
         {{- else -}}
             {{- range .Sections -}}
-                {{- if gt (len .RegularPages) 0 -}}
-                    {{- $groups = $groups | append (dict "title" .Title "pages" .RegularPages.ByDate.Reverse) -}}
+                {{- $pages := .RegularPages.ByDate.Reverse -}}
+                {{- if and (eq (len $pages) 0) $fallbackSite -}}
+                    {{- with $fallbackSite.GetPage .Path -}}
+                        {{- $pages = .RegularPages.ByDate.Reverse -}}
+                    {{- end -}}
+                {{- end -}}
+                {{- if gt (len $pages) 0 -}}
+                    {{- $groups = $groups | append (dict "title" .Title "pages" $pages) -}}
+                {{- end -}}
+            {{- end -}}
+            {{- if and (eq (len $groups) 0) $fallbackSite -}}
+                {{- with $fallbackSite.GetPage .Path -}}
+                    {{- range .Sections -}}
+                        {{- if gt (len .RegularPages) 0 -}}
+                            {{- $groups = $groups | append (dict "title" .Title "pages" .RegularPages.ByDate.Reverse) -}}
+                        {{- end -}}
+                    {{- end -}}
                 {{- end -}}
             {{- end -}}
         {{- end -}}
