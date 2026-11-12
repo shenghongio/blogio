@@ -1,5 +1,5 @@
 baseURL = 'https://shenghongio.github.io/blogio/'
-defaultContentLanguage = "en"
+defaultContentLanguage = "zh"
 defaultContentLanguageInSubdir = false
 title = 'Real ShengHong | AI Native Infrastructure Engineer'
 
