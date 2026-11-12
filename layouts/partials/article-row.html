@@ -23,11 +23,11 @@
 {{- end -}}
 {{- $thumb := "" -}}
 {{- with $img -}}
-  {{- $thumb = .Fill "320x200 Center" -}}
+  {{- $thumb = .Fill "400x150 Center" -}}
 {{- end -}}
 {{- if not $thumb -}}
   {{- with resources.Get "images/default-cover.jpg" -}}
-    {{- $thumb = .Fill "320x200 Center" -}}
+    {{- $thumb = .Fill "400x150 Center" -}}
   {{- end -}}
 {{- end -}}
 <div class="article-row" data-date="{{ $p.Date.Format "2006-01-02T15:04:05Z07:00" }}" data-ts="{{ $p.Date.Unix }}">

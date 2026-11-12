@@ -101,6 +101,116 @@ hugo mod get -u
 hugo mod tidy
 ```
 
+## 内容创作
+
+### 新建文章
+
+文章放在 `content/articles/<分类目录>/` 下，文件名形如 `my-post.zh.md`（中文）与 `my-post.en.md`（英文），两种语言必须同名。
+
+```yaml
+---
+title: "Go 里那些设计模式，其实都不太像设计模式"
+date: 2026-11-12
+description: "列表页显示的一句话摘要"
+location: "Shanghai"
+tcf: "Go"
+cover:
+  image: "images/02.jpg"
+---
+```
+
+| 字段 | 说明 |
+|------|------|
+| `title` | 文章标题，列表页与详情页大标题 |
+| `date` | 发布日期，决定列表排序与「最新优先」 |
+| `description` | 卡片摘要，超过一行会自动截断 |
+| `tcf` | 文章主题标签（The Core Focus），显示为紫色胶囊 |
+| `location` | 地点标签，显示为绿色胶囊 |
+| `cover.image` | 封面图，填 `assets/images/` 下的资源路径，构建时自动裁成 16:6 |
+
+**分类**：目录名决定所属分类，无需在 front matter 里写 `categories`。新增分类时创建对应目录并添加 `_index.zh.md`：
+
+```yaml
+---
+title: "语言与工具"
+description: "Go、Linux 与日常工具链"
+---
+```
+
+分类在列表页左栏的显示顺序由 [list.html](file:///Users/ssh/workspace/github.com/blogio/layouts/articles/list.html#L18) 的 `$catOrder` 控制，未列出的分类自动排在最后。
+
+**封面图**：推荐用脚本下载并压缩：
+
+```bash
+./scripts/fetch-cover.sh <图片URL> 02
+```
+
+生成的文件落在 `assets/images/`，模板通过 `resources.Get` 读取，压缩后的资源不会进入 Git。
+
+**英文缺失**：只写中文版即可。英文站会按分类自动回退到中文文章，列表不会出现空缺，但页面内容为中文。
+
+### 新建教程系列
+
+教程是「多篇 + 系列首页」的形态，放在 `content/series/<slug>/`：
+
+```text
+content/series/kubernetes-tutorial/
+├── _index.zh.md              # 系列首页
+├── part-i.zh.md              # 分篇
+├── part-ii.zh.md
+└── part-iii.zh.md
+```
+
+**系列首页** `_index.zh.md`：
+
+```yaml
+---
+title: "Kubernetes 教程"
+description: "从核心抽象到生产实践的完整 K8s 学习路径"
+layout: "kubernetes-tutorial"
+cascade:
+  layout: "kubernetes-tutorial"
+stackGroup: "云原生"
+---
+```
+
+`cascade` 会把 `layout` 下发到该目录下所有分篇，因此分篇只需要写自己的 `title` 和 `date`：
+
+```yaml
+---
+title: "Part I · 云原生基础与核心抽象"
+date: 2026-11-09
+layout: "kubernetes-tutorial-part"
+sustain: true
+---
+```
+
+| 字段 | 说明 |
+|------|------|
+| `layout` | 系列专用模板：首页用 `kubernetes-tutorial`，分篇用 `kubernetes-tutorial-part` |
+| `cascade` | 自动继承给所有子页面，避免每篇重复声明 |
+| `sustain` | 分篇标记，表示内容处于持续更新状态 |
+
+**系列与导航的关联**：在 `data/blog_links.yaml` 添加条目，导航与 `/categories/` 分类图会自动发现：
+
+```yaml
+- title:
+    en: "Kubernetes Tutorial"
+    zh: "Kubernetes 教程"
+  icon: "kubernetes"
+  url: "/series/kubernetes-tutorial/"
+  category: "cloud-native"
+```
+
+然后在文章 front matter 中加 `series: kubernetes-tutorial`，文章会自动挂到该系列节点下。详见下方[神经网络分类关系图](#神经网络分类关系图)。
+
+### 本地预览与检查
+
+```bash
+hugo server --bind 0.0.0.0   # 本地预览 http://localhost:1313
+hugo --gc --minify            # 构建，会同时报出模板与资源错误
+```
+
 ## 设计原则
 
 ### 简洁
@@ -145,6 +255,8 @@ Content and code are provided for personal and educational purposes unless other
 ## 神经网络分类关系图
 
 `/categories/` 页面展示一个以 **shenghong** 为核心的三级力导向神经网络图，动态反映博客的分类、系列与文章之间的关联关系。
+
+> 写文章、建系列的基础规范见上方[内容创作](#内容创作)，本节只说明这张图的数据与连线逻辑。
 
 ### 体系架构
 
