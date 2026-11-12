@@ -30,3 +30,22 @@
         applySort(order);
     });
 })();
+
+(function () {
+    var nav = document.querySelector('[data-cat-nav]');
+    var panes = document.querySelector('[data-cat-panes]');
+    if (!nav || !panes) return;
+
+    nav.addEventListener('click', function (e) {
+        var tab = e.target.closest('.article-cat-tab');
+        if (!tab) return;
+        var key = tab.getAttribute('data-cat');
+        nav.querySelectorAll('.article-cat-tab').forEach(function (t) {
+            t.classList.toggle('is-active', t === tab);
+        });
+        panes.querySelectorAll('.article-cat-group').forEach(function (pane) {
+            pane.classList.toggle('is-active', pane.getAttribute('data-cat-pane') === key);
+        });
+        panes.scrollTop = 0;
+    });
+})();

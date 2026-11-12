@@ -7298,33 +7298,124 @@ html[data-theme="dark"] .article-sort-btn.is-active {
 }
 
 .article-index {
-    display: flex;
-    flex-direction: column;
-    gap: 36px;
+    display: grid;
+    grid-template-columns: 148px 1fr;
+    gap: 25px;
+    align-items: start;
     width: 100%;
     max-width: 100%;
-    margin: 0;
+    margin: 32px 0 0;
+}
+
+.article-cat-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0;
+    border-right: none;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    width: 148px;
+}
+
+.article-cat-tab {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 9px 16px 9px 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--header-text);
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.18s ease, opacity 0.18s ease;
+    opacity: 0.5;
+    position: relative;
+}
+
+.article-cat-tab:hover {
+    opacity: 0.85;
+}
+
+.article-cat-tab.is-active {
+    opacity: 1;
+    font-weight: 600;
+    color: #7c4dff;
+}
+
+.article-cat-tab.is-active::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    right: 0;
+    width: 2px;
+    border-radius: 2px;
+    background: #7c4dff;
+}
+
+html[data-theme="dark"] .article-cat-tab {
+    color: #e5e5e5;
+}
+
+html[data-theme="dark"] .article-cat-tab.is-active {
+    color: #a9b0ff;
+}
+
+html[data-theme="dark"] .article-cat-tab.is-active::after {
+    background: #a9b0ff;
+}
+
+.article-cat-panes {
+    min-width: 0;
+    padding-left: 0;
+    border-left: none;
+    max-height: calc(100vh - 168px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.18) transparent;
+    padding-right: 8px;
+}
+
+.article-cat-panes::-webkit-scrollbar {
+    width: 6px;
+}
+
+.article-cat-panes::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.article-cat-panes::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18);
+    border-radius: 3px;
+}
+
+.article-cat-panes::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.32);
+}
+
+html[data-theme="dark"] .article-cat-panes {
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+html[data-theme="dark"] .article-cat-panes::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+html[data-theme="dark"] .article-cat-panes::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.36);
 }
 
 .article-cat-group {
-    display: grid;
-    grid-template-columns: 132px 1fr;
-    gap: 64px;
-    align-items: stretch;
+    display: none;
 }
 
-.article-cat-label {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--header-text);
-    text-align: right;
-    border-right: 1px solid rgba(0, 0, 0, 0.08);
-    padding-right: 28px;
+.article-cat-group.is-active {
+    display: block;
 }
 
 .article-cat-body {
@@ -7333,16 +7424,15 @@ html[data-theme="dark"] .article-sort-btn.is-active {
     min-width: 0;
 }
 
-html[data-theme="dark"] .article-cat-label {
-    color: #e5e5e5;
-    border-right-color: rgba(255, 255, 255, 0.1);
+html[data-theme="dark"] .article-cat-panes {
+    border-left-color: rgba(255, 255, 255, 0.1);
 }
 
 .article-row {
     display: grid;
-    grid-template-columns: 1fr 160px;
+    grid-template-columns: 1fr 200px;
     gap: 24px;
-    align-items: start;
+    align-items: center;
     padding: 14px 16px;
     margin: 6px 0;
     border-radius: 12px;
@@ -7486,8 +7576,8 @@ html[data-theme="dark"] .article-pill--location {
 
 .article-row-thumb {
     display: block;
-    width: 160px;
-    height: 100px;
+    width: 100%;
+    aspect-ratio: 16 / 6;
     border-radius: 10px;
     overflow: hidden;
     background: rgba(124, 77, 255, 0.06);
@@ -7498,6 +7588,7 @@ html[data-theme="dark"] .article-pill--location {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.3s ease;
 }
 
@@ -7524,16 +7615,53 @@ html[data-theme="dark"] .article-row-thumb {
     .articles-brand-name {
         font-size: 18px;
     }
-    .article-cat-group {
+    .article-index {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 20px;
+        margin: 20px 0 0;
     }
-    .article-cat-label {
-        position: static;
-        text-align: left;
-        padding: 0 0 8px;
-        border-right: none;
+    .article-cat-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: auto;
+        padding: 0 0 12px;
         border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        position: static;
+    }
+    .article-cat-tab {
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(124, 77, 255, 0.06);
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        opacity: 0.75;
+    }
+    .article-cat-tab.is-active::after {
+        display: none;
+    }
+    .article-cat-panes {
+        max-height: none;
+        overflow-y: visible;
+        padding-left: 0;
+        padding-right: 0;
+        border-left: none;
+    }
+    .article-cat-tab.is-active {
+        background: rgba(124, 77, 255, 0.16);
+        color: #7c4dff;
+        opacity: 1;
+    }
+    html[data-theme="dark"] .article-cat-nav {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+    html[data-theme="dark"] .article-cat-tab {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    html[data-theme="dark"] .article-cat-tab.is-active {
+        background: rgba(169, 176, 255, 0.18);
+        color: #a9b0ff;
     }
 }
 
@@ -7543,5 +7671,27 @@ html[data-theme="dark"] .article-row-thumb {
     }
     .article-row-thumb {
         display: none;
+    }
+}
+
+.post-single--article .entry-cover {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 0 24px;
+}
+
+.post-single--article .entry-cover img {
+    width: 100%;
+    aspect-ratio: 16 / 6;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+}
+
+@media (max-width: 860px) {
+    .post-single--article .entry-cover {
+        max-width: 100%;
+        margin-bottom: 16px;
     }
 }

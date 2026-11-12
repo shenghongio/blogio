@@ -16,8 +16,9 @@
         </header>
 
         {{- $groups := slice -}}
+        {{- $catOrder := slice "kubernetes" "languages-tools" "cloud-native" "ai-engineering" "thoughts" -}}
         {{- $fallbackSite := false -}}
-        {{- range site.Sites -}}
+        {{- range hugo.Sites -}}
             {{- if ne .Language.Lang site.Language.Lang -}}
                 {{- $fallbackSite = . -}}
             {{- end -}}
@@ -36,34 +37,53 @@
                     {{- end -}}
                 {{- end -}}
                 {{- if gt (len $pages) 0 -}}
-                    {{- $groups = $groups | append (dict "title" .Title "pages" $pages) -}}
+                    {{- $groups = $groups | append (dict "title" .Title "slug" (path.Base .Path) "pages" $pages) -}}
                 {{- end -}}
             {{- end -}}
             {{- if and (eq (len $groups) 0) $fallbackSite -}}
                 {{- with $fallbackSite.GetPage .Path -}}
                     {{- range .Sections -}}
                         {{- if gt (len .RegularPages) 0 -}}
-                            {{- $groups = $groups | append (dict "title" .Title "pages" .RegularPages.ByDate.Reverse) -}}
+                            {{- $groups = $groups | append (dict "title" .Title "slug" (path.Base .Path) "pages" .RegularPages.ByDate.Reverse) -}}
                         {{- end -}}
                     {{- end -}}
                 {{- end -}}
             {{- end -}}
         {{- end -}}
 
+        {{- $ordered := slice -}}
+        {{- range $slug := $catOrder -}}
+            {{- range $groups -}}
+                {{- if eq .slug $slug -}}
+                    {{- $ordered = $ordered | append . -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+        {{- range $groups -}}
+            {{- if not (in $catOrder .slug) -}}
+                {{- $ordered = $ordered | append . -}}
+            {{- end -}}
+        {{- end -}}
+        {{- $groups = $ordered -}}
+
         {{ if gt (len $groups) 0 }}
         <div class="article-index" data-sort-target>
-            {{ range $groups }}
-            <section class="article-cat-group">
-                {{ with .title }}
-                <h2 class="article-cat-label">{{ . }}</h2>
+            <nav class="article-cat-nav" data-cat-nav>
+                {{ range $i, $g := $groups }}
+                <button type="button" class="article-cat-tab{{ if eq $i 0 }} is-active{{ end }}" data-cat="{{ $i }}">{{ $g.title }}</button>
                 {{ end }}
-                <div class="article-cat-body">
-                    {{ range .pages }}
-                    {{ partial "article-row.html" (dict "page" .) }}
-                    {{ end }}
-                </div>
-            </section>
-            {{ end }}
+            </nav>
+            <div class="article-cat-panes" data-cat-panes>
+                {{ range $i, $g := $groups }}
+                <section class="article-cat-group{{ if eq $i 0 }} is-active{{ end }}" data-cat-pane="{{ $i }}">
+                    <div class="article-cat-body">
+                        {{ range $g.pages }}
+                        {{ partial "article-row.html" (dict "page" .) }}
+                        {{ end }}
+                    </div>
+                </section>
+                {{ end }}
+            </div>
         </div>
         {{ else }}
         <div class="category-empty">
