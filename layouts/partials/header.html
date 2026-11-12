@@ -1,5 +1,4 @@
 {{- $mainNavigationLabel := i18n "main_navigation" -}}
-{{- $languageSwitchLabel := i18n "language_switch" -}}
 {{- $themeSwitchLabel := i18n "theme_switch" -}}
 {{- $aboutHintTitle := i18n "about_hint_title" -}}
 {{- $aboutHintDescription := i18n "about_hint_description" -}}
@@ -7,22 +6,9 @@
 {{- $contactHintDescription := i18n "contact_hint_description" -}}
 {{- $siteBasePath := (urls.Parse site.BaseURL).Path | strings.TrimSuffix "/" -}}
 {{- $currentLang := site.Language.Lang -}}
-{{- $otherLang := cond (eq $currentLang "zh") "en" "zh" -}}
 {{- $langPrefix := "" -}}
 {{- if ne $currentLang "en" -}}
   {{- $langPrefix = printf "/%s" $currentLang -}}
-{{- end -}}
-{{- $otherLangURL := "" -}}
-{{- if . -}}
-  {{- range .AllTranslations -}}
-    {{- if eq .Lang $otherLang -}}
-      {{- $otherLangURL = .RelPermalink -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-{{- if not $otherLangURL -}}
-  {{- $otherLangHome := cond (eq $otherLang "zh") (printf "%s/zh/" $siteBasePath) (printf "%s/" $siteBasePath) -}}
-  {{- $otherLangURL = $otherLangHome -}}
 {{- end -}}
 
 <header class="site-header{{ if .IsHome }} site-header--home{{ end }}">
@@ -117,16 +103,6 @@
 
         <div class="header-tools">
             <div class="header-switches" aria-label="Site settings">
-                <button class="language-toggle" type="button" aria-label="{{ $languageSwitchLabel }}">
-                    <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9"></circle>
-                        <path d="M3 12h18"></path>
-                        <path d="M12 3a15 15 0 0 1 0 18"></path>
-                        <path d="M12 3a15 15 0 0 0 0 18"></path>
-                    </svg>
-                    <span class="lang-code">{{ $otherLang }}</span>
-                </button>
-
                 <button class="theme-toggle icon-button" type="button" aria-label="{{ $themeSwitchLabel }}">
                     <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="12" r="5"></circle>
@@ -188,13 +164,6 @@
                 root.setAttribute("data-theme", nextTheme);
                 localStorage.setItem("theme", nextTheme);
                 updateThemeIcon();
-            });
-        }
-
-        const languageToggle = document.querySelector(".language-toggle");
-        if (languageToggle) {
-            languageToggle.addEventListener("click", function () {
-                window.location.href = "{{ $otherLangURL }}";
             });
         }
 

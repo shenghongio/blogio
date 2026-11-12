@@ -1,0 +1,25 @@
+{{- $cur := . }}
+{{- $siblings := slice }}
+{{- with .Parent }}{{ $siblings = .RegularPagesRecursive.ByDate.Reverse }}{{ end }}
+{{- $pool := $siblings }}
+{{- if lt (len $siblings) 2 }}
+  {{- $pool = (where site.RegularPages "Section" "articles").ByDate.Reverse }}
+{{- end }}
+{{- $older := $pool.Next $cur }}
+{{- $newer := $pool.Prev $cur }}
+{{- if or $older $newer }}
+<nav class="paginav">
+  {{- with $newer }}
+  <a class="prev" href="{{ .RelPermalink }}">
+    <span class="title">« {{ i18n "prev_page" }}</span>
+    <span>{{ .Name }}</span>
+  </a>
+  {{- end }}
+  {{- with $older }}
+  <a class="next" href="{{ .RelPermalink }}">
+    <span class="title">{{ i18n "next_page" }} »</span>
+    <span>{{ .Name }}</span>
+  </a>
+  {{- end }}
+</nav>
+{{- end }}

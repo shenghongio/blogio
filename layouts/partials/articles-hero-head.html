@@ -1,0 +1,17 @@
+{{- with site.Params.brandLogo }}
+<div class="articles-hero-head">
+    <div class="articles-hero-head-left">
+        <img class="articles-brand-logo" src="{{ . | relURL }}" alt="" width="44" height="44">
+        <span class="articles-brand-name">{{ site.Params.brandName | default "ShengHong" }}<span class="articles-brand-handle">{{ site.Params.brandHandle | default "@kraken" }}</span></span>
+    </div>
+    {{ partial "hero-tools.html" $ }}
+</div>
+{{- else }}
+<div class="articles-hero-head">
+    <div class="articles-hero-head-left">
+        <img class="articles-brand-logo" src="{{ "goldie-400x400.jpg" | relURL }}" alt="" width="44" height="44">
+        <span class="articles-brand-name">ShengHong<span class="articles-brand-handle">@kraken</span></span>
+    </div>
+    {{ partial "hero-tools.html" $ }}
+</div>
+{{- end }}

@@ -8,6 +8,8 @@ tags:
 topics:
   - cloud-native
 series: kubernetes-tutorial
+aliases:
+  - "/posts/kubernetes-optimization/"
 ShowToc: true
 TocOpen: true
 ---

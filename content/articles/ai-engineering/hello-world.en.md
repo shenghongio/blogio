@@ -10,6 +10,8 @@ topics:
   - ai-engineering
   - cloud-native
 series: ai-agent-building-guide
+aliases:
+  - "/posts/hello-world/"
 ---
 
 # Hello World

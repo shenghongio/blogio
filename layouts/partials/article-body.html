@@ -1,0 +1,43 @@
+<article class="post-single post-single--article">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="post-title entry-hint-parent">{{ .Title }}</h1>
+    {{- if .Description }}
+    <div class="post-description">{{ .Description }}</div>
+    {{- end }}
+    {{- if not (.Param "hideMeta") }}
+    <div class="post-meta article-meta-tags">
+      {{- with .Date }}
+      <span class="gt-date-tag">{{ .Format "2006-01-02" }}</span>
+      {{- end }}
+      {{- with .Params.location }}
+      <span class="gt-badge gt-badge-location">{{ . }}</span>
+      {{- end }}
+      {{- with .Params.tcf }}
+      <span class="gt-badge gt-badge-tcf">{{ . }}</span>
+      {{- end }}
+    </div>
+    {{- end }}
+  </header>
+  {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+  {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+  {{- if (.Param "ShowToc") }}
+  {{- partial "toc.html" . }}
+  {{- end }}
+
+  {{- if .Content }}
+  <div class="post-content md-content">
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}
+    {{ .Content }}
+    {{- end }}
+  </div>
+  {{- end }}
+
+  {{- if .Params.ShowPostNavLinks | default true }}
+  {{- partial "post_nav_links.html" . }}
+  {{- end }}
+</article>
+
+{{- partial "article_toc.html" . }}

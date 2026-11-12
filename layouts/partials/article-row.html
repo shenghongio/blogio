@@ -1,0 +1,63 @@
+{{- $p := .page -}}
+{{- $img := "" -}}
+{{- with $p.Resources.ByType "image" -}}
+  {{- $img = index . 0 -}}
+{{- end -}}
+{{- if not $img -}}
+  {{- with $p.Params.cover -}}
+    {{- with .image -}}
+      {{- with resources.Get . -}}
+        {{- $img = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if not $img -}}
+  {{- with $p.Params.images -}}
+    {{- with index . 0 -}}
+      {{- with resources.Get . -}}
+        {{- $img = . -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $thumb := "" -}}
+{{- with $img -}}
+  {{- $thumb = .Fill "320x200 Center" -}}
+{{- end -}}
+{{- if not $thumb -}}
+  {{- with resources.Get "images/default-cover.jpg" -}}
+    {{- $thumb = .Fill "320x200 Center" -}}
+  {{- end -}}
+{{- end -}}
+<div class="article-row" data-date="{{ $p.Date.Format "2006-01-02T15:04:05Z07:00" }}" data-ts="{{ $p.Date.Unix }}">
+    <div class="article-row-body">
+        <h3 class="article-row-title">
+            <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+        </h3>
+        {{ with $p.Description }}
+        <p class="article-row-desc">{{ . }}</p>
+        {{ end }}
+        <div class="article-row-meta">
+            {{ if gt $p.Date.Year 1 }}
+            <span class="article-pill article-pill--date">
+                <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>
+            </span>
+            {{ end }}
+            {{ if gt $p.WordCount 0 }}
+            <span class="article-pill article-pill--words">{{ $p.WordCount }} {{ i18n "search_word_count" }}</span>
+            {{ end }}
+            {{ with $p.Params.tcf }}
+            <span class="article-pill article-pill--accent">{{ . }}</span>
+            {{ end }}
+            {{ with $p.Params.location }}
+            <span class="article-pill article-pill--location">{{ . }}</span>
+            {{ end }}
+        </div>
+    </div>
+    <a class="article-row-thumb" href="{{ $p.RelPermalink }}" aria-hidden="true" tabindex="-1">
+        {{ with $thumb }}
+        <img src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" loading="lazy" decoding="async">
+        {{ end }}
+    </a>
+</div>

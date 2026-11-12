@@ -2,7 +2,7 @@
 <main class="category-page series-page">
     <div class="category-page-inner">
 
-        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "label" .Title "currentAria" true) }}
+        {{ partial "breadcrumb.html" (dict "homeURL" ("" | relLangURL) "label" .Title "currentAria" true) }}
 
         <header class="category-header">
             <h1 class="category-title">{{ .Title }}</h1>

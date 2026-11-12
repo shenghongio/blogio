@@ -6,6 +6,12 @@
 {{ $customCSS = $customCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">
 {{ end }}
+
+{{ $articleSortJS := resources.Get "js/article-sort.js" }}
+{{ if $articleSortJS }}
+{{ $articleSortJS = $articleSortJS | minify | fingerprint }}
+<script src="{{ $articleSortJS.RelPermalink }}" integrity="{{ $articleSortJS.Data.Integrity }}" defer></script>
+{{ end }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var viewer = document.querySelector('[id$="-article-viewer"]');
@@ -23,4 +29,29 @@ document.addEventListener('DOMContentLoaded', function() {
       section.classList.toggle(prefix + '-section--open');
     });
   });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  var root = document.documentElement;
+  var MOON = '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>';
+  var SUN = '<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2"></path><path d="M12 21v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="m4.93 19.07 1.41-1.41"></path><path d="m17.66 6.34 1.41-1.41"></path></svg>';
+
+  var syncAll = function() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    document.querySelectorAll('.hero-theme-toggle, .theme-toggle').forEach(function(btn) {
+      btn.innerHTML = dark ? MOON : SUN;
+    });
+  };
+
+  syncAll();
+
+  document.querySelectorAll('.hero-theme-toggle').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      syncAll();
+    });
+  });
+
 });</script>
