@@ -9,6 +9,8 @@ tags:
 topics:
   - cloud-native
 series: kubernetes-tutorial
+aliases:
+  - "/posts/kubernetes-optimization/"
 ---
 
 # Kubernetes Performance Optimization

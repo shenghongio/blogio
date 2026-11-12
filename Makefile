@@ -94,10 +94,10 @@ preview:
 
 new:
 	@echo "==> Creating new post: $(POST)"
-	$(HUGO) new posts/$(POST).md
+	$(HUGO) new articles/$(POST).md
 	@echo ""
 	@echo "==> Created:"
-	@echo "    content/posts/$(POST).md"
+	@echo "    content/articles/$(POST).md"
 
 # ============================================================
 # Build

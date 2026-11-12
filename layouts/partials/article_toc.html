@@ -1,0 +1,74 @@
+{{- if and .Content (in .Content "<h2" ) }}
+{{- $headers := findRE "<h[23][^>]*>(.|\n)*?</h[23]>" .Content }}
+{{- if ge (len $headers) 1 }}
+<aside class="at-toc" id="at-toc" hidden>
+    <div class="at-toc-inner">
+        <div class="at-toc-title">本章目录</div>
+        <ul class="at-toc-list" id="at-toc-list"></ul>
+    </div>
+</aside>
+<script>
+(function(){
+    var tocEl = document.getElementById('at-toc');
+    var listEl = document.getElementById('at-toc-list');
+    var contentEl = document.querySelector('.post-single--article .post-content');
+    if (!tocEl || !listEl || !contentEl) return;
+
+    var heads = contentEl.querySelectorAll('h2, h3');
+    if (!heads.length) return;
+
+    var items = [];
+    heads.forEach(function(h, i){
+        if (!h.id) h.id = 'at-sec-' + i;
+        items.push({ id: h.id, el: h, level: h.tagName.toLowerCase() });
+    });
+
+    items.forEach(function(it){
+        var li = document.createElement('li');
+        li.className = 'at-toc-' + it.level;
+        var a = document.createElement('a');
+        a.href = '#' + it.id;
+        a.setAttribute('data-target', it.id);
+        var clone = it.el.cloneNode(true);
+        clone.querySelectorAll('.anchor').forEach(function(n){ n.remove(); });
+        a.textContent = clone.textContent.trim();
+        a.addEventListener('click', function(e){
+            e.preventDefault();
+            var t = document.getElementById(it.id);
+            if (!t) return;
+            window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 96, behavior: 'smooth' });
+            if (history.replaceState) history.replaceState(null, '', '#' + it.id);
+        });
+        li.appendChild(a);
+        listEl.appendChild(li);
+    });
+
+    tocEl.hidden = false;
+
+    var spy = function(){
+        var cur = null;
+        items.forEach(function(it){
+            if (it.el.getBoundingClientRect().top <= 120) cur = it.id;
+        });
+        listEl.querySelectorAll('a').forEach(function(a){
+            var li = a.parentElement;
+            if (cur && a.getAttribute('data-target') === cur) {
+                li.classList.add('at-toc-active');
+            } else {
+                li.classList.remove('at-toc-active');
+            }
+        });
+    };
+
+    var raf = false;
+    window.addEventListener('scroll', function(){
+        if (raf) return;
+        raf = true;
+        requestAnimationFrame(function(){ spy(); raf = false; });
+    }, { passive: true });
+
+    spy();
+})();
+</script>
+{{- end }}
+{{- end }}

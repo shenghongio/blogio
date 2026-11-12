@@ -4,6 +4,8 @@ date: 2026-11-09
 description: "记录一次从静态 yaml 列表到内容驱动导航的重构：浮窗如何自动发现新系列、空系列如何自己消失，以及文章体系为什么只留一级。"
 location: "Shanghai"
 tcf: "Hugo"
+cover:
+  image: "images/04.jpg"
 ---
 
 ## 起点：一个会撒谎的列表

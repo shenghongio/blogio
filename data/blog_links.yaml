@@ -19,7 +19,7 @@
     en: ""
     zh: ""
   icon: "grid"
-  url: "posts/"
+  url: "articles/"
   category: "ai-engineering"
 
 - title:
@@ -29,7 +29,7 @@
     en: ""
     zh: ""
   icon: "server"
-  url: "posts/"
+  url: "articles/"
   category: "ai-engineering"
 
 - title:
@@ -39,7 +39,7 @@
     en: ""
     zh: ""
   icon: "book-open"
-  url: "posts/"
+  url: "articles/"
   category: "ai-engineering"
 
 - title:
@@ -96,5 +96,5 @@
     en: ""
     zh: ""
   icon: "compass"
-  url: "posts/"
+  url: "articles/"
   category: "other"

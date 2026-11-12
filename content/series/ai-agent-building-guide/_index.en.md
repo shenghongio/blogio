@@ -2,7 +2,7 @@
 title: "AI Agent Building Guide"
 description: "AI infrastructure, LLM deployment, and Agent runtime practices"
 posts:
-  - "/posts/kubernetes-optimization/"
+  - "/articles/cloud-native/kubernetes-optimization/"
 chapters:
   - title: "Agent Design Patterns"
     posts: []

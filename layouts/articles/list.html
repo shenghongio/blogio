@@ -1,65 +1,46 @@
 {{ define "main" }}
 <main class="category-page articles-page">
+
+    {{- partial "articles-hero-head.html" . }}
+
     <div class="category-page-inner">
-
-        {{ if .Parent.IsSection }}
-        {{- $crumbMid := dict "url" .Parent.RelPermalink "label" .Parent.Title -}}
-        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "mid" $crumbMid "label" .Title "currentAria" true) }}
-        {{ else }}
-        {{ partial "breadcrumb.html" (dict "homeURL" ("posts/" | relLangURL) "label" .Title "currentAria" true) }}
-        {{ end }}
-
         <header class="category-header">
             <h1 class="category-title">{{ .Title }}</h1>
             {{ with .Description }}
             <p class="category-desc">{{ . }}</p>
             {{ end }}
+            <div class="article-sort" data-sort-root>
+                <button type="button" class="article-sort-btn is-active" data-sort="date-desc">{{ i18n "sort_newest" }}</button>
+                <button type="button" class="article-sort-btn" data-sort="date-asc">{{ i18n "sort_oldest" }}</button>
+            </div>
         </header>
 
-        {{- $articles := slice -}}
-        {{ if .Parent.IsSection }}
-        {{- $articles = .RegularPages.ByDate.Reverse -}}
-        {{ else }}
-        {{- range .Sections -}}
-        {{- $articles = $articles | append .RegularPages -}}
+        {{- $groups := slice -}}
+        {{- if .Parent.IsSection -}}
+            {{- if gt (len .RegularPages) 0 -}}
+                {{- $groups = slice (dict "title" "" "pages" .RegularPages.ByDate.Reverse) -}}
+            {{- end -}}
+        {{- else -}}
+            {{- range .Sections -}}
+                {{- if gt (len .RegularPages) 0 -}}
+                    {{- $groups = $groups | append (dict "title" .Title "pages" .RegularPages.ByDate.Reverse) -}}
+                {{- end -}}
+            {{- end -}}
         {{- end -}}
-        {{- $articles = $articles.ByDate.Reverse -}}
-        {{ end }}
 
-        {{ if gt (len $articles) 0 }}
-        <div class="category-post-grid">
-            {{ range $articles }}
-            <article class="category-post-card">
-                <h2 class="category-post-title">
-                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-                </h2>
-                <div class="card-meta">
-                    {{ if gt .Date.Year 1 }}
-                    <time class="card-date" datetime="{{ .Date.Format "2006-01-02" }}">
-                        <svg class="card-date-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        {{ .Date.Format "2006-01-02" }}
-                    </time>
-                    {{ end }}
-                    {{ if not $.Parent.IsSection }}
-                    {{ with .CurrentSection }}
-                    <span class="card-meta-dot" aria-hidden="true">·</span>
-                    <span class="card-category">{{ .Title }}</span>
-                    {{ end }}
-                    {{ end }}
-                    {{ with .Params.tcf }}
-                    <span class="card-meta-dot" aria-hidden="true">·</span>
-                    <span class="card-category">{{ . }}</span>
+        {{ if gt (len $groups) 0 }}
+        <div class="article-index" data-sort-target>
+            {{ range $groups }}
+            <section class="article-cat-group">
+                {{ with .title }}
+                <h2 class="article-cat-label">{{ . }}</h2>
+                {{ end }}
+                <div class="article-cat-body">
+                    {{ range .pages }}
+                    {{ partial "article-row.html" (dict "page" .) }}
                     {{ end }}
                 </div>
-                {{ with .Description }}
-                <p class="card-desc">{{ . }}</p>
-                {{ end }}
-            </article>
+            </section>
             {{ end }}
         </div>
         {{ else }}
@@ -67,7 +48,6 @@
             <p>{{ i18n "search_no_results" }}</p>
         </div>
         {{ end }}
-
     </div>
 </main>
 {{ end }}

@@ -10,6 +10,8 @@ tags:
 topics:
   - cloud-native
 series: envoy-basics
+aliases:
+  - "/posts/service-mesh-intro/"
 ---
 
 # Service Mesh 与 Envoy 实践
