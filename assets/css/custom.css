@@ -4529,13 +4529,6 @@ body:has(.kt-page--standalone) .kt-layout {
     margin: 0 0 24px;
 }
 
-.kt-commit-tag {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    letter-spacing: 0;
-    word-break: break-all;
-    max-width: 100%;
-}
-
 .kt-date-tag {
     display: inline-flex;
     align-items: center;
@@ -4553,14 +4546,28 @@ body:has(.kt-page--standalone) .kt-layout {
     display: inline-flex;
     align-items: center;
     font-size: 11px;
-    color: #4b5563;
-    background: #eef2ff;
-    border: 1px solid #e0e7ff;
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     border-radius: 10px;
     padding: 2px 8px;
     font-weight: 500;
     letter-spacing: 0.02em;
     flex-shrink: 0;
+}
+
+.kt-badge:hover {
+    border-color: #6ee7b7;
+}
+
+.kt-commit-tag {
+    color: #7c3aed;
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0;
+    word-break: break-all;
+    max-width: 100%;
 }
 
 .kt-overview-intro {
@@ -5218,9 +5225,15 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-date-tag {
 }
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-badge {
-    color: #c7d2fe;
-    background: rgba(99, 102, 241, 0.16);
-    border-color: rgba(99, 102, 241, 0.35);
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.16);
+    border-color: rgba(16, 185, 129, 0.38);
+}
+
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-commit-tag {
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.16);
+    border-color: rgba(167, 139, 250, 0.38);
 }
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-sidebar-part-trigger {
@@ -6163,13 +6176,6 @@ html[data-theme="dark"] .gs-stack-group-head {
     margin: 0 0 24px;
 }
 
-.gt-commit-tag {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    letter-spacing: 0;
-    word-break: break-all;
-    max-width: 100%;
-}
-
 .gt-date-tag {
     display: inline-flex;
     align-items: center;
@@ -6242,14 +6248,28 @@ html[data-theme="dark"] .article-meta-tags .gt-badge-tcf {
     display: inline-flex;
     align-items: center;
     font-size: 11px;
-    color: #4b5563;
-    background: #eef2ff;
-    border: 1px solid #e0e7ff;
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     border-radius: 10px;
     padding: 2px 8px;
     font-weight: 500;
     letter-spacing: 0.02em;
     flex-shrink: 0;
+}
+
+.gt-badge:hover {
+    border-color: #6ee7b7;
+}
+
+.gt-commit-tag {
+    color: #7c3aed;
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0;
+    word-break: break-all;
+    max-width: 100%;
 }
 
 .gt-overview-intro {
@@ -6944,9 +6964,15 @@ html[data-theme="dark"]:has(.gt-page--standalone) .gt-date-tag {
 }
 
 html[data-theme="dark"]:has(.gt-page--standalone) .gt-badge {
-    color: #c7d2fe;
-    background: rgba(99, 102, 241, 0.16);
-    border-color: rgba(99, 102, 241, 0.35);
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.16);
+    border-color: rgba(16, 185, 129, 0.38);
+}
+
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-commit-tag {
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.16);
+    border-color: rgba(167, 139, 250, 0.38);
 }
 
 html[data-theme="dark"]:has(.gt-page--standalone) .gt-overview-header {
