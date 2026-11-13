@@ -55,6 +55,7 @@
                         <span class="{{ $prefix }}-date-tag">最后更新：{{ $page.Date.Format "2006-01-02" }}</span>
                         {{ end }}
                         {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if $page.Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                        {{ with $page.GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
                     </div>
                     <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
                         {{ $page.Content }}
@@ -74,6 +75,7 @@
                                     <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
                                     {{ end }}
                                     {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                                    {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
                                 </div>
                                 <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
                             </div>
@@ -109,6 +111,7 @@
                 <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
                 {{ end }}
                 {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
             </div>
             <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
         </div>
