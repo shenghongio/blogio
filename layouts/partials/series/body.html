@@ -50,12 +50,15 @@
                     <h2 class="{{ $prefix }}-overview-title">{{ $page.Title }}</h2>
                     <div class="{{ $prefix }}-overview-meta">
                         {{ if gt $page.Lastmod.Year 1 }}
-                        <span class="{{ $prefix }}-date-tag">最后更新：{{ $page.Lastmod.Format "2006-01-02" }}</span>
+                        <span class="{{ $prefix }}-date-tag">updated {{ $page.Lastmod.Format "2006-01-02" }}</span>
                         {{ else if gt $page.Date.Year 1 }}
-                        <span class="{{ $prefix }}-date-tag">最后更新：{{ $page.Date.Format "2006-01-02" }}</span>
+                        <span class="{{ $prefix }}-date-tag">updated {{ $page.Date.Format "2006-01-02" }}</span>
                         {{ end }}
-                        {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if $page.Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
-                        {{ with $page.GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
+                        {{ with $page.GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
+                        {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if $page.Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
+                        {{ with $page.WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
+                        {{ $author := $page.Params.author | default site.Params.author | default "ShengHong" }}
+                        <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
                     </div>
                     <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
                         {{ $page.Content }}
@@ -70,12 +73,15 @@
                                 <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
                                 <div class="{{ $prefix }}-overview-meta">
                                     {{ if gt .Lastmod.Year 1 }}
-                                    <span class="{{ $prefix }}-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                                    <span class="{{ $prefix }}-date-tag">updated {{ .Lastmod.Format "2006-01-02" }}</span>
                                     {{ else if gt .Date.Year 1 }}
-                                    <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                                    <span class="{{ $prefix }}-date-tag">updated {{ .Date.Format "2006-01-02" }}</span>
                                     {{ end }}
-                                    {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
-                                    {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
+                                    {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
+                                    {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if .Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
+                                    {{ with .WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
+                                    {{ $author := .Params.author | default site.Params.author | default "ShengHong" }}
+                                    <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
                                 </div>
                                 <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
                             </div>
@@ -106,12 +112,15 @@
             <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
             <div class="{{ $prefix }}-overview-meta">
                 {{ if gt .Lastmod.Year 1 }}
-                <span class="{{ $prefix }}-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                <span class="{{ $prefix }}-date-tag">updated {{ .Lastmod.Format "2006-01-02" }}</span>
                 {{ else if gt .Date.Year 1 }}
-                <span class="{{ $prefix }}-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                <span class="{{ $prefix }}-date-tag">updated {{ .Date.Format "2006-01-02" }}</span>
                 {{ end }}
-                {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
-                {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
+                {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
+                {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if .Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
+                {{ with .WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
+                {{ $author := .Params.author | default site.Params.author | default "ShengHong" }}
+                <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
             </div>
             <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
         </div>

@@ -2,7 +2,6 @@
 title: "Go 里那些设计模式，其实都不太像设计模式"
 date: 2026-11-12
 description: "把二十三种经典模式放到 Go 里逐个过一遍：哪些是语言本身已经替你解决的，哪些该用接口替代继承，哪些根本不该在 Go 里出现。"
-location: "Shanghai"
 tcf: "Go"
 cover:
   image: "images/02.jpg"
