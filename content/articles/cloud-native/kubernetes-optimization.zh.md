@@ -1,17 +1,10 @@
 ---
 title: "Kubernetes 性能优化实战：从资源配额到成本控制"
 date: 2026-09-23
-draft: false
 description: "生产环境 Kubernetes 集群的资源配置、调度优化与成本控制实践。"
-tags:
-  - Kubernetes
-topics:
-  - cloud-native
-series: kubernetes-tutorial
-aliases:
-  - "/posts/kubernetes-optimization/"
-ShowToc: true
-TocOpen: true
+tcf: "Kubernetes"
+cover:
+  image: "images/default-cover.jpg"
 ---
 >**为什么 K8s 优化总被忽视**
 Kubernetes 已经成为容器编排的事实标准，但"跑得起来"和"跑得好"之间有很长的距离。资源浪费、调度延迟、节点碎片化、HPA 抖动——这些问题在集群规模上来之后会逐一暴露。 这篇文章聚焦**生产环境可落地**的优化实践，不谈玩具 Demo，直接给结论和代码。

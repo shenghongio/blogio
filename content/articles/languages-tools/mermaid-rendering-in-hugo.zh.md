@@ -1,13 +1,10 @@
 ---
 title: "在 Hugo 中稳定渲染 Mermaid 图表"
 date: 2026-11-13
-draft: false
 description: "从静态页面到 JS 动态加载页面，一套可规模化的 Mermaid 渲染机制的设计与踩坑记录。"
 tcf: "Hugo"
-tags:
-  - Hugo
-  - Mermaid
-  - 静态站点
+cover:
+  image: "images/default-cover.jpg"
 ---
 
 > **一句话概括**

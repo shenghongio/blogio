@@ -3,6 +3,8 @@ title: "关于技术判断力的一点思考"
 date: 2026-11-05
 description: "长期主义不是慢，而是不被短期噪音带偏。"
 tcf: "Engineering"
+cover:
+  image: "images/default-cover.jpg"
 ---
 
 ## 出发点

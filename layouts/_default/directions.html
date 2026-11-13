@@ -21,12 +21,6 @@
       <span class="meta-label">{{ . }}</span>
       {{ end }}
       {{ end }}
-      {{ with .Params.tags }}
-      <span class="meta-sep">·</span>
-      {{ range . }}
-      <span class="meta-label">#{{ . }}</span>
-      {{ end }}
-      {{ end }}
     </div>
   </header>
 

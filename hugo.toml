@@ -37,13 +37,12 @@ hasCJKLanguage = true
         [languages.zh.menu.main.params]
           icon = "user"
 
-disableKinds = ["taxonomy", "term"]
+disableKinds = ["taxonomy", "term", "RSS"]
+
+[taxonomies]
 
 [pagination]
   pagerSize = 10
-
-[taxonomies]
-  tag = "tags"
 
 [markup]
   [markup.highlight]

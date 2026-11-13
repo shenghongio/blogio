@@ -3,6 +3,8 @@ title: "HPA 调优实践"
 date: 2026-11-09
 description: "一次线上 HPA 频繁扩缩容的排查与参数调优记录。"
 tcf: "Kubernetes"
+cover:
+  image: "images/default-cover.jpg"
 ---
 
 ## 背景

@@ -3,9 +3,6 @@ title: "什么是服务网格？"
 date: 2026-11-10
 draft: false
 sustain: true
-tags:
-  - Service Mesh
-  - Kubernetes
 topics:
   - cloud-native
 series: kubernetes-tutorial

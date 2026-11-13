@@ -1,5 +1,5 @@
 ---
-title: "Part III · 新范式与生态"
+title: "新范式与生态"
 date: 2026-11-09
 layout: "kubernetes-tutorial-part"
 ---

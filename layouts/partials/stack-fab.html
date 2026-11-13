@@ -41,7 +41,7 @@
 <script id="gs-stack-search-index" type="application/json">
 {{- $idx := slice -}}
 {{- range site.RegularPages -}}
-{{- $idx = $idx | append (dict "title" .Title "url" .RelPermalink "description" (.Description | default "") "tcf" (.Params.tcf | default "") "section" (.CurrentSection.Title | default "") "kind" .Kind "content" (.Plain | default "") "tags" (delimit (.Params.tags | default slice) " ") "topics" (delimit (.Params.topics | default slice) " ")) -}}
+{{- $idx = $idx | append (dict "title" .Title "url" .RelPermalink "description" (.Description | default "") "tcf" (.Params.tcf | default "") "section" (.CurrentSection.Title | default "") "kind" .Kind "content" (.Plain | default "") "topics" (delimit (.Params.topics | default slice) " ")) -}}
 {{- end -}}
 {{- $idx | jsonify | safeJS -}}
 </script>
@@ -237,7 +237,6 @@
                 ['title', p.title],
                 ['description', p.description],
                 ['content', p.content],
-                ['tags', p.tags],
                 ['topics', p.topics],
                 ['tcf', p.tcf],
                 ['section', p.section]
@@ -252,7 +251,6 @@
             var frag = '';
             if (hit.indexOf('content') !== -1) frag = snippet(p.content, q, 34);
             else if (hit.indexOf('description') !== -1) frag = snippet(p.description, q, 34);
-            else if (hit.indexOf('tags') !== -1) frag = snippet(p.tags, q, 20);
             else if (hit.indexOf('topics') !== -1) frag = snippet(p.topics, q, 20);
             return { fields: hit, snippet: frag };
         };

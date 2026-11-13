@@ -3,6 +3,8 @@ title: "SRE 如何过渡到 AI Infra"
 date: 2026-11-11
 description: "SRE 转 AI Infra 不是学几个新框架，而是把已有的稳定性方法论挪到一个更贵、更不可控的系统上。"
 tcf: "Engineering"
+cover:
+  image: "images/default-cover.jpg"
 ---
 
 ## 先说结论

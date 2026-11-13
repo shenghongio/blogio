@@ -4,8 +4,6 @@ date: 2026-11-09
 draft: false
 sustain: true
 description: "Go（又称 Golang）是 Google 开发的开源编程语言，以简洁、高效、原生并发支持著称，是云原生时代的首选后端语言。"
-tags:
-  - Go
 topics:
   - go
 series: go-tutorial

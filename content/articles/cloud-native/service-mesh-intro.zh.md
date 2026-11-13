@@ -1,17 +1,10 @@
 ---
 title: "Service Mesh 与 Envoy 实践"
 date: 2026-09-22
-draft: false
 description: "Kubernetes 集群中的 Service Mesh 架构设计与 Envoy 代理实战经验。"
-tags:
-  - Kubernetes
-  - Service Mesh
-  - Envoy
-topics:
-  - cloud-native
-series: envoy-basics
-aliases:
-  - "/posts/service-mesh-intro/"
+tcf: "Kubernetes"
+cover:
+  image: "images/default-cover.jpg"
 ---
 
 # Service Mesh 与 Envoy 实践

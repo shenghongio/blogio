@@ -3,9 +3,6 @@ title: "什么是云原生？"
 date: 2026-11-09
 draft: false
 sustain: true
-tags:
-  - Cloud Native
-  - Kubernetes
 topics:
   - cloud-native
 series: kubernetes-tutorial

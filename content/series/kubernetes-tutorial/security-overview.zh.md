@@ -3,9 +3,6 @@ title: "安全概述"
 date: 2026-11-10
 draft: false
 sustain: true
-tags:
-  - Kubernetes
-  - Security
 topics:
   - cloud-native
 series: kubernetes-tutorial
