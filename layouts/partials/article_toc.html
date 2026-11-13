@@ -45,11 +45,42 @@
 
     tocEl.hidden = false;
 
+    var syncTocWidth = function(){
+        if (tocEl.hidden) return;
+        var inner = tocEl.querySelector('.at-toc-inner');
+        if (!inner) return;
+        var widest = 0;
+        var titleEl = inner.querySelector('.at-toc-title');
+        if (titleEl) widest = Math.ceil(titleEl.offsetWidth);
+        listEl.querySelectorAll('a').forEach(function(a){
+            var indent = a.parentElement.className === 'at-toc-h3' ? 18 : 0;
+            widest = Math.max(widest, Math.ceil(a.offsetWidth) + indent);
+        });
+        if (!widest) return;
+        var width = widest + 40 + 2;
+        width = Math.max(150, width);
+        var limit = Math.max(150, Math.round(window.innerWidth * 0.45));
+        if (width > limit) width = limit;
+        document.documentElement.style.setProperty('--at-toc-width', width + 'px');
+    };
+
+    requestAnimationFrame(function(){ syncTocWidth(); });
+    window.addEventListener('resize', syncTocWidth, { passive: true });
+
     var spy = function(){
         var cur = null;
         items.forEach(function(it){
             if (it.el.getBoundingClientRect().top <= 120) cur = it.id;
         });
+        if (!cur) {
+            var half = Math.round(window.innerHeight * 0.5);
+            items.forEach(function(it){
+                if (it.el.getBoundingClientRect().top <= half) cur = it.id;
+            });
+        }
+        if (!cur) cur = items[0].id;
+        var atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+        if (atBottom) cur = items[items.length - 1].id;
         listEl.querySelectorAll('a').forEach(function(a){
             var li = a.parentElement;
             if (cur && a.getAttribute('data-target') === cur) {

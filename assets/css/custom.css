@@ -4467,9 +4467,11 @@ body:has(.kt-page--standalone) .kt-layout {
     color: #888;
     text-decoration: none;
     border-left: 2px solid transparent;
-    padding-left: 12px;
-    display: block;
+    padding: 3px 10px;
+    display: inline-block;
+    border-radius: 6px;
     white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .kt-toc-list a:hover {
@@ -4477,13 +4479,13 @@ body:has(.kt-page--standalone) .kt-layout {
 }
 
 .kt-toc-list .kt-toc-h2 a {
-    padding-left: 12px;
+    margin-left: 2px;
     font-weight: 600;
     color: #555;
 }
 
 .kt-toc-list .kt-toc-h3 a {
-    padding-left: 28px;
+    margin-left: 18px;
     font-weight: 400;
     color: #888;
 }
@@ -6296,9 +6298,11 @@ html[data-theme="dark"] .gs-stack-group-head {
     color: #888;
     text-decoration: none;
     border-left: 2px solid transparent;
-    padding-left: 12px;
-    display: block;
+    padding: 3px 10px;
+    display: inline-block;
+    border-radius: 6px;
     white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 
 .gt-toc-list a:hover {
@@ -6311,7 +6315,7 @@ html[data-theme="dark"] .gs-stack-group-head {
 }
 
 .gt-toc-list .gt-toc-h3 a {
-    padding-left: 24px;
+    margin-left: 18px;
 }
 
 .gt-toc-list .gt-toc-active a {
@@ -7402,7 +7406,7 @@ html[data-theme="dark"] .series-pager-link:hover .series-pager-title {
     position: fixed;
     top: 180px;
     right: 0;
-    width: 210px;
+    width: var(--at-toc-width, 210px);
     max-height: calc(100vh - 200px);
     overflow-y: auto;
     border-left: 1px solid var(--border);
@@ -7444,16 +7448,14 @@ html[data-theme="dark"] .series-pager-link:hover .series-pager-title {
 }
 
 .at-toc-list a {
-    display: block;
+    display: inline-block;
     color: var(--secondary);
     text-decoration: none;
     border-left: 2px solid transparent;
-    border-radius: 0 6px 6px 0;
-    padding: 3px 8px 3px 12px;
+    border-radius: 6px;
+    padding: 3px 10px;
     transition: color 0.15s ease, background 0.15s ease;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .at-toc-list a:hover {
@@ -7467,7 +7469,7 @@ html[data-theme="dark"] .series-pager-link:hover .series-pager-title {
 }
 
 .at-toc-list .at-toc-h3 a {
-    padding-left: 26px;
+    margin-left: 18px;
     font-weight: 400;
 }
 
