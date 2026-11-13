@@ -5,6 +5,10 @@ title = 'Real ShengHong | AI Native Infrastructure Engineer'
 
 enableRobotsTXT = true
 enableGitInfo = true
+hasCJKLanguage = true
+
+[params]
+  author = "ShengHong"
 
 [languages]
   [languages.en]

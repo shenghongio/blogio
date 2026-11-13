@@ -2,7 +2,6 @@
 title: "文章列表页重构：分类左栏与胶囊元信息"
 date: 2026-11-11
 description: "把三列卡片网格换成分类左栏加条目流的横向布局，并让元信息从一串分隔点变成各自独立的胶囊标签。"
-location: "Shanghai"
 tcf: "Hugo"
 cover:
   image: "images/03.jpg"

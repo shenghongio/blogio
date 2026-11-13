@@ -48,7 +48,7 @@
         }
     };
 
-    var renderTitle = function(title, dateStr, sustain, commitId){
+    var renderTitle = function(title, dateStr, sustain, commitId, words, author){
         var h = document.createElement('h2');
         h.className = P + '-overview-title';
         h.textContent = title || '';
@@ -57,21 +57,33 @@
         if (dateStr) {
             var dt = document.createElement('span');
             dt.className = P + '-date-tag';
-            dt.textContent = '最后更新：' + dateStr;
+            dt.textContent = 'updated ' + dateStr;
             meta.appendChild(dt);
-        }
-        if (sustain !== null) {
-            var badge = document.createElement('span');
-            badge.className = P + '-badge';
-            badge.textContent = '持续维护：' + (sustain ? '是' : '否');
-            meta.appendChild(badge);
         }
         if (commitId) {
             var commit = document.createElement('span');
             commit.className = P + '-badge ' + P + '-commit-tag';
-            commit.title = '提交：' + commitId;
-            commit.textContent = '提交：' + commitId;
+            commit.title = 'commit ' + commitId;
+            commit.textContent = 'commit ' + commitId;
             meta.appendChild(commit);
+        }
+        if (sustain !== null) {
+            var badge = document.createElement('span');
+            badge.className = P + '-badge ' + P + '-sustain-tag';
+            badge.textContent = 'sustained ' + (sustain ? 'yes' : 'no');
+            meta.appendChild(badge);
+        }
+        if (words) {
+            var wc = document.createElement('span');
+            wc.className = P + '-badge ' + P + '-count-tag';
+            wc.textContent = words + ' words';
+            meta.appendChild(wc);
+        }
+        if (author) {
+            var au = document.createElement('span');
+            au.className = P + '-badge ' + P + '-author-tag';
+            au.textContent = 'by ' + author;
+            meta.appendChild(au);
         }
         return [h, meta];
     };
@@ -83,15 +95,21 @@
         var dateEl = header ? header.querySelector('.post-meta') : null;
         var sustain = null;
         var commitId = '';
+        var words = '';
+        var author = '';
         if (!content && doc.getElementById(P + '-article-viewer')) {
             var singleViewer = doc.getElementById(P + '-article-viewer');
             content = singleViewer.querySelector('.' + P + '-overview-body');
             titleEl = singleViewer.querySelector('.' + P + '-overview-title');
             dateEl = singleViewer.querySelector('.' + P + '-overview-meta');
-            var badge = singleViewer.querySelector('.' + P + '-badge');
-            if (badge) sustain = badge.textContent.indexOf('是') !== -1;
+            var badge = singleViewer.querySelector('.' + P + '-sustain-tag');
+            if (badge) sustain = badge.textContent.indexOf('yes') !== -1;
             var commitEl = singleViewer.querySelector('.' + P + '-commit-tag');
-            if (commitEl) commitId = commitEl.getAttribute('data-commit') || commitEl.textContent.replace(/^提交[:：]\s*/, '').trim();
+            if (commitEl) commitId = commitEl.getAttribute('data-commit') || commitEl.textContent.replace(/^commit\s*/i, '').trim();
+            var wcEl = singleViewer.querySelector('.' + P + '-count-tag');
+            if (wcEl) words = wcEl.textContent.replace(/\s*words\s*$/i, '').trim();
+            var auEl = singleViewer.querySelector('.' + P + '-author-tag');
+            if (auEl) author = auEl.textContent.replace(/^by\s*/i, '').trim();
         }
         var dateStr = '';
         if (dateEl) {
@@ -110,18 +128,28 @@
             var sustainEl = header.querySelector('[data-sustain]');
             if (sustainEl) sustain = sustainEl.getAttribute('data-sustain') === 'true';
         }
+        if (!words && header) {
+            var wcHead = header.querySelector('.gt-badge-count');
+            if (wcHead) words = wcHead.textContent.replace(/\s*words\s*$/i, '').trim();
+        }
+        if (!author && header) {
+            var auHead = header.querySelector('.gt-badge-author');
+            if (auHead) author = auHead.textContent.replace(/^by\s*/i, '').trim();
+        }
         return {
             title: titleEl ? titleEl.textContent.trim() : '',
             date: dateStr,
             sustain: sustain,
             commitId: commitId,
+            words: words,
+            author: author,
             html: content ? content.innerHTML : ''
         };
     };
 
-    var renderArticle = function(title, contentHtml, dateStr, sustain, commitId){
+    var renderArticle = function(title, contentHtml, dateStr, sustain, commitId, words, author){
         viewer.innerHTML = '';
-        var nodes = renderTitle(title, dateStr, sustain, commitId);
+        var nodes = renderTitle(title, dateStr, sustain, commitId, words, author);
         viewer.appendChild(nodes[0]);
         viewer.appendChild(nodes[1]);
         var body = document.createElement('div');
@@ -134,7 +162,7 @@
 
     var loadArticle = function(url, link){
         var finish = function(data){
-            renderArticle(data.title, data.html, data.date, data.sustain, data.commitId);
+            renderArticle(data.title, data.html, data.date, data.sustain, data.commitId, data.words, data.author);
             markActive(link);
         };
         if (cache[url]) { finish(cache[url]); return; }
@@ -175,15 +203,23 @@
 
     var tocSpy = function(){
         if (!tocInner) return;
-        var heads = viewer.querySelectorAll('h2, h3');
-        var cur = null;
-        heads.forEach(function(h){
+        var heads = [];
+        viewer.querySelectorAll('h2, h3').forEach(function(h){
             if (h.classList.contains(P + '-overview-title')) return;
-            if (h.getBoundingClientRect().top <= 100) cur = h.id;
+            if (!h.id) return;
+            heads.push(h);
         });
+        if (!heads.length) return;
+        var cur = null;
+        for (var i = 0; i < heads.length; i++) {
+            if (heads[i].getBoundingClientRect().top <= 100) cur = heads[i].id;
+        }
+        if (!cur) cur = heads[0].id;
+        var atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+        if (atBottom) cur = heads[heads.length - 1].id;
         tocInner.querySelectorAll('a').forEach(function(a){
             var target = a.getAttribute('data-target');
-            a.parentElement.classList.toggle(P + '-toc-active', !!cur && target === cur);
+            a.parentElement.classList.toggle(P + '-toc-active', target === cur);
         });
     };
 
@@ -224,7 +260,7 @@
         if (!widest) return;
         var width = widest + TOC_PAD_X * 2 + 2;
         width = Math.max(TOC_MIN_WIDTH, width);
-        var limit = Math.max(TOC_MIN_WIDTH, Math.round(window.innerWidth * 0.3));
+        var limit = Math.max(TOC_MIN_WIDTH, Math.round(window.innerWidth * 0.45));
         if (width > limit) width = limit;
         document.documentElement.style.setProperty('--' + P + '-toc-width', width + 'px');
     };
@@ -392,6 +428,7 @@
             syncPanes(currentIdx);
             history.replaceState(saveState(), '', location.href);
         }
+        buildToc(true);
         return;
     }
 
@@ -402,6 +439,7 @@
         showOverview(initialIdx);
     } else {
         syncPanes(currentIdx);
+        buildToc(true);
     }
 })();
 </script>

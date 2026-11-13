@@ -1,6 +1,31 @@
 {{- $lang := .Type -}}
 {{- if eq $lang "mermaid" -}}
-<div class="mermaid" id="mermaid-{{ .Ordinal }}">{{ .Inner }}</div>
+{{- $caption := "" -}}
+{{- $align := "" -}}
+{{- $code := .Inner -}}
+{{- range seq 3 -}}
+  {{- $inner := cond (gt (len $code) 1) $code "" -}}
+  {{- if and $inner (findRE `^%%\s*(caption|align):` $inner) -}}
+    {{- $lines := split $inner "\n" -}}
+    {{- $first := index $lines 0 -}}
+    {{- if findRE `^%%\s*caption:` $first -}}
+      {{- $caption = replaceRE `^%%\s*caption:\s*` "" $first -}}
+    {{- else if findRE `^%%\s*align:` $first -}}
+      {{- $align = replaceRE `^%%\s*align:\s*` "" $first -}}
+    {{- end -}}
+    {{- $code = delimit (after 1 $lines) "\n" -}}
+  {{- end -}}
+{{- end -}}
+{{- $align = lower (trim (substr $align 0 (int (math.Min (len $align) 20))) " \n\r\t") -}}
+{{- $cls := "mermaid-align-center" -}}
+{{- if eq $align "left" -}}{{- $cls = "mermaid-align-left" -}}{{- end -}}
+{{- if eq $align "right" -}}{{- $cls = "mermaid-align-right" -}}{{- end -}}
+<div class="mermaid-figure">
+<div class="mermaid {{ $cls }}" id="mermaid-{{ .Ordinal }}">{{ $code }}</div>
+{{- with $caption }}
+<div class="mermaid-caption {{ $cls }}">{{ . }}</div>
+{{- end }}
+</div>
 {{- else -}}
 {{- $opts := dict "noClasses" false "lineNos" false "lineNumbersInTable" false -}}
 {{- highlight .Inner $lang $opts -}}

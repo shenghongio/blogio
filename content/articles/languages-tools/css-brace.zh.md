@@ -2,7 +2,6 @@
 title: "一个缺失的大括号，让整站样式失效"
 date: 2026-11-11
 description: "新写的文章列表样式全部不生效，元素退化成单列堆叠。排查一圈后发现根因不在这段样式里，而在文件更早处一个没闭合的规则。"
-location: "Shanghai"
 tcf: "Hugo"
 cover:
   image: "images/02.jpg"

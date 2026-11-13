@@ -76,8 +76,7 @@
         {{- $allPages = $allPages.ByDate.Reverse -}}
         <div class="article-index" data-sort-target>
             <nav class="article-cat-nav" data-cat-nav aria-label="{{ i18n "articles_nav_label" }}">
-                <span class="article-cat-label">{{ i18n "articles_nav_label" }}</span>
-                <button type="button" class="article-cat-tab is-active" data-cat="all">{{ i18n "articles_all" }}</button>
+                <button type="button" class="article-cat-tab is-active" data-cat="all">{{ i18n "articles_nav_all" }}</button>
                 {{ range $i, $g := $groups }}
                 <button type="button" class="article-cat-tab" data-cat="{{ $i }}">{{ $g.title }}</button>
                 {{ end }}

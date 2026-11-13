@@ -18,37 +18,36 @@ Kubernetes 支持多种扩展方式，开发者可以通过自定义资源定义
 ### Kubernetes 开发生态全景
 Kubernetes 作为云原生应用的首选平台，为开发者提供了丰富的开发工具和扩展机制。从简单的应用部署到复杂的分布式系统管理，Kubernetes 开发涵盖了从基础设施到应用的全栈开发能力。
 ```mermaid
+%% caption: 图 1：Kubernetes 开发生态全景：开发层次、开发工具与开发模式
 flowchart LR
-    classDef default fill:#f8f9fa,stroke:#d1d5db,stroke-width:2px,color:#333;
-    classDef highlight fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a;
-
-    subgraph Layer["开发层次"]
-        L1["🖧 <b>基础设施层</b><br/><span style='font-size:12px;color:#666'>集群部署、网络配置</span>"]
-        L2["📦 <b>运行时层</b><br/><span style='font-size:12px;color:#666'>容器化、调度优化</span>"]
-        L3["{} <b>扩展层</b><br/><span style='font-size:12px;color:#666'>API 扩展、Operator 模式</span>"]
-        L4["🚀 <b>应用层</b><br/><span style='font-size:12px;color:#666'>微服务、声明式配置</span>"]
+    subgraph Layer [开发层次]
+        direction TB
+        L1[基础设施层<br>集群部署、网络配置]
+        L2[运行时层<br>容器化、调度优化]
+        L3[扩展层<br>API 扩展、Operator 模式]
+        L4[应用层<br>微服务、声明式配置]
     end
 
-    subgraph Tool["开发工具"]
-        T1["⌨️ <b>kubectl</b><br/><span style='font-size:12px;color:#666'>命令行工具</span>"]
-        T2["🐹 <b>client-go</b><br/><span style='font-size:12px;color:#666'>Go 客户端库</span>"]
-        T3["⎈ <b>Operator SDK</b><br/><span style='font-size:12px;color:#666'>自动化开发</span>"]
-        T4["⛵ <b>Helm</b><br/><span style='font-size:12px;color:#666'>包管理</span>"]
+    subgraph Tool [开发工具]
+        direction TB
+        T1[kubectl<br>命令行工具]
+        T2[client-go<br>Go 客户端库]
+        T3[Operator SDK<br>自动化开发]
+        T4[Helm<br>包管理]
     end
 
-    subgraph Mode["开发模式"]
-        M1["➔ <b>命令式开发</b><br/><span style='font-size:12px;color:#666'>直接操作资源</span>"]
-        M2["📄 <b>声明式开发</b><br/><span style='font-size:12px;color:#666'>YAML 配置管理</span>"]
-        M3["🔄 <b>GitOps</b><br/><span style='font-size:12px;color:#666'>代码即基础设施</span>"]
-        M4["👥 <b>平台工程</b><br/><span style='font-size:12px;color:#666'>自助服务</span>"]
+    subgraph Mode [开发模式]
+        direction TB
+        M1[命令式开发<br>直接操作资源]
+        M2[声明式开发<br>YAML 配置管理]
+        M3[GitOps<br>代码即基础设施]
+        M4[平台工程<br>自助服务]
     end
 
     L1 --> T1 --> M1
     L2 --> T2 --> M2
     L3 --> T3 --> M3
     L4 --> T4 --> M4
-
-    class M4 highlight;
 ```
 
 ### 核心开发理念

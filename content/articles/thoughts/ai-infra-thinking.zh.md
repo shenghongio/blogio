@@ -2,7 +2,6 @@
 title: "AI Infra 不是又一个 K8s：关于这轮基础设施的一些思考"
 date: 2026-11-11
 description: "把 AI 基础设施当成 K8s 的下一个版本是误判。变的核心不是调度对象，而是资源的稀缺结构与故障的发生方式。"
-location: "Shanghai"
 tcf: "Engineering"
 ---
 

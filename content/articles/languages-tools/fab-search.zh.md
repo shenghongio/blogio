@@ -2,7 +2,6 @@
 title: "把搜索塞进导航浮窗：双 pane 切换与高度锁定"
 date: 2026-11-11
 description: "记录一次从独立搜索按钮到浮窗内置搜索的重构：分类区与候选区如何同处一个面板而不互相挤压，以及为什么高度必须锁死。"
-location: "Shanghai"
 tcf: "Hugo"
 cover:
   image: "images/01.jpg"

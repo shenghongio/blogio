@@ -7,14 +7,18 @@
     {{- end }}
     {{- if not (.Param "hideMeta") }}
     <div class="post-meta article-meta-tags">
-      {{- with .Date }}
-      <span class="gt-date-tag">{{ .Format "2006-01-02" }}</span>
+      {{- $author := .Params.author | default site.Params.author | default "ShengHong" }}
+      {{- with .Lastmod }}
+      <span class="gt-date-tag">updated {{ .Format "2006-01-02" }}</span>
       {{- end }}
-      {{- with .Params.location }}
-      <span class="gt-badge gt-badge-location">{{ . }}</span>
+      {{- with .GitInfo }}
+      <span class="gt-badge gt-badge-commit" title="{{ .AbbreviatedHash }}">commit {{ .Hash }}</span>
       {{- end }}
-      {{- with .Params.tcf }}
-      <span class="gt-badge gt-badge-tcf">{{ . }}</span>
+      {{- with .WordCount }}
+      <span class="gt-badge gt-badge-count">{{ lang.FormatNumber 0 . }} words</span>
+      {{- end }}
+      {{- with $author }}
+      <span class="gt-badge gt-badge-author">by {{ . }}</span>
       {{- end }}
     </div>
     {{- end }}
