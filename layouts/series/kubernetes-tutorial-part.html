@@ -43,6 +43,37 @@
 </div>
 <script>
 (function(){
+    var basePath = {{ (strings.TrimRight "/" ((urls.Parse site.BaseURL).Path)) | jsonify | safeJS }};
+    var parts = {{ $kt.nav | jsonify | safeJS }};
+    var dropdowns = document.querySelectorAll('.kt-sidebar-part-dropdown');
+    document.querySelectorAll('[data-part-dropdown-trigger]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            var dd = btn.closest('.kt-sidebar-part-dropdown');
+            var opened = dd.classList.toggle('kt-sidebar-part-dropdown--open');
+            btn.setAttribute('aria-expanded', opened ? 'true' : 'false');
+        });
+    });
+    document.querySelectorAll('.kt-part-menu-item').forEach(function(item){
+        item.addEventListener('click', function(){
+            var idx = parseInt(item.getAttribute('data-part-index'), 10);
+            var target = idx === 0 ? basePath + '/series/kubernetes-tutorial/' : (parts[idx] && parts[idx].overview ? basePath + parts[idx].overview : '');
+            if (target) window.location.href = target;
+        });
+    });
+    document.addEventListener('click', function(e){
+        dropdowns.forEach(function(dd){
+            if (!dd.contains(e.target)) {
+                dd.classList.remove('kt-sidebar-part-dropdown--open');
+                var trigger = dd.querySelector('[data-part-dropdown-trigger]');
+                if (trigger) trigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
+})();
+</script>
+<script>
+(function(){
     var P = 'kt';
     var tocEl = document.getElementById(P + '-toc');
     var tocInner = tocEl ? tocEl.querySelector('.kt-toc-inner') : null;
