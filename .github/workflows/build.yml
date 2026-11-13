@@ -29,11 +29,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install PyYAML
+        run: pip install --quiet pyyaml
+
       - name: Sync project activity order
         continue-on-error: true
-        run: |
-          pip install --quiet pyyaml
-          python3 scripts/sync_projects.py
+        run: python3 scripts/sync_projects.py
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -44,7 +51,7 @@ jobs:
       - name: Set up Hugo
         uses: peaceiris/actions-hugo@v3
         with:
-          hugo-version: '0.166.0'
+          hugo-version: '0.169.0'
           extended: true
 
       - name: Verify Hugo modules
