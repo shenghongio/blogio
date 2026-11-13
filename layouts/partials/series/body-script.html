@@ -211,8 +211,15 @@
         });
         if (!heads.length) return;
         var cur = null;
+        var refLine = 100;
         for (var i = 0; i < heads.length; i++) {
-            if (heads[i].getBoundingClientRect().top <= 100) cur = heads[i].id;
+            if (heads[i].getBoundingClientRect().top <= refLine) cur = heads[i].id;
+        }
+        if (!cur) {
+            var half = Math.round(window.innerHeight * 0.5);
+            for (var j = 0; j < heads.length; j++) {
+                if (heads[j].getBoundingClientRect().top <= half) cur = heads[j].id;
+            }
         }
         if (!cur) cur = heads[0].id;
         var atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
@@ -232,8 +239,8 @@
     var TOC_MIN_WIDTH = 150;
     var TOC_PAD_X = 20;
     var TOC_INDENT = {};
-    TOC_INDENT[P + '-toc-h2'] = 12;
-    TOC_INDENT[P + '-toc-h3'] = 28;
+    TOC_INDENT[P + '-toc-h2'] = 0;
+    TOC_INDENT[P + '-toc-h3'] = 18;
 
     var textWidth = function(text, weight){
         var probe = document.createElement('span');
@@ -255,7 +262,7 @@
                 indent = TOC_INDENT[el.parentElement.className] || 0;
                 weight = el.parentElement.className === P + '-toc-h3' ? 400 : 600;
             }
-            widest = Math.max(widest, Math.ceil(textWidth(el.textContent, weight)) + indent);
+            widest = Math.max(widest, Math.ceil(textWidth(el.textContent, weight)) + indent + 20);
         });
         if (!widest) return;
         var width = widest + TOC_PAD_X * 2 + 2;
