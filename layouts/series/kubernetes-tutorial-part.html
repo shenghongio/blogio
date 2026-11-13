@@ -23,6 +23,46 @@
                 <div class="kt-markdown kt-overview-body">{{ .Content }}</div>
             </div>
         </div>
+        <aside class="kt-toc" id="kt-toc">
+            <div class="kt-toc-inner"></div>
+        </aside>
     </div>
 </div>
+<script>
+(function(){
+    var tocEl = document.getElementById('kt-toc');
+    var tocInner = tocEl ? tocEl.querySelector('.kt-toc-inner') : null;
+    var viewer = document.querySelector('.kt-overview-body');
+    if (!tocEl || !tocInner || !viewer) return;
+    var heads = viewer.querySelectorAll('h2, h3');
+    var items = [];
+    heads.forEach(function(h, i){
+        if (h.classList.contains('kt-overview-title')) return;
+        if (!h.id) h.id = 'kt-sec-' + i;
+        items.push({ id: h.id, text: h.textContent.trim(), level: h.tagName.toLowerCase() });
+    });
+    if (!items.length) { tocEl.hidden = true; return; }
+    var title = document.createElement('div');
+    title.className = 'kt-toc-title';
+    title.textContent = '本章目录';
+    var ul = document.createElement('ul');
+    ul.className = 'kt-toc-list';
+    items.forEach(function(it){
+        var li = document.createElement('li');
+        li.className = 'kt-toc-' + it.level;
+        var a = document.createElement('a');
+        a.href = '#' + it.id;
+        a.textContent = it.text;
+        a.addEventListener('click', function(e){
+            e.preventDefault();
+            var t = document.getElementById(it.id);
+            if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 90, behavior: 'smooth' });
+        });
+        li.appendChild(a);
+        ul.appendChild(li);
+    });
+    tocInner.appendChild(title);
+    tocInner.appendChild(ul);
+})();
+</script>
 {{ end }}

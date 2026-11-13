@@ -56,7 +56,10 @@
                         {{ end }}
                         {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge">持续维护：{{ if $page.Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
                     </div>
-                    <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ $page.Content }}</div>
+                    <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
+                        {{ $page.Content }}
+                        {{ partial "series/article-nav.html" (dict "nav" $data.nav "currentPath" (relURL $page.RelPermalink) "baseURL" (relURL "")) }}
+                    </div>
                     {{ else }}
                     {{ range $i, $part := $data.nav }}
                         {{ if eq $i 0 }}

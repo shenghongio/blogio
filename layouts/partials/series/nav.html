@@ -53,11 +53,12 @@
         </button>
         <ul class="{{ $prefix }}-articles">
             {{ range $article := $section.articles }}
-            {{ $articleURL := printf "%s%s" $basePath $article.path }}
+            {{ $articlePath := replaceRE "^/zh/" "/" $article.path }}
+            {{ $articleURL := printf "%s%s" $basePath $articlePath }}
             {{ $isActive := eq $articleURL $currentPath }}
             {{ $articleTitle := path.Base $article.path }}
-            {{ $pagePath := replaceRE "^/zh/" "/" $article.path }}
-            {{ $isDraft := true }}
+            {{ $pagePath := $articlePath }}
+            {{ $isDraft := false }}
             {{ with site.GetPage $pagePath }}
                 {{ $articleTitle = .Title }}
                 {{ $isDraft = .Draft }}

@@ -1,0 +1,55 @@
+{{- $nav := .nav -}}
+{{- $currentPath := .currentPath -}}
+{{- $baseURL := strings.TrimRight "/" .baseURL -}}
+{{- $basePath := (urls.Parse site.BaseURL).Path | strings.TrimRight "/" -}}
+{{- $flat := slice -}}
+{{- range $part := $nav -}}
+  {{- range $group := $part.groups -}}
+    {{- range $section := $group.sections -}}
+      {{- range $article := $section.articles -}}
+        {{- $flat = $flat | append (dict "part" $part "path" $article.path "name" $article.name) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $idx := -1 -}}
+{{- range $i, $item := $flat -}}
+  {{- if eq (printf "%s%s" $basePath (replaceRE "^/zh/" "/" $item.path)) $currentPath -}}
+    {{- $idx = $i -}}
+  {{- end -}}
+{{- end -}}
+{{- if ge $idx 0 -}}
+  {{- $currentPart := (index $flat $idx).part -}}
+  {{- $prev := false -}}
+  {{- $next := false -}}
+  {{- if gt $idx 0 -}}
+    {{- $cand := index $flat (sub $idx 1) -}}
+    {{- if eq $cand.part.part $currentPart.part -}}{{- $prev = $cand -}}{{- end -}}
+  {{- end -}}
+  {{- if lt $idx (sub (len $flat) 1) -}}
+    {{- $cand := index $flat (add $idx 1) -}}
+    {{- if eq $cand.part.part $currentPart.part -}}{{- $next = $cand -}}{{- end -}}
+  {{- end -}}
+  {{- if or $prev $next }}
+<nav class="series-pager" aria-label="文章导航">
+    {{- with $prev }}
+    {{- $title := .name | default "" -}}
+    {{- with site.GetPage (replaceRE "^/zh/" "/" .path) -}}{{- $title = .Title -}}{{- end -}}
+    {{- if not $title -}}{{- $title = path.Base .path -}}{{- end }}
+    <a class="series-pager-link series-pager-prev" href="{{ $baseURL }}{{ replaceRE "^/zh/" "/" .path }}">
+        <span class="series-pager-eyebrow">← 上一篇</span>
+        <span class="series-pager-title">{{ $title }}</span>
+    </a>
+    {{- end }}
+    {{- with $next }}
+    {{- $title := .name | default "" -}}
+    {{- with site.GetPage (replaceRE "^/zh/" "/" .path) -}}{{- $title = .Title -}}{{- end -}}
+    {{- if not $title -}}{{- $title = path.Base .path -}}{{- end }}
+    <a class="series-pager-link series-pager-next" href="{{ $baseURL }}{{ replaceRE "^/zh/" "/" .path }}">
+        <span class="series-pager-eyebrow">下一篇 →</span>
+        <span class="series-pager-title">{{ $title }}</span>
+    </a>
+    {{- end }}
+</nav>
+  {{- end }}
+{{- end -}}

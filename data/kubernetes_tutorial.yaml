@@ -58,6 +58,23 @@ nav:
           - name: "安全"
             articles:
               - path: "/zh/series/kubernetes-tutorial/security-overview/"
+      - label: "开发指南"
+        sections:
+          - name: "开发指南"
+            articles:
+              - path: "/zh/series/kubernetes-tutorial/overview/"
+      - label: "扩展 Kubernetes"
+        sections:
+          - name: "扩展 Kubernetes"
+            articles: []
+      - label: "应用交付与 GitOps"
+        sections:
+          - name: "应用交付与 GitOps"
+            articles: []
+      - label: "多集群管理"
+        sections:
+          - name: "多集群管理"
+            articles: []
   - part: "III"
     name: "新范式与生态"
     overview: "/series/kubernetes-tutorial/part-iii/"

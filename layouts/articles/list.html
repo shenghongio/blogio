@@ -5,10 +5,12 @@
 
     <div class="category-page-inner">
         <header class="category-header">
-            <h1 class="category-title">{{ .Title }}</h1>
-            {{ with .Description }}
-            <p class="category-desc">{{ . }}</p>
-            {{ end }}
+            <div class="category-header-text">
+                <h1 class="category-title">{{ .Title }}</h1>
+                {{ with .Description }}
+                <p class="category-desc">{{ . }}</p>
+                {{ end }}
+            </div>
             <div class="article-sort" data-sort-root>
                 <button type="button" class="article-sort-btn is-active" data-sort="date-desc">{{ i18n "sort_newest" }}</button>
                 <button type="button" class="article-sort-btn" data-sort="date-asc">{{ i18n "sort_oldest" }}</button>
@@ -67,15 +69,29 @@
         {{- $groups = $ordered -}}
 
         {{ if gt (len $groups) 0 }}
+        {{- $allPages := slice -}}
+        {{- range $groups -}}
+            {{- $allPages = $allPages | append .pages -}}
+        {{- end -}}
+        {{- $allPages = $allPages.ByDate.Reverse -}}
         <div class="article-index" data-sort-target>
-            <nav class="article-cat-nav" data-cat-nav>
+            <nav class="article-cat-nav" data-cat-nav aria-label="{{ i18n "articles_nav_label" }}">
+                <span class="article-cat-label">{{ i18n "articles_nav_label" }}</span>
+                <button type="button" class="article-cat-tab is-active" data-cat="all">{{ i18n "articles_all" }}</button>
                 {{ range $i, $g := $groups }}
-                <button type="button" class="article-cat-tab{{ if eq $i 0 }} is-active{{ end }}" data-cat="{{ $i }}">{{ $g.title }}</button>
+                <button type="button" class="article-cat-tab" data-cat="{{ $i }}">{{ $g.title }}</button>
                 {{ end }}
             </nav>
             <div class="article-cat-panes" data-cat-panes>
+                <section class="article-cat-group is-active" data-cat-pane="all">
+                    <div class="article-cat-body">
+                        {{ range $allPages }}
+                        {{ partial "article-row.html" (dict "page" .) }}
+                        {{ end }}
+                    </div>
+                </section>
                 {{ range $i, $g := $groups }}
-                <section class="article-cat-group{{ if eq $i 0 }} is-active{{ end }}" data-cat-pane="{{ $i }}">
+                <section class="article-cat-group" data-cat-pane="{{ $i }}">
                     <div class="article-cat-body">
                         {{ range $g.pages }}
                         {{ partial "article-row.html" (dict "page" .) }}

@@ -271,7 +271,7 @@
         viewer.innerHTML = tmpl.innerHTML;
         clearActive();
         syncPanes(currentIdx);
-        buildToc(false);
+        buildToc(true);
         if (enablePartSwitch) {
             var hash = currentIdx > 0 ? '#part-' + currentIdx : '';
             if (location.hash !== hash) {
