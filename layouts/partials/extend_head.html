@@ -57,12 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });</script>
 
 {{ $needMermaid := false }}
-{{ if .IsPage }}
 {{ if or (in .Content "class=\"mermaid\"") (in .RawContent "```mermaid") }}{{ $needMermaid = true }}{{ end }}
-{{ with .Params.articleNav }}{{ $needMermaid = true }}{{ end }}
-{{ if in (string .Params.layout) "tutorial-part" }}{{ $needMermaid = true }}{{ end }}
-{{ end }}
-{{ if eq .Kind "section" }}{{ if in .RelPermalink "series" }}{{ $needMermaid = true }}{{ end }}{{ end }}
+{{ if and (not $needMermaid) (in .RelPermalink "/series/") }}{{ $needMermaid = true }}{{ end }}
 {{ if $needMermaid }}
 {{ $mermaidLib := resources.Get "js/mermaid.min.js" }}
 {{ $mermaidJS := resources.Get "js/mermaid-init.js" }}
