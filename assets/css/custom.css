@@ -4524,6 +4524,7 @@ body:has(.kt-page--standalone) .kt-layout {
 .kt-overview-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     margin: 0 0 24px;
 }
@@ -4545,14 +4546,28 @@ body:has(.kt-page--standalone) .kt-layout {
     display: inline-flex;
     align-items: center;
     font-size: 11px;
-    color: #4b5563;
-    background: #eef2ff;
-    border: 1px solid #e0e7ff;
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     border-radius: 10px;
     padding: 2px 8px;
     font-weight: 500;
     letter-spacing: 0.02em;
     flex-shrink: 0;
+}
+
+.kt-badge:hover {
+    border-color: #6ee7b7;
+}
+
+.kt-commit-tag {
+    color: #7c3aed;
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0;
+    word-break: break-all;
+    max-width: 100%;
 }
 
 .kt-overview-intro {
@@ -5201,6 +5216,24 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-sidebar {
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-overview-title {
     color: #e8e8e4 !important;
+}
+
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-date-tag {
+    color: #9ca3af;
+    background: #262626;
+    border-color: #3a3a3a;
+}
+
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-badge {
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.16);
+    border-color: rgba(16, 185, 129, 0.38);
+}
+
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-commit-tag {
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.16);
+    border-color: rgba(167, 139, 250, 0.38);
 }
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-sidebar-part-trigger {
@@ -6138,6 +6171,7 @@ html[data-theme="dark"] .gs-stack-group-head {
 .gt-overview-meta {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
     margin: 0 0 24px;
 }
@@ -6214,14 +6248,28 @@ html[data-theme="dark"] .article-meta-tags .gt-badge-tcf {
     display: inline-flex;
     align-items: center;
     font-size: 11px;
-    color: #4b5563;
-    background: #eef2ff;
-    border: 1px solid #e0e7ff;
+    color: #047857;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
     border-radius: 10px;
     padding: 2px 8px;
     font-weight: 500;
     letter-spacing: 0.02em;
     flex-shrink: 0;
+}
+
+.gt-badge:hover {
+    border-color: #6ee7b7;
+}
+
+.gt-commit-tag {
+    color: #7c3aed;
+    background: #f5f3ff;
+    border-color: #ddd6fe;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0;
+    word-break: break-all;
+    max-width: 100%;
 }
 
 .gt-overview-intro {
@@ -6907,6 +6955,24 @@ html[data-theme="dark"]:has(.gt-page--standalone) .gt-sidebar {
 
 html[data-theme="dark"]:has(.gt-page--standalone) .gt-overview-title {
     color: #e8e8e4 !important;
+}
+
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-date-tag {
+    color: #9ca3af;
+    background: #262626;
+    border-color: #3a3a3a;
+}
+
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-badge {
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.16);
+    border-color: rgba(16, 185, 129, 0.38);
+}
+
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-commit-tag {
+    color: #c4b5fd;
+    background: rgba(167, 139, 250, 0.16);
+    border-color: rgba(167, 139, 250, 0.38);
 }
 
 html[data-theme="dark"]:has(.gt-page--standalone) .gt-overview-header {
@@ -7991,4 +8057,22 @@ html[data-theme="dark"] .article-row-thumb {
         max-width: 100%;
         margin-bottom: 16px;
     }
+}
+.mermaid {
+    margin: 1.5rem 0;
+    padding: 1rem 0.5rem;
+    overflow-x: auto;
+    text-align: center;
+    background: transparent;
+    border-radius: 8px;
+    min-height: 60px;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+html[data-theme="dark"] .mermaid {
+    background: transparent;
 }

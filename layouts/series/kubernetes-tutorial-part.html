@@ -20,6 +20,16 @@
         </aside>
         <div class="kt-content">
             <div class="kt-content-inner">
+                <h2 class="kt-overview-title">{{ .Title }}</h2>
+                <div class="kt-overview-meta">
+                    {{ if gt .Lastmod.Year 1 }}
+                    <span class="kt-date-tag">最后更新：{{ .Lastmod.Format "2006-01-02" }}</span>
+                    {{ else if gt .Date.Year 1 }}
+                    <span class="kt-date-tag">最后更新：{{ .Date.Format "2006-01-02" }}</span>
+                    {{ end }}
+                    {{ if isset .Params "sustain" }}<span class="kt-badge">持续维护：{{ if .Params.sustain }}是{{ else }}否{{ end }}</span>{{ end }}
+                    {{ with .GitInfo }}<span class="kt-badge kt-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">提交：{{ .Hash }}</span>{{ end }}
+                </div>
                 <div class="kt-markdown kt-overview-body">{{ .Content }}</div>
             </div>
         </div>

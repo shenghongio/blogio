@@ -55,3 +55,15 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 });</script>
+
+{{ if and .IsPage (in .Content "class=\"mermaid\"") }}
+{{ $mermaidLib := resources.Get "js/mermaid.min.js" }}
+{{ $mermaidJS := resources.Get "js/mermaid-init.js" }}
+{{ if and $mermaidLib $mermaidJS }}
+{{ $mermaidLib = $mermaidLib | fingerprint }}
+{{ $libURL := $mermaidLib.RelPermalink }}
+{{ $mermaidJS = $mermaidJS | minify | fingerprint }}
+{{ $mermaidCDN := "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js" }}
+<script src="{{ $mermaidJS.RelPermalink }}" integrity="{{ $mermaidJS.Data.Integrity }}" data-mermaid-cdn="{{ $mermaidCDN }}" data-mermaid-lib="{{ $libURL }}" defer></script>
+{{ end }}
+{{ end }}

@@ -48,7 +48,7 @@
         }
     };
 
-    var renderTitle = function(title, dateStr, sustain){
+    var renderTitle = function(title, dateStr, sustain, commitId){
         var h = document.createElement('h2');
         h.className = P + '-overview-title';
         h.textContent = title || '';
@@ -66,6 +66,13 @@
             badge.textContent = '持续维护：' + (sustain ? '是' : '否');
             meta.appendChild(badge);
         }
+        if (commitId) {
+            var commit = document.createElement('span');
+            commit.className = P + '-badge ' + P + '-commit-tag';
+            commit.title = '提交：' + commitId;
+            commit.textContent = '提交：' + commitId;
+            meta.appendChild(commit);
+        }
         return [h, meta];
     };
 
@@ -75,6 +82,7 @@
         var titleEl = header ? header.querySelector('.post-title') : null;
         var dateEl = header ? header.querySelector('.post-meta') : null;
         var sustain = null;
+        var commitId = '';
         if (!content && doc.getElementById(P + '-article-viewer')) {
             var singleViewer = doc.getElementById(P + '-article-viewer');
             content = singleViewer.querySelector('.' + P + '-overview-body');
@@ -82,6 +90,8 @@
             dateEl = singleViewer.querySelector('.' + P + '-overview-meta');
             var badge = singleViewer.querySelector('.' + P + '-badge');
             if (badge) sustain = badge.textContent.indexOf('是') !== -1;
+            var commitEl = singleViewer.querySelector('.' + P + '-commit-tag');
+            if (commitEl) commitId = commitEl.getAttribute('data-commit') || commitEl.textContent.replace(/^提交[:：]\s*/, '').trim();
         }
         var dateStr = '';
         if (dateEl) {
@@ -104,13 +114,14 @@
             title: titleEl ? titleEl.textContent.trim() : '',
             date: dateStr,
             sustain: sustain,
+            commitId: commitId,
             html: content ? content.innerHTML : ''
         };
     };
 
-    var renderArticle = function(title, contentHtml, dateStr, sustain){
+    var renderArticle = function(title, contentHtml, dateStr, sustain, commitId){
         viewer.innerHTML = '';
-        var nodes = renderTitle(title, dateStr, sustain);
+        var nodes = renderTitle(title, dateStr, sustain, commitId);
         viewer.appendChild(nodes[0]);
         viewer.appendChild(nodes[1]);
         var body = document.createElement('div');
@@ -123,7 +134,7 @@
 
     var loadArticle = function(url, link){
         var finish = function(data){
-            renderArticle(data.title, data.html, data.date, data.sustain);
+            renderArticle(data.title, data.html, data.date, data.sustain, data.commitId);
             markActive(link);
         };
         if (cache[url]) { finish(cache[url]); return; }
