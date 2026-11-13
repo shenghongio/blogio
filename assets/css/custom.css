@@ -4120,7 +4120,7 @@ html[data-theme="dark"] .profile-action-btn:hover {
 body:has(.kt-page--standalone) .kt-inner {
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 0 32px;
     flex: 1;
     min-height: 0;
 }
@@ -5161,10 +5161,15 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-article-link:hover {
     background: rgba(255, 255, 255, 0.06);
 }
 
-html[data-theme="dark"]:has(.kt-page--standalone) .kt-article--active .kt-article-link,
-html[data-theme="dark"]:has(.kt-page--standalone) .kt-article--active .kt-article-title {
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-article--active .kt-article-link {
     color: #c4b5fd !important;
     background: rgba(167, 139, 250, 0.16);
+    font-weight: 600;
+}
+
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-article--active .kt-article-title {
+    color: #c4b5fd !important;
+    background: none;
     font-weight: 600;
 }
 
@@ -5301,7 +5306,7 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown code {
 body:has(.gt-page--standalone) .gt-inner {
     max-width: none;
     margin: 0;
-    padding: 0;
+    padding: 0 32px;
     flex: 1;
     min-height: 0;
 }
@@ -6862,10 +6867,15 @@ html[data-theme="dark"]:has(.gt-page--standalone) .gt-article-link:hover {
     background: rgba(255, 255, 255, 0.06);
 }
 
-html[data-theme="dark"]:has(.gt-page--standalone) .gt-article--active .gt-article-link,
-html[data-theme="dark"]:has(.gt-page--standalone) .gt-article--active .gt-article-title {
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-article--active .gt-article-link {
     color: #c4b5fd !important;
     background: rgba(167, 139, 250, 0.16);
+    font-weight: 600;
+}
+
+html[data-theme="dark"]:has(.gt-page--standalone) .gt-article--active .gt-article-title {
+    color: #c4b5fd !important;
+    background: none;
     font-weight: 600;
 }
 
