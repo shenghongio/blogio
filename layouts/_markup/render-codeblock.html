@@ -1,0 +1,7 @@
+{{- $lang := .Type -}}
+{{- if eq $lang "mermaid" -}}
+<div class="mermaid" id="mermaid-{{ .Ordinal }}">{{ .Inner }}</div>
+{{- else -}}
+{{- $opts := dict "noClasses" false "lineNos" false "lineNumbersInTable" false -}}
+{{- highlight .Inner $lang $opts -}}
+{{- end -}}

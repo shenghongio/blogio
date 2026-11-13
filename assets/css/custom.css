@@ -8058,3 +8058,21 @@ html[data-theme="dark"] .article-row-thumb {
         margin-bottom: 16px;
     }
 }
+.mermaid {
+    margin: 1.5rem 0;
+    padding: 1rem 0.5rem;
+    overflow-x: auto;
+    text-align: center;
+    background: transparent;
+    border-radius: 8px;
+    min-height: 60px;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+html[data-theme="dark"] .mermaid {
+    background: transparent;
+}
