@@ -5,11 +5,7 @@
 {{- $contactHintTitle := i18n "contact_hint_title" -}}
 {{- $contactHintDescription := i18n "contact_hint_description" -}}
 {{- $siteBasePath := (urls.Parse site.BaseURL).Path | strings.TrimSuffix "/" -}}
-{{- $currentLang := site.Language.Lang -}}
-{{- $langPrefix := "" -}}
-{{- if ne $currentLang "en" -}}
-  {{- $langPrefix = printf "/%s" $currentLang -}}
-{{- end -}}
+{{- $langPrefix := site.LanguagePrefix -}}
 
 <header class="site-header{{ if .IsHome }} site-header--home{{ end }}">
     <div class="site-header-inner">

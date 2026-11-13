@@ -50,7 +50,8 @@
     if (!tocEl || !tocInner || !viewer) return;
 
     var TOC_MIN_WIDTH = 150;
-    var TOC_PAD_X = 20;
+    var TOC_PAD_LEFT = 20;
+    var TOC_PAD_RIGHT = 4;
     var TOC_INDENT = {};
     TOC_INDENT[P + '-toc-h2'] = 0;
     TOC_INDENT[P + '-toc-h3'] = 18;
@@ -75,10 +76,10 @@
                 indent = TOC_INDENT[el.parentElement.className] || 0;
                 weight = el.parentElement.className === P + '-toc-h3' ? 400 : 600;
             }
-            widest = Math.max(widest, Math.ceil(textWidth(el.textContent, weight)) + indent + 20);
+            widest = Math.max(widest, Math.ceil(textWidth(el.textContent, weight)) + indent + 18);
         });
         if (!widest) return;
-        var width = widest + TOC_PAD_X * 2 + 2;
+        var width = widest + TOC_PAD_LEFT + TOC_PAD_RIGHT + 2;
         width = Math.max(TOC_MIN_WIDTH, width);
         var limit = Math.max(TOC_MIN_WIDTH, Math.round(window.innerWidth * 0.45));
         if (width > limit) width = limit;

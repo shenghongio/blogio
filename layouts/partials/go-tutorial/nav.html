@@ -10,7 +10,7 @@
     {{ range $section := $group.sections }}
     {{ $sectionHasActive := false }}
     {{ range $article := $section.articles }}
-        {{ if eq (printf "%s%s" $basePath $article.path) $currentPath }}
+        {{ if eq (printf "%s%s" $basePath (replaceRE "^/zh/" "/" $article.path)) $currentPath }}
             {{ $sectionHasActive = true }}
         {{ end }}
     {{ end }}
@@ -32,10 +32,10 @@
         </button>
         <ul class="gt-articles">
             {{ range $article := $section.articles }}
-            {{ $articleURL := printf "%s%s" $basePath $article.path }}
-            {{ $isActive := eq $articleURL $currentPath }}
-            {{ $articleTitle := path.Base $article.path }}
             {{ $pagePath := replaceRE "^/zh/" "/" $article.path }}
+            {{ $articleURL := printf "%s%s" $basePath $pagePath }}
+            {{ $isActive := eq $articleURL $currentPath }}
+            {{ $articleTitle := path.Base $pagePath }}
             {{ $isDraft := true }}
             {{ with site.GetPage $pagePath }}
                 {{ $articleTitle = .Title }}

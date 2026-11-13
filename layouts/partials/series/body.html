@@ -3,9 +3,24 @@
 {{- $prefix     := .prefix -}}
 {{- $partSwitch := .enablePartSwitch | default false -}}
 {{- $data       := index hugo.Data $dataKey -}}
-{{- $zh         := index (where hugo.Sites "Language.Lang" "zh") 0 -}}
+{{- $seriesSites := slice -}}
+{{- range hugo.Sites -}}
+  {{- $siteLang := .Language.Lang -}}
+  {{- range .RegularPages -}}
+    {{- if in .File.Path (printf "series/%s/part-" $seriesId) -}}
+      {{- if not (in $seriesSites $siteLang) -}}
+        {{- $seriesSites = $seriesSites | append $siteLang -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $siteLang := site.Language.Lang -}}
+{{- if not (in $seriesSites $siteLang) -}}
+  {{- $siteLang = index $seriesSites 0 -}}
+{{- end -}}
+{{- $seriesSite := index (where hugo.Sites "Language.Lang" $siteLang) 0 -}}
 {{- $partPages  := slice -}}
-{{- range $zh.RegularPages -}}
+{{- range $seriesSite.RegularPages -}}
   {{- if in .File.Path (printf "series/%s/part-" $seriesId) -}}
     {{- $partPages = $partPages | append . -}}
   {{- end -}}

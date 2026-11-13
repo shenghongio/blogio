@@ -11,36 +11,10 @@ hasCJKLanguage = true
   author = "ShengHong"
 
 [languages]
-  [languages.en]
-    label = "English"
-    locale = "en-us"
-    weight = 1
-
-    [languages.en.menu]
-      [[languages.en.menu.main]]
-        name = "Home"
-        url = "/"
-        weight = 10
-        [languages.en.menu.main.params]
-          icon = "home"
-
-      [[languages.en.menu.main]]
-        name = "Stack"
-        weight = 20
-        [languages.en.menu.main.params]
-          icon = "book"
-
-      [[languages.en.menu.main]]
-        name = "About"
-        url = "/profile/"
-        weight = 50
-        [languages.en.menu.main.params]
-          icon = "user"
-
   [languages.zh]
     label = "中文"
     locale = "zh-cn"
-    weight = 2
+    weight = 1
 
     [languages.zh.menu]
       [[languages.zh.menu.main]]
