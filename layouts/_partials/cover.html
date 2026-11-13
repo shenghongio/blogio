@@ -8,7 +8,10 @@
     {{- $responsiveImages := (.Params.cover.responsiveImages | default site.Params.cover.responsiveImages) | default true }}
 
     {{- $pageBundleCover := (.Resources.ByType "image").GetMatch (printf "*%s*" (.Params.cover.image)) }}
-    {{- $globalResourcesCover := (resources.ByType "image").GetMatch (printf "*%s*" (path.Base (.Params.cover.image))) }}
+    {{- $globalResourcesCover := resources.Get (.Params.cover.image) }}
+    {{- if not $globalResourcesCover }}
+        {{- $globalResourcesCover = (resources.ByType "image").GetMatch (printf "*%s*" (path.Base (.Params.cover.image))) }}
+    {{- end }}
     {{- $cover := (or $pageBundleCover $globalResourcesCover)}}
 
     {{- $sizes := (slice "360" "480" "720" "1080" "1500") }}
@@ -19,7 +22,7 @@
 
     {{- $imgdl := (.Params.cover.image) | absURL }}
     {{- if $cover -}}
-        {{- $imgdl = $cover.Permalink }}
+        {{- $imgdl = $cover.RelPermalink | absURL }}
     {{- end -}}
 
     {{- if $addLink }}
@@ -27,7 +30,7 @@
     {{- end }}
 
     {{- if $cover -}}
-        {{- if (and (in $processableFormats $cover.MediaType.SubType) ($responsiveImages) (eq $prod true)) }}
+        {{- if and (in $processableFormats $cover.MediaType.SubType) ($responsiveImages) }}
             <img loading="{{$loading}}"
                 srcset='{{- range $size := $sizes -}}
                             {{- if (ge $cover.Width $size) }}
@@ -40,6 +43,7 @@
                 width="{{ $cover.Width }}" height="{{ $cover.Height }}"
                 alt="{{ $alt }}">
         {{- else }}
+            {{- $cover.Publish }}
             <img loading="{{ $loading }}" src="{{ $imgdl }}" alt="{{ $alt }}">
         {{- end }}
     {{- else }}
