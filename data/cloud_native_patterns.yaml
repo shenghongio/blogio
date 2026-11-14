@@ -1,0 +1,9 @@
+hero:
+  title: "云原生模式"
+  subtitle: "云原生应用设计模式与最佳实践"
+
+nav:
+  - part: "I"
+    name: "云原生模式"
+    overview: "/series/cloud-native-patterns/part-i/"
+    groups: []

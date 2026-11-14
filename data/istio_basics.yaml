@@ -1,0 +1,9 @@
+hero:
+  title: "Istio 基础教程"
+  subtitle: "Istio 服务网格核心概念与生产实践"
+
+nav:
+  - part: "I"
+    name: "Istio 基础"
+    overview: "/series/istio-basics/part-i/"
+    groups: []

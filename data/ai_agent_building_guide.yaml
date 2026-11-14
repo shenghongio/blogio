@@ -1,0 +1,9 @@
+hero:
+  title: "AI 智能体构建指南"
+  subtitle: "AI 云原生基础设施实践、LLM 推理部署与 Agent 运行时设计"
+
+nav:
+  - part: "I"
+    name: "智能体设计模式"
+    overview: "/series/ai-agent-building-guide/part-i/"
+    groups: []

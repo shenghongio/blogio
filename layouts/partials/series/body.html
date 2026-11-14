@@ -1,7 +1,9 @@
-{{- $dataKey    := .dataKey -}}
-{{- $seriesId   := .seriesId -}}
-{{- $prefix     := .prefix -}}
-{{- $partSwitch := .enablePartSwitch | default false -}}
+{{- $page       := .page -}}
+{{- $prefix     := .prefix | default "kt" -}}
+{{- $dataKey    := .dataKey | default ($page.Params.seriesDataKey | default "") -}}
+{{- $seriesId   := .seriesId | default ($page.Params.seriesId | default "") -}}
+{{- $partSwitch := $page.Params.enablePartSwitch | default false -}}
+{{- $tocInside  := $page.Params.tocInsideContent | default false -}}
 {{- $data       := index hugo.Data $dataKey -}}
 {{- $seriesSites := slice -}}
 {{- range hugo.Sites -}}
@@ -15,7 +17,7 @@
   {{- end -}}
 {{- end -}}
 {{- $siteLang := site.Language.Lang -}}
-{{- if not (in $seriesSites $siteLang) -}}
+{{- if and (not (in $seriesSites $siteLang)) (gt (len $seriesSites) 0) -}}
   {{- $siteLang = index $seriesSites 0 -}}
 {{- end -}}
 {{- $seriesSite := index (where hugo.Sites "Language.Lang" $siteLang) 0 -}}
@@ -26,7 +28,6 @@
   {{- end -}}
 {{- end -}}
 {{- $partPages = sort $partPages "File.Path" -}}
-{{- $page := .page -}}
 <div class="{{ $prefix }}-page {{ $prefix }}-page--standalone">
 
     <div class="{{ $prefix }}-hero-head">
@@ -100,19 +101,26 @@
                                 </div>
                                 <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
                             </div>
+                            {{ else }}
+                            <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
+                                <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
+                                <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
+                                    <p>建设中…</p>
+                                </div>
+                            </div>
                             {{ end }}
                         {{ end }}
                     {{ end }}
                     {{ end }}
                 </div>
             </div>
-            {{ if .tocInsideContent }}
+            {{ if $tocInside }}
             <aside class="{{ $prefix }}-toc" id="{{ $prefix }}-toc" hidden>
                 <div class="{{ $prefix }}-toc-inner"></div>
             </aside>
             {{ end }}
         </div>
-        {{ if not .tocInsideContent }}
+        {{ if not $tocInside }}
         <aside class="{{ $prefix }}-toc" id="{{ $prefix }}-toc" hidden>
             <div class="{{ $prefix }}-toc-inner"></div>
         </aside>
