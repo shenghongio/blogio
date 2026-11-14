@@ -1,7 +1,6 @@
 ---
 title: "平台能力与生产实践"
 date: 2026-11-09
-layout: "kubernetes-tutorial-part"
 sustain: false
 ---
 

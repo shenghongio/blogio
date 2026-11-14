@@ -1,7 +1,6 @@
 ---
 title: "云原生基础与核心抽象"
 date: 2026-11-09
-layout: "kubernetes-tutorial-part"
 sustain: true
 ---
 
