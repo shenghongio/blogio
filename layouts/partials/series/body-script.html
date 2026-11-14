@@ -129,11 +129,11 @@
             if (sustainEl) sustain = sustainEl.getAttribute('data-sustain') === 'true';
         }
         if (!words && header) {
-            var wcHead = header.querySelector('.gt-badge-count');
+            var wcHead = header.querySelector('.kt-badge-count');
             if (wcHead) words = wcHead.textContent.replace(/\s*words\s*$/i, '').trim();
         }
         if (!author && header) {
-            var auHead = header.querySelector('.gt-badge-author');
+            var auHead = header.querySelector('.kt-badge-author');
             if (auHead) author = auHead.textContent.replace(/^by\s*/i, '').trim();
         }
         return {

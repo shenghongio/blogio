@@ -1,0 +1,9 @@
+hero:
+  title: "Envoy 基础教程"
+  subtitle: "Envoy 代理架构、配置与流量管理"
+
+nav:
+  - part: "I"
+    name: "Envoy 基础"
+    overview: "/series/envoy-basics/part-i/"
+    groups: []

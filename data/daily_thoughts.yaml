@@ -1,0 +1,9 @@
+hero:
+  title: "个人思考"
+  subtitle: "日常旅行和所见所闻的积累"
+
+nav:
+  - part: "I"
+    name: "个人思考"
+    overview: "/series/daily-thoughts/part-i/"
+    groups: []
