@@ -161,16 +161,30 @@
     var mouseMode = false;
     if (searchInput && searchResults && navBody && navPane) {
         var noResults = {{ i18n "search_no_results" }};
-        var lockedHeight = 0;
 
-        var lockHeight = function(){
-            if (lockedHeight || !navPane || navPane.hidden) return;
-            var h = navPane.getBoundingClientRect().height;
-            if (!h) return;
-            lockedHeight = Math.min(h, Math.max(200, window.innerHeight - 200));
-            navBody.style.height = lockedHeight + 'px';
+        var viewportCap = function(){
+            return Math.max(200, window.innerHeight - 40 - 24 - 24 - 40 - 14 - 18);
         };
 
+        var bodyMinHeight = function(){
+            return 120;
+        };
+
+        var clearBodyHeight = function(){
+            navBody.style.height = '';
+        };
+
+        var syncBodyHeight = function(){
+            if (searchResults.hidden) {
+                navBody.style.height = '';
+                return;
+            }
+            var cap = viewportCap();
+            var floor = bodyMinHeight();
+            navBody.style.height = '';
+            var h = searchResults.scrollHeight;
+            navBody.style.height = Math.min(Math.max(h, floor), cap) + 'px';
+        };
         var loadIndex = function(){
             if (searchIndex) return searchIndex;
             try {
@@ -180,7 +194,7 @@
             }
             return searchIndex;
         };
-        var renderItem = function(p, i, info){
+        var renderItem = function(p, i, info, q){
             var badges = [];
             if (p.tcf) badges.push('<span class="gs-search-badge gs-search-badge-tcf">' + p.tcf + '</span>');
             if (p.section && p.kind === 'page') badges.push('<span class="gs-search-badge gs-search-badge-section">' + p.section + '</span>');
@@ -189,12 +203,14 @@
                 var labels = info.fields.map(function(f){
                     return '<span class="gs-search-hit">' + (FIELD_LABELS[f] || f) + '</span>';
                 }).join('');
-                meta = '<span class="gs-search-result-meta">' + labels +
-                    (info.snippet ? '<span class="gs-search-snippet">' + info.snippet + '</span>' : '') +
-                    '</span>';
+                meta = '<span class="gs-search-result-meta">' + labels + '</span>';
             }
+            var snippetEl = info && info.snippet
+                ? '<span class="gs-search-snippet">' + info.snippet + '</span>'
+                : '';
             return '<a class="gs-search-result" href="' + p.url + '" data-index="' + i + '">' +
-                '<span class="gs-search-result-main"><span class="gs-search-result-title"><strong>' + p.title + '</strong>' + badges.join('') + '</span>' + meta + '</span>' +
+                '<span class="gs-search-result-main"><span class="gs-search-result-title"><strong>' + highlight(p.title || '', q) + '</strong>' + badges.join('') + '</span>' + meta + '</span>' +
+                snippetEl +
                 '</a>';
         };
         var setActive = function(i){
@@ -219,8 +235,17 @@
             section: {{ i18n "search_hit_section" | jsonify | safeJS }}
         };
 
+        var escapeHTML = function(text){
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        };
+
         var snippet = function(text, q, radius){
             if (!text) return '';
+            text = String(text);
             var lower = text.toLowerCase();
             var pos = lower.indexOf(q);
             if (pos === -1) return '';
@@ -229,7 +254,23 @@
             var frag = text.slice(start, end);
             if (start > 0) frag = '…' + frag;
             if (end < text.length) frag = frag + '…';
-            return frag;
+            return highlight(frag, q);
+        };
+
+        var highlight = function(text, q){
+            if (!q) return escapeHTML(text);
+            var out = '';
+            var lower = text.toLowerCase();
+            var from = 0;
+            var idx = lower.indexOf(q, from);
+            while (idx !== -1) {
+                out += escapeHTML(text.slice(from, idx));
+                out += '<mark>' + escapeHTML(text.slice(idx, idx + q.length)) + '</mark>';
+                from = idx + q.length;
+                idx = lower.indexOf(q, from);
+            }
+            out += escapeHTML(text.slice(from));
+            return out;
         };
 
         var matchInfo = function(p, q){
@@ -255,6 +296,11 @@
             return { fields: hit, snippet: frag };
         };
 
+        if (window.ResizeObserver) {
+            new ResizeObserver(function(){ syncBodyHeight(); }).observe(searchResults);
+        }
+        window.addEventListener('resize', function(){ syncBodyHeight(); });
+
         var renderResults = function(query){
             var q = query.trim().toLowerCase();
             activeIndex = -1;
@@ -275,24 +321,23 @@
                 searchResults.innerHTML = '<p class="gs-search-empty">' + noResults + '</p>';
             } else {
                 searchResults.innerHTML = currentMatches.map(function(m, i){
-                    return renderItem(m.page, i, m.info);
+                    return renderItem(m.page, i, m.info, q);
                 }).join('');
             }
             openDropdown();
         };
         var openDropdown = function(){
-            lockHeight();
             searchResults.hidden = false;
             navPane.hidden = true;
             searchInput.setAttribute('aria-expanded', 'true');
+            syncBodyHeight();
         };
         var closeDropdown = function(){
             searchResults.hidden = true;
             searchResults.innerHTML = '';
             navPane.hidden = false;
             searchInput.setAttribute('aria-expanded', 'false');
-            navBody.style.height = '';
-            lockedHeight = 0;
+            clearBodyHeight();
         };
         searchInput.addEventListener('input', function(){
             renderResults(searchInput.value);
