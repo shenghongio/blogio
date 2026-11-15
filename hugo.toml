@@ -1,7 +1,7 @@
 baseURL = 'https://shenghongio.github.io/blogio/'
 defaultContentLanguage = "zh"
 defaultContentLanguageInSubdir = false
-title = 'Real ShengHong | AI Native Infrastructure Engineer'
+title = 'ShengHong | StackTrace'
 
 enableRobotsTXT = true
 enableGitInfo = true

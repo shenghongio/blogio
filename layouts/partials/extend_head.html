@@ -1,7 +1,5 @@
 {{ $customCSS := resources.Get "css/custom.css" }}
 
-<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
-
 {{ if $customCSS }}
 {{ $customCSS = $customCSS | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $customCSS.RelPermalink }}" integrity="{{ $customCSS.Data.Integrity }}">

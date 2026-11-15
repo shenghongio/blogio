@@ -9,16 +9,16 @@
     <div class="post-meta article-meta-tags">
       {{- $author := .Params.author | default site.Params.author | default "ShengHong" }}
       {{- with .Lastmod }}
-      <span class="gt-date-tag">updated {{ .Format "2006-01-02" }}</span>
+      <span class="kt-date-tag">updated {{ .Format "2006-01-02" }}</span>
       {{- end }}
       {{- with .GitInfo }}
-      <span class="gt-badge gt-badge-commit" title="{{ .AbbreviatedHash }}">commit {{ .Hash }}</span>
+      <span class="kt-badge kt-commit-tag" title="{{ .AbbreviatedHash }}">commit {{ .Hash }}</span>
       {{- end }}
       {{- with .WordCount }}
-      <span class="gt-badge gt-badge-count">{{ lang.FormatNumber 0 . }} words</span>
+      <span class="kt-badge kt-count-tag">{{ lang.FormatNumber 0 . }} words</span>
       {{- end }}
       {{- with $author }}
-      <span class="gt-badge gt-badge-author">by {{ . }}</span>
+      <span class="kt-badge kt-author-tag">by {{ . }}</span>
       {{- end }}
     </div>
     {{- end }}

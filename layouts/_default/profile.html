@@ -6,70 +6,224 @@
 
     <aside class="profile-card profile-card--strip">
 
-    <div class="profile-actions">
-        <a class="profile-action-btn profile-action-btn--github" href="https://github.com/shenghongio" target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            <span>GitHub</span>
-        </a>
-        <button class="profile-action-btn profile-action-btn--contact" type="button" aria-haspopup="true" aria-expanded="false">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            <span>{{ i18n "profile_contact_me" }}</span>
-            <span class="profile-action-caret" aria-hidden="true">▾</span>
-            <div class="profile-contact-popover" role="dialog" aria-label="{{ i18n "profile_contact_me" }}">
-        <div class="profile-contact-qr">
-            <img src="{{ "wechat-qr.jpg" | relURL }}" alt="{{ i18n "profile_wechat" }}" width="180" height="180">
-            <div class="profile-contact-qr-label">{{ i18n "profile_wechat_desc" }}</div>
-        </div>
-    </div>
-        </button>
-    </div>
-
     <div class="profile-top">
             <div class="profile-avatar">
                 <img src="{{ "personal_photo.jpg" | relURL }}" alt="Profile" width="200" height="200" loading="eager">
             </div>
-            <ul class="profile-practice">
-                <li><strong>{{ i18n "profile_practice_cloud_title" }}</strong>{{ i18n "profile_practice_cloud_desc" }}</li>
-                <li><strong>{{ i18n "profile_practice_ai_title" }}</strong>{{ i18n "profile_practice_ai_desc" }}</li>
-                <li><strong>{{ i18n "profile_practice_obs_title" }}</strong>{{ i18n "profile_practice_obs_desc" }}</li>
-                <li><strong>{{ i18n "profile_practice_devops_title" }}</strong>{{ i18n "profile_practice_devops_desc" }}</li>
-            </ul>
+            <div class="prof-intro">
+                <p class="prof-intro-name">{{ i18n "profile_intro_name" }}</p>
+                <p class="prof-intro-role">{{ i18n "profile_intro_role" }}</p>
+                <p class="prof-intro-desc">{{ i18n "profile_intro_desc" }}</p>
+                <div class="prof-intro-tags">
+                    {{- range split (i18n "profile_intro_tags") "|" -}}
+                    <span class="prof-intro-tag">{{ . }}</span>
+                    {{- end -}}
+                </div>
+            </div>
         </div>
 
         <hr class="profile-divider">
 
         <section id="bio">
-            <h2>{{ i18n "profile_bio_title" }}</h2>
-            <p>{{ i18n "profile_bio_p1" }}</p>
-            <p>{{ i18n "profile_bio_p2" }}</p>
-            <p>{{ i18n "profile_bio_p3" }}</p>
-            <p>{{ i18n "profile_bio_p4" }}</p>
+            <div class="prof-bio-intro">
+                <p class="prof-bio-intro-p">{{ i18n "profile_bio_p1" }}</p>
+                <p class="prof-bio-intro-p">{{ i18n "profile_bio_p2" }}</p>
+                <p class="prof-bio-intro-p">{{ i18n "profile_bio_p3" }}</p>
+                <p class="prof-bio-intro-p">{{ i18n "profile_bio_p4" }}</p>
+                <p class="prof-bio-intro-p">{{ i18n "profile_bio_p5" }}</p>
+            </div>
+            <ul class="prof-bio-list">
+                <li class="prof-bio-item prof-bio-item--cloud">
+                    <div class="prof-bio-head">
+                        <svg class="prof-bio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.2 9.2 4 4 0 0 0 6.5 17.3"/></svg>
+                        <h3 class="prof-bio-title">{{ i18n "profile_practice_cloud_title" }}</h3>
+                    </div>
+                    <p class="prof-bio-desc">{{ i18n "profile_practice_cloud_desc_short" }}</p>
+                </li>
+                <li class="prof-bio-item prof-bio-item--ai">
+                    <div class="prof-bio-head">
+                        <svg class="prof-bio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+                        <h3 class="prof-bio-title">{{ i18n "profile_practice_ai_title" }}</h3>
+                    </div>
+                    <p class="prof-bio-desc">{{ i18n "profile_practice_ai_desc_short" }}</p>
+                </li>
+                <li class="prof-bio-item prof-bio-item--obs">
+                    <div class="prof-bio-head">
+                        <svg class="prof-bio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 15l4.5-5 3.5 3.5L15 9l3 3.5"/><circle cx="17.5" cy="15.5" r="1"/></svg>
+                        <h3 class="prof-bio-title">{{ i18n "profile_practice_obs_title" }}</h3>
+                    </div>
+                    <p class="prof-bio-desc">{{ i18n "profile_practice_obs_desc_short" }}</p>
+                </li>
+                <li class="prof-bio-item prof-bio-item--go">
+                    <div class="prof-bio-head">
+                        <svg class="prof-bio-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg>
+                        <h3 class="prof-bio-title">{{ i18n "profile_practice_go_title" }}</h3>
+                    </div>
+                    <p class="prof-bio-desc">{{ i18n "profile_practice_go_desc_short" }}</p>
+                </li>
+            </ul>
         </section>
     </aside>
 
-    <section id="experience" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #14b8a6;background:linear-gradient(90deg,rgba(20,184,166,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_exp_title" }}</h2>
+    <section id="experience" class="prof-exp">
+        <h2>{{ i18n "profile_exp_title" }}</h2>
 
-        <div id="exp-ai-delivery" style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--header-border);">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_ai_delivery_title" }}</h3>
-            <p style="margin:0 0 10px 0;">2026.01 - 2026.07</p>
-            <p style="margin:0;">{{ i18n "profile_exp_ai_delivery_desc" }}</p>
+        <ol class="prof-exp-track">
+            <li class="prof-exp-item">
+                <span class="prof-exp-index">01</span>
+                <h3 class="prof-exp-role">{{ i18n "profile_exp_ai_delivery_title" }}</h3>
+                <div class="prof-exp-meta">
+                    <span class="prof-exp-period">{{ i18n "profile_exp_ai_delivery_period" }}</span>
+                    <span class="prof-exp-sep">·</span>
+                    <span class="prof-exp-tags">
+                        {{- range split (i18n "profile_exp_ai_delivery_tags") "|" -}}
+                        <span class="prof-exp-tag">{{ . }}</span>
+                        {{- end -}}
+                    </span>
+                </div>
+                <p class="prof-exp-desc">{{ i18n "profile_exp_ai_delivery_desc" }}</p>
+            </li>
+
+            <li class="prof-exp-item">
+                <span class="prof-exp-index">02</span>
+                <h3 class="prof-exp-role">{{ i18n "profile_exp_sre_title" }}</h3>
+                <div class="prof-exp-meta">
+                    <span class="prof-exp-period">{{ i18n "profile_exp_sre_period" }}</span>
+                    <span class="prof-exp-sep">·</span>
+                    <span class="prof-exp-tags">
+                        {{- range split (i18n "profile_exp_sre_tags") "|" -}}
+                        <span class="prof-exp-tag">{{ . }}</span>
+                        {{- end -}}
+                    </span>
+                </div>
+                <p class="prof-exp-desc">{{ i18n "profile_exp_sre_desc" }}</p>
+            </li>
+
+            <li class="prof-exp-item">
+                <span class="prof-exp-index">03</span>
+                <h3 class="prof-exp-role">{{ i18n "profile_exp_devops_title" }}</h3>
+                <div class="prof-exp-meta">
+                    <span class="prof-exp-period">{{ i18n "profile_exp_devops_period" }}</span>
+                    <span class="prof-exp-sep">·</span>
+                    <span class="prof-exp-tags">
+                        {{- range split (i18n "profile_exp_devops_tags") "|" -}}
+                        <span class="prof-exp-tag">{{ . }}</span>
+                        {{- end -}}
+                    </span>
+                </div>
+                <p class="prof-exp-desc">{{ i18n "profile_exp_devops_desc" }}</p>
+            </li>
+        </ol>
+    </section>
+
+    <section id="research" class="prof-research">
+        <h2 class="prof-research-title">{{ i18n "profile_research_title" }}</h2>
+        <p class="prof-research-subtitle">{{ i18n "profile_research_subtitle" }}</p>
+        <p class="prof-research-lead">{{ i18n "profile_research_lead" }}</p>
+
+        <div class="prof-research-grid">
+            <div class="prof-research-panel">
+                <h3 class="prof-research-panel-title">{{ i18n "profile_research_panel_title" }}</h3>
+                <p class="prof-research-panel-desc">{{ i18n "profile_research_panel_desc" }}</p>
+                <ul class="prof-research-panel-list">
+                    <li class="prof-research-panel-row">
+                        <span>{{ i18n "profile_research_panel_platform" }}</span>
+                        <svg class="prof-research-panel-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.4 12.4l2.6 2.6 4.6-5"/></svg>
+                    </li>
+                    <li class="prof-research-panel-row">
+                        <span>{{ i18n "profile_research_panel_gpu" }}</span>
+                        <svg class="prof-research-panel-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.4 12.4l2.6 2.6 4.6-5"/></svg>
+                    </li>
+                    <li class="prof-research-panel-row">
+                        <span>{{ i18n "profile_research_panel_ai" }}</span>
+                        <span class="prof-research-panel-tag">{{ i18n "profile_research_panel_ai_tag" }}</span>
+                    </li>
+                    <li class="prof-research-panel-row">
+                        <span>{{ i18n "profile_research_panel_diag" }}</span>
+                        <span class="prof-research-panel-tag">{{ i18n "profile_research_panel_diag_tag" }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="prof-research-arrow" aria-hidden="true">&lt;=&gt;</div>
+
+            <div class="prof-research-track">
+            <div class="prof-research-card prof-research-card--ai">
+                <div class="prof-research-side">
+                <svg class="prof-research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="18" r="2.4"/><circle cx="12" cy="13" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 16.6L10 14.5M13.8 14.5l1.8 2.1M12 10.6V7.8M10 6.5h4"/></svg>
+                <h3 class="prof-research-name">{{ i18n "profile_research_ai_title" }}</h3>
+                <p class="prof-research-desc">{{ i18n "profile_research_ai_desc" }}</p>
+                <ul class="prof-research-points">
+                    {{- range split (i18n "profile_research_ai_points") "|" -}}
+                    <li>{{ . }}</li>
+                    {{- end -}}
+                </ul>
+                </div>
+                <div class="prof-research-side">
+                <svg class="prof-research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6" rx="1"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>
+                <h3 class="prof-research-name">{{ i18n "profile_research_gpu_title" }}</h3>
+                <p class="prof-research-desc">{{ i18n "profile_research_gpu_desc" }}</p>
+                <ul class="prof-research-points">
+                    {{- range split (i18n "profile_research_gpu_points") "|" -}}
+                    <li>{{ . }}</li>
+                    {{- end -}}
+                </ul>
+                </div>
+                </div>
+
+            <div class="prof-research-card prof-research-card--row2">
+                <div class="prof-research-side">
+                <svg class="prof-research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="5" r="2.4"/><circle cx="5.5" cy="18" r="2.4"/><circle cx="18.5" cy="18" r="2.4"/><path d="M12 7.4V12M12 12l-4.6 4.4M12 12l4.6 4.4"/></svg>
+                <h3 class="prof-research-name">{{ i18n "profile_research_cloud_title" }}</h3>
+                <p class="prof-research-desc">{{ i18n "profile_research_cloud_desc" }}</p>
+                <ul class="prof-research-points">
+                    {{- range split (i18n "profile_research_cloud_points") "|" -}}
+                    <li>{{ . }}</li>
+                    {{- end -}}
+                </ul>
+                </div>
+                <div class="prof-research-side">
+                <svg class="prof-research-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 15l4.5-5 3.5 3.5L15 9l3 3.5"/><circle cx="17.5" cy="15.5" r="1"/></svg>
+                <h3 class="prof-research-name">{{ i18n "profile_research_obs_title" }}</h3>
+                <p class="prof-research-desc">{{ i18n "profile_research_obs_desc" }}</p>
+                <ul class="prof-research-points">
+                    {{- range split (i18n "profile_research_obs_points") "|" -}}
+                    <li>{{ . }}</li>
+                    {{- end -}}
+                </ul>
+                </div>
+            </div>
+            </div>
         </div>
 
-        <div id="exp-sre" style="margin-bottom:24px;padding-bottom:20px;border-bottom:1px dashed var(--header-border);">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_sre_title" }}</h3>
-            <p style="margin:0 0 10px 0;">2025.01 - 2025.08</p>
-            <p style="margin:0;">{{ i18n "profile_exp_sre_desc" }}</p>
-        </div>
+        <div class="prof-research-sub">
+            <div class="prof-research-sub-head">
+                <h3 class="prof-research-sub-title">{{ i18n "profile_research_sub_title" }}</h3>
+                <span class="prof-research-sub-status">{{ i18n "profile_research_sub_status" }}</span>
+            </div>
+            <p class="prof-research-sub-desc">{{ i18n "profile_research_sub_desc" }}</p>
 
-        <div id="exp-devops">
-            <h3 style="margin:0 0 4px 0;font-size:1.05rem;font-weight:600;">{{ i18n "profile_exp_devops_title" }}</h3>
-            <p style="margin:0 0 10px 0;">2021.03 - 2024.11</p>
-            <p style="margin:0;">{{ i18n "profile_exp_devops_desc" }}</p>
+            <div class="prof-research-sub-body">
+                <div class="prof-research-sub-item">
+                    <div class="prof-research-sub-item-head">
+                        <h4 class="prof-research-sub-item-title">{{ i18n "profile_research_sub_work_title" }}</h4>
+                        <span class="prof-research-sub-badge prof-research-sub-badge--work">{{ i18n "profile_research_sub_work_tag" }}</span>
+                    </div>
+                    <p class="prof-research-sub-item-desc">{{ i18n "profile_research_sub_work_desc" }}</p>
+                </div>
+
+                <div class="prof-research-sub-item">
+                    <div class="prof-research-sub-item-head">
+                        <h4 class="prof-research-sub-item-title">{{ i18n "profile_research_sub_proj_title" }}</h4>
+                        <span class="prof-research-sub-badge prof-research-sub-badge--proj">{{ i18n "profile_research_sub_proj_tag" }}</span>
+                    </div>
+                    <p class="prof-research-sub-item-desc">{{ i18n "profile_research_sub_proj_desc" }}</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="life" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #ec407a;background:linear-gradient(90deg,rgba(236,64,122,0.08) 0%,transparent 40%);">
+    <section id="life" style="padding:24px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-top:4px solid #ec407a;background:linear-gradient(180deg,rgba(236,64,122,0.08) 0%,transparent 40%);">
         <h2 style="margin:0 0 12px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_life_title" }}</h2>
         <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p1" }}</p>
         <p style="margin:0 0 10px 0;">{{ i18n "profile_life_p2" }}</p>
@@ -79,32 +233,34 @@
         <p style="margin:0;">{{ i18n "profile_life_p6" }}</p>
     </section>
 
-    <section id="research" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #7c4dff;background:linear-gradient(90deg,rgba(124,77,255,0.08) 0%,transparent 40%);">
-        <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_research_title" }}</h2>
-        <p style="margin:0 0 12px 0;">{{ i18n "profile_research_lead" }}</p>
-
-        <ul style="margin:0 0 12px 0;padding-left:20px;">
-            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag1_title" }}</strong>{{ i18n "profile_research_tag1_desc" }}</li>
-            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag2_title" }}</strong>{{ i18n "profile_research_tag2_desc" }}</li>
-            <li style="margin-bottom:6px;"><strong>{{ i18n "profile_research_tag3_title" }}</strong>{{ i18n "profile_research_tag3_desc" }}</li>
-            <li><strong>{{ i18n "profile_research_tag4_title" }}</strong>{{ i18n "profile_research_tag4_desc" }}</li>
-        </ul>
-
-        <p style="margin:0;">{{ i18n "profile_research_close" }}</p>
-    </section>
-
-    <section id="contact" style="padding:24px 24px 24px 28px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid #00bcd4;background:linear-gradient(90deg,rgba(0,188,212,0.08) 0%,transparent 40%);">
+    <section id="contact" style="padding:24px;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-top:4px solid #00bcd4;background:linear-gradient(180deg,rgba(0,188,212,0.08) 0%,transparent 40%);">
         <h2 style="margin:0 0 16px 0;font-size:1.25rem;font-weight:700;">{{ i18n "profile_contact_title" }}</h2>
-        <p style="margin:0 0 12px 0;">{{ i18n "profile_contact_p1" }}</p>
-        <p style="margin:0 0 12px 0;">{{ i18n "profile_contact_p2" }}</p>
+        <p style="margin:0 0 18px 0;">{{ i18n "profile_contact_p1" }}</p>
 
-        <ul style="margin:0 0 12px 0;padding-left:20px;">
-            <li style="margin-bottom:6px;">{{ i18n "profile_contact_item1" }}</li>
-            <li style="margin-bottom:6px;">{{ i18n "profile_contact_item2" }}</li>
-            <li>{{ i18n "profile_contact_item3" }}</li>
-        </ul>
-
-        <p style="margin:0;">{{ i18n "profile_contact_close" }}</p>
+        <div class="profile-actions">
+            <a class="profile-action-btn profile-action-btn--github" href="https://github.com/shenghongio" target="_blank" rel="noopener" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                <span>GitHub</span>
+            </a>
+            <button class="profile-action-btn profile-action-btn--contact" type="button" aria-haspopup="true" aria-expanded="false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>{{ i18n "profile_contact_me" }}</span>
+                <span class="profile-action-caret" aria-hidden="true">▾</span>
+                <div class="profile-contact-popover" role="dialog" aria-label="{{ i18n "profile_contact_me" }}">
+                    <div class="profile-contact-row">
+                        <span class="profile-contact-label">Email</span>
+                        <a class="profile-contact-value" href="mailto:{{ i18n "profile_contact_email" }}">{{ i18n "profile_contact_email" }}</a>
+                    </div>
+                    <div class="profile-contact-row profile-contact-row--wechat">
+                        <span class="profile-contact-label">WeChat</span>
+                        <div class="profile-contact-qr">
+                            <img src="{{ "wechat-qr.jpg" | relURL }}" alt="{{ i18n "profile_wechat" }}" width="180" height="180">
+                            <div class="profile-contact-qr-label">{{ i18n "profile_wechat_desc" }}</div>
+                        </div>
+                    </div>
+                </div>
+            </button>
+        </div>
     </section>
 
 </article>
