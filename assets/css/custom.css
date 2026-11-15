@@ -7344,12 +7344,16 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-article-viewer .post-heade
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown p,
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown li,
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown strong {
+    color: #c4c4c9 !important;
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h1,
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h2,
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h3,
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h4 {
+    color: #e8e8e4 !important;
+}
 
 
 
