@@ -1847,7 +1847,6 @@ html[data-theme="dark"] .blog-column-post-icon--github {
     flex: 0 0 auto;
 }
 
-
 html:not([data-theme="dark"]) .search-popover {
     --search-popover-bg: rgba(245, 245, 245, 0.92);
     box-shadow:
@@ -1855,29 +1854,19 @@ html:not([data-theme="dark"]) .search-popover {
         0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
-
-
-
 html:not([data-theme="dark"]) .search-input {
     --search-input-bg: rgba(255, 255, 255, 0.85);
     --search-input-text: #333;
 }
 
-
 html:not([data-theme="dark"]) .search-input::placeholder {
     --search-placeholder: rgba(0, 0, 0, 0.35);
 }
-
-
-
-
-
 
 html:not([data-theme="dark"]) .search-result span,
 html:not([data-theme="dark"]) .search-empty {
     --search-muted: rgba(0, 0, 0, 0.45);
 }
-
 
 .site-footer {
     background-color: var(--page-bg);
@@ -2463,7 +2452,6 @@ html[data-theme="dark"] .series-chapter {
     row-gap: 4px;
     align-items: start;
 }
-
 
 .perspective-card::before {
     content: '';
@@ -3320,7 +3308,6 @@ html[data-theme="dark"] .profile-detail-section--alt {
 .sre-section--net   { border-color: #00bcd4; background: rgba(0, 188, 212, 0.06); }
 .sre-section--sec   { border-color: #e53935; background: rgba(229, 57, 53, 0.06); }
 .sre-section--sre   { border-color: #43a047; background: rgba(67, 160, 71, 0.06); }
-
 
 .post-single {
 }
@@ -5381,12 +5368,6 @@ body:has(.kt-page--standalone) .kt-layout {
     border-color: #a7f3d0;
 }
 
-
-
-
-
-
-
 .kt-overview-intro {
     font-size: 15px;
     color: #555;
@@ -5482,8 +5463,6 @@ html[data-theme="dark"] .kt-markdown img,
 html[data-theme="dark"] .post-single--article .post-content img {
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
 }
-
-
 
 .kt-nav-group-label {
     font-size: 11px;
@@ -6042,12 +6021,6 @@ html[data-theme="dark"] .kt-sustain-tag {
     border-color: rgba(16, 185, 129, 0.38);
 }
 
-
-
-
-
-
-
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-sidebar-part-trigger {
     color: #e8e8e4 !important;
 }
@@ -6125,10 +6098,6 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown code {
    Go Tutorial — dedicated layout
    ============================================================ */
 
-
-
-
-
 body:has(.kt-page--standalone) .kt-inner {
     max-width: none;
     margin: 0;
@@ -6136,28 +6105,6 @@ body:has(.kt-page--standalone) .kt-inner {
     flex: 1;
     min-height: 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .gs-stack-logo {
     position: fixed;
@@ -6444,7 +6391,6 @@ body:has(.kt-page--standalone) .kt-inner {
 .gs-stack-search-clear[hidden] {
     display: none;
 }
-
 
 .gs-search-result {
     display: block;
@@ -6835,20 +6781,6 @@ html[data-theme="dark"] .gs-stack-modal-search input::placeholder {
     color: #111;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .kt-part-menu {
     position: fixed;
     top: auto;
@@ -6865,33 +6797,7 @@ html[data-theme="dark"] .gs-stack-modal-search input::placeholder {
     padding: 6px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ---------- Layout ---------- */
-
-
-
-
-
-
-
-
-
-
 
 @media (min-width: 1281px) {
     .kt-content-inner {
@@ -6900,74 +6806,24 @@ html[data-theme="dark"] .gs-stack-modal-search input::placeholder {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 @media (max-width: 1280px) {
     .kt-toc {
         display: none !important;
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .kt-toc-list .kt-toc-h2 {
     padding-left: 0;
     font-weight: 600;
 }
 
-
-
-
-
 /* ---------- Article Viewer ---------- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .kt-overview-header {
     padding: 32px 0 24px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     margin-bottom: 28px;
 }
-
-
-
-
-
-
 
 .article-meta-tags {
     display: flex;
@@ -6977,73 +6833,11 @@ html[data-theme="dark"] .gs-stack-modal-search input::placeholder {
     margin-top: 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .kt-markdown ul,
 .kt-markdown ol {
     padding-left: 1.8em;
     margin: 8px 0 14px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .kt-overview-groups {
     display: flex;
@@ -7078,89 +6872,15 @@ html[data-theme="dark"] .gs-stack-modal-search input::placeholder {
     flex-direction: column;
 }
 
-
-
-
-
-
-
-
-
 /* ---------- Sidebar Nav ---------- */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* ---------- Welcome ---------- */
 
-
-
-
-
-
-
-
-
-
-
 /* Standalone mode — hide site chrome + reset main container */
 body:has(.kt-page--standalone) .site-header,
-
+body:has(.kt-page--standalone) .site-footer {
+    display: none !important;
+}
 
 body:has(.kt-page--standalone) .main {
     max-width: none !important;
@@ -7175,10 +6895,10 @@ body:has(.kt-page--standalone) {
     background: #fff;
 }
 
-
-
 html[data-theme="dark"]:has(.kt-page--standalone),
-
+html[data-theme="dark"] body:has(.kt-page--standalone) {
+    background: #1a1a1e;
+}
 
 /* ---------- Responsive ---------- */
 
@@ -7204,128 +6924,168 @@ body:has(.kt-page--standalone) {
 /* 浅色模式：正文底色下沉到滚动内容，避免 TOC 栏成为独立白板 */
 body:has(.kt-page--standalone) .kt-page,
 body:has(.kt-page--standalone) .kt-layout,
+body:has(.kt-page--standalone) .kt-toc {
+    background: #fff !important;
+}
 
+body:has(.kt-page--standalone) .site-header {
+    display: none !important;
+    position: static !important;
+    height: 0 !important;
+    overflow: hidden !important;
+}
 
-
-
+body:has(.kt-page--standalone) .main {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 100vh !important;
+    position: static !important;
+    box-sizing: border-box !important;
+}
 
 /* Final kill — list body, everything zero */
+body.list:has(.kt-page--standalone) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+}
 
+body.list:has(.kt-page--standalone) .main {
+    min-height: 100vh !important;
+    min-height: 100svh !important;
+    height: auto !important;
+}
 
-
-
-
+body.list:has(.kt-page--standalone) .kt-page {
+    min-height: 100vh;
+}
 
 /* 消除页面间隙：浅色模式用白底，深色模式由下方规则接管 */
 html:has(.kt-page--standalone),
 body.list:has(.kt-page--standalone),
-
+body:has(.kt-page--standalone) {
+    background: #fff !important;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+    top: 0 !important;
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone),
 html[data-theme="dark"]:has(.kt-page--standalone) body,
 html[data-theme="dark"] body:has(.kt-page--standalone),
-
+html[data-theme="dark"] body.list:has(.kt-page--standalone) {
+    background-color: #222226 !important;
+}
 
 body:has(.kt-page--standalone) .main,
+body:has(.kt-page--standalone) .kt-page {
+    overflow: visible !important;
+}
 
+body:has(.kt-page--standalone) .kt-hero {
+    background: linear-gradient(135deg, #1a1d2e 0%, #232640 50%, #2a2d4a 100%);
+}
 
-
-
-
+body:has(.kt-page--standalone) .kt-inner {
+    margin-top: 0;
+}
 
 body:has(.kt-page--standalone) .kt-chapters,
+body:has(.kt-page--standalone) .kt-chapters ~ * {
+    background: #222226;
+}
 
+body:has(.kt-page--standalone) .kt-chapter {
+    background: #1a1a20;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #e0e0e0;
+}
 
+body:has(.kt-page--standalone) .kt-chapter-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
 
+body:has(.kt-page--standalone) .kt-chapter-title {
+    color: #fff;
+}
 
+body:has(.kt-page--standalone) .kt-chapter-summary {
+    color: rgba(255, 255, 255, 0.5);
+}
 
+body:has(.kt-page--standalone) .kt-chapter-num {
+    color: #a0a0b0;
+}
 
-
-
-
-
-
-
-
+body:has(.kt-page--standalone) .kt-chapter:hover {
+    border-left-color: #7c4dff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+}
 
 /* ---------- Go Tutorial — theme overrides ---------- */
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapters,
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-layout,
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapters ~ * {
+    background: #222226 !important;
+}
 
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapter {
+    background: #2c2c31 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #e8e8e4 !important;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapter-title {
+    color: #e8e8e4 !important;
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapter-summary,
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapter-num {
+    color: #9a9a96 !important;
+}
 
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-chapter-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
 
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc {
+    background: transparent !important;
+    border-left-color: rgba(255, 255, 255, 0.08) !important;
+}
 
-
-
-
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc::before {
+    background: linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 80px,
+        rgba(255, 255, 255, 0.08) 160px,
+        rgba(255, 255, 255, 0.08) calc(100% - 72px),
+        transparent 100%
+    );
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc-title,
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc-placeholder {
+    color: #7d7d85 !important;
+}
 
-
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc-list a {
+    color: #b8b8c0 !important;
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc-list a:hover,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+html[data-theme="dark"]:has(.kt-page--standalone) .kt-toc-active a {
+    color: #a78bfa !important;
+    background: rgba(167, 139, 250, 0.12);
+}
 
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-overview-header {
     border-bottom-color: rgba(255, 255, 255, 0.1) !important;
@@ -7354,16 +7114,6 @@ html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h3,
 html[data-theme="dark"]:has(.kt-page--standalone) .kt-markdown h4 {
     color: #e8e8e4 !important;
 }
-
-
-
-
-
-
-
-
-
-
 
 /* ===== 教程系列文章上下篇导航 ===== */
 .series-pager {
