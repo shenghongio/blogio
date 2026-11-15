@@ -1,400 +1,150 @@
-# real-shenghong
+# ShengHong | StackTrace
 
-> Personal technical blog and engineering knowledge base.
+<p>
+  <a href="https://shenghongio.github.io/blogio/"><img alt="站点" src="https://img.shields.io/badge/site-online-1c8a6a?style=flat-square&logo=githubpages&logoColor=white"></a>
+  <a href="https://github.com/shenghongio/blogio/actions/workflows/build.yml"><img alt="构建状态" src="https://img.shields.io/github/actions/workflow/status/shenghongio/blogio/build.yml?style=flat-square&logo=githubactions&logoColor=white&label=build"></a>
+  <img alt="Hugo" src="https://img.shields.io/badge/Hugo-0.169.0-ff4088?style=flat-square&logo=hugo&logoColor=white">
+  <img alt="Go" src="https://img.shields.io/badge/Go-1.22-00add8?style=flat-square&logo=go&logoColor=white">
+  <img alt="GitHub Pages" src="https://img.shields.io/badge/deploy-GitHub%20Pages-222222?style=flat-square&logo=github&logoColor=white">
+  <img alt="许可" src="https://img.shields.io/badge/license-MIT%20%2B%20CC%20BY--NC--SA%204.0-f0a040?style=flat-square&logo=creativecommons&logoColor=white">
+</p>
 
-一个面向基础设施与 AI 系统工程的个人技术博客。
+> 面向 AI Infrastructure 与云原生系统工程的个人技术博客，同时作为长期可检索的工程知识库。
 
-## 定位
+站点地址：https://shenghongio.github.io/blogio/
 
-**AI-Native Infrastructure Engineer**
+## 目的
 
-构建生产级 AI 背后的基础设施、运行时与工程系统。
+这个仓库解决三个问题：
+
+1. **沉淀** —— 把工程实践中遇到的问题、设计取舍、验证结论记录下来，而不是停留在聊天记录里。
+2. **可检索** —— 内容按「分类 → 系列 → 文章」三层组织，配合本地构建的全文搜索，随时能找回过去的技术判断。
+3. **可复用** —— 写下来的方案要能直接被下一次工程决策引用，而不是写完即弃的教程搬运。
+
+写文章的判断标准只有一条：**是否包含真实工程过程**。单纯翻译文档、罗列概念的内容不进入本博客。
 
 ## 技术方向
 
-* Kubernetes
-* AI Infrastructure
-* Agent Runtime
-* GPU / DRA
-* Linux
-* Go
-* Container Runtime
-* Cloud Native
+| 方向 | 关注点 |
+|------|--------|
+| AI Infrastructure | GPU 集群调度、DRA、推理服务工程 |
+| Agent Runtime | 智能体运行时的隔离、状态与生命周期 |
+| Kubernetes / 云原生 | 核心抽象、生产化改造、Service Mesh |
+| Linux / 系统工程 | cgroup、namespace、资源与性能观测 |
+| Go 工程实践 | 并发模型、设计模式在真实项目中的取舍 |
+| 容器与运行时 | OCI、运行时隔离、镜像构建链路 |
 
-## 内容
+## 关键要点
 
-博客主要记录：
+**架构**
 
-* Kubernetes 与云原生基础设施
-* AI Infrastructure 与 GPU 集群
-* Agent / Runtime 系统设计
-* Linux 与系统工程
-* Go 工程实践
-* 容器与运行时
-* 开源项目与工程实践
-* 技术研究与实践记录
+- **Hugo + Hugo Modules**，主题以模块方式引入 PaperMod，不做 fork 改造，定制全部通过 `layouts/` 覆盖与 `assets/css/custom.css` 追加。
+- **多层覆盖优先级**：站点 `layouts/` → 主题 `_vendor/` → 模块默认。改样式先确认层级，避免改了不生效。
+- **数据驱动导航**：分类与系列的关系不在模板里硬编码，而是由 `data/*.yaml` 描述，模板遍历生成。新增系列只改数据，不改模板。
+- **中英双语**：内容以 `.zh.md` / `.en.md` 区分。英文缺失时自动回退中文，列表页不会出现空洞。
 
-## 技术栈
+**构建与发布**
 
-```text
-Hugo
-Go
-Hugo Modules
-Markdown
-Podman
-Ubuntu
-Kubernetes
-```
+- GitHub Actions 监听 `main` 分支推送，构建后部署到 GitHub Pages。
+- 构建使用 `hugo --gc --minify --printPathWarnings`，路径警告会直接暴露模板引用问题。
+- 构建前会执行 `hugo mod verify`，主题模块异常会立刻失败，不会产出风格错乱的站点。
 
-博客使用 **Hugo + Hugo Modules** 构建，开发环境基于 **VS Code + Podman + Ubuntu**。
+**内容组织**
+
+- 目录名即分类，无需在 front matter 重复声明 `categories`。
+- 教程系列用 `cascade` 把 layout 下发给全部子篇，分篇只写 `title` 和 `date`。
+- 文章通过 `series` 字段挂载到系列节点，这是导航、目录、关系图共同依赖的唯一关联键。
+
+## 关注点
+
+维护这个仓库时需要守住的东西：
+
+1. **CSS 完整性** —— `custom.css` 是单文件长期追加的结果，选择器列表与声明块必须成对。一旦出现「逗号结尾但无声明块」的悬空选择器，后续规则会被整段吞掉，症状往往是某个主题下间距异常、样式莫名失效。改完务必校验花括号配平。
+2. **主题不硬改** —— 不修改 `_vendor/` 与模块缓存，所有覆盖写在站点侧。主题升级才能无冲突。
+3. **数据即配置** —— 导航、系列、项目列表来自 `data/`，模板里出现硬编码的分类名或链接都是技术债。
+4. **内容不做虚构** —— 文章中的性能数字、结论、踩坑过程必须来自真实实践。这是本博客唯一的可信度来源。
+5. **双语同步成本** —— 新增中文文章时优先保证中文质量，英文回退是兜底而非长期方案。
 
 ## 项目结构
 
 ```text
-real-shenghong/
-├── .devcontainer/      # VS Code Dev Container
-├── archetypes/         # Hugo content templates
-├── assets/             # Assets
-├── content/            # Blog content
-├── data/               # Data files
-├── layouts/            # Custom layouts
-├── static/             # Static files
-├── themes/             # Local theme overrides
-├── hugo.toml           # Hugo configuration
-├── go.mod              # Hugo Modules
-├── go.sum              # Module checksums
-└── README.md
+blogio/
+├── layouts/            # 站点级模板覆盖（优先级最高）
+│   ├── _default/       # 首页、个人主页、方向页
+│   ├── articles/       # 文章列表与详情
+│   ├── series/         # 教程系列首页与分篇
+│   ├── partials/       # 可复用片段（导航、文章体、图标）
+│   └── _markup/        # 代码块渲染定制
+├── assets/
+│   ├── css/custom.css  # 全部自定义样式
+│   └── js/             # 排序、Mermaid 初始化
+├── content/
+│   ├── articles/       # 文章，按分类目录组织
+│   ├── series/         # 教程系列
+│   └── directions/     # 技术方向页
+├── data/               # 导航、系列、项目等结构化数据
+├── i18n/               # 中英文案
+├── scripts/            # 封面下载、项目活动同步
+└── hugo.toml           # 站点配置与模块声明
 ```
+
+> `_vendor/` 与 `public/` 为构建产物，不参与修改。
 
 ## 本地开发
 
-进入开发容器：
-
 ```bash
-hugo server --bind 0.0.0.0
+hugo server --bind 0.0.0.0          # 预览，访问 /blogio/
+hugo --gc --minify                  # 生产构建，同时暴露模板与资源错误
+hugo mod verify                     # 校验主题模块完整性
 ```
 
-访问：
+`Makefile` 提供常用封装：`make dev`、`make build`、`make check`、`make new POST=<name>`。
 
-```text
-http://localhost:1313
-```
+## 内容创作速查
 
-GitHub Actions 会在推送到 `main` 或提交 Pull Request 时自动检查 Hugo 配置并构建站点，构建结果会作为 workflow artifact 保存。
-
-构建：
-
-```bash
-hugo
-```
-
-检查 Hugo Modules：
-
-```bash
-hugo mod graph
-```
-
-更新依赖：
-
-```bash
-hugo mod get -u
-hugo mod tidy
-```
-
-## 内容创作
-
-### 新建文章
-
-文章放在 `content/articles/<分类目录>/` 下，文件名形如 `my-post.zh.md`（中文）与 `my-post.en.md`（英文），两种语言必须同名。
+**新增文章**：在 `content/articles/<分类>/` 下创建 `my-post.zh.md`。
 
 ```yaml
 ---
-title: "Go 里那些设计模式，其实都不太像设计模式"
+title: "标题"
 date: 2026-11-12
-description: "列表页显示的一句话摘要"
+description: "列表页一句话摘要"
+tcf: "Go"                    # 主题胶囊标签
 location: "Shanghai"
-tcf: "Go"
+series: kubernetes-tutorial   # 可选，挂载到系列节点
 cover:
   image: "images/02.jpg"
 ---
 ```
 
-| 字段 | 说明 |
-|------|------|
-| `title` | 文章标题，列表页与详情页大标题 |
-| `date` | 发布日期，决定列表排序与「最新优先」 |
-| `description` | 卡片摘要，超过一行会自动截断 |
-| `tcf` | 文章主题标签（The Core Focus），显示为紫色胶囊 |
-| `location` | 地点标签，显示为绿色胶囊 |
-| `cover.image` | 封面图，填 `assets/images/` 下的资源路径，构建时自动裁成 16:6 |
+**新增系列**：在 `content/series/<slug>/_index.zh.md` 中用 `cascade` 下发 layout，并在 `data/blog_links.yaml` 添加条目让导航自动发现。
 
-**分类**：目录名决定所属分类，无需在 front matter 里写 `categories`。新增分类时创建对应目录并添加 `_index.zh.md`：
-
-```yaml
----
-title: "语言与工具"
-description: "Go、Linux 与日常工具链"
----
-```
-
-分类在列表页左栏的显示顺序由 [list.html](file:///Users/ssh/workspace/github.com/blogio/layouts/articles/list.html#L18) 的 `$catOrder` 控制，未列出的分类自动排在最后。
-
-**封面图**：推荐用脚本下载并压缩：
-
-```bash
-./scripts/fetch-cover.sh <图片URL> 02
-```
-
-生成的文件落在 `assets/images/`，模板通过 `resources.Get` 读取，压缩后的资源不会进入 Git。
-
-**英文缺失**：只写中文版即可。英文站会按分类自动回退到中文文章，列表不会出现空缺，但页面内容为中文。
-
-### 新建教程系列
-
-教程是「多篇 + 系列首页」的形态，放在 `content/series/<slug>/`：
-
-```text
-content/series/kubernetes-tutorial/
-├── _index.zh.md              # 系列首页
-├── part-i.zh.md              # 分篇
-├── part-ii.zh.md
-└── part-iii.zh.md
-```
-
-**系列首页** `_index.zh.md`：
-
-```yaml
----
-title: "Kubernetes 教程"
-description: "从核心抽象到生产实践的完整 K8s 学习路径"
-layout: "kubernetes-tutorial"
-cascade:
-  layout: "kubernetes-tutorial"
-stackGroup: "云原生"
----
-```
-
-`cascade` 会把 `layout` 下发到该目录下所有分篇，因此分篇只需要写自己的 `title` 和 `date`：
-
-```yaml
----
-title: "Part I · 云原生基础与核心抽象"
-date: 2026-11-09
-layout: "kubernetes-tutorial-part"
-sustain: true
----
-```
-
-| 字段 | 说明 |
-|------|------|
-| `layout` | 系列专用模板：首页用 `kubernetes-tutorial`，分篇用 `kubernetes-tutorial-part` |
-| `cascade` | 自动继承给所有子页面，避免每篇重复声明 |
-| `sustain` | 分篇标记，表示内容处于持续更新状态 |
-
-**系列与导航的关联**：在 `data/blog_links.yaml` 添加条目，导航与 `/categories/` 分类图会自动发现：
-
-```yaml
-- title:
-    en: "Kubernetes Tutorial"
-    zh: "Kubernetes 教程"
-  icon: "kubernetes"
-  url: "/series/kubernetes-tutorial/"
-  category: "cloud-native"
-```
-
-然后在文章 front matter 中加 `series: kubernetes-tutorial`，文章会自动挂到该系列节点下。详见下方[神经网络分类关系图](#神经网络分类关系图)。
-
-### 本地预览与检查
-
-```bash
-hugo server --bind 0.0.0.0   # 本地预览 http://localhost:1313
-hugo --gc --minify            # 构建，会同时报出模板与资源错误
-```
+**新增分类**：创建目录并添加 `_index.zh.md`，再把它加入 `layouts/articles/list.html` 的 `$catOrder` 以控制排序位置。
 
 ## 设计原则
 
-### 简洁
+- **内容优先** —— 视觉服务于阅读，不做干扰性动效。
+- **工程真实** —— 记录问题、设计、实现、验证的完整链路。
+- **长期可用** —— 今天是博客，长期是知识库，结构要为三年后服务。
+- **开放共享** —— 可公开的实践与工具都放出来。
 
-保持内容优先，减少不必要的视觉元素和复杂动画。
+## 许可协议
 
-### 技术
+本项目采用**内容与代码分离授权**的方式：文章是创作成果，代码是工程资产，两者的使用诉求不同。
 
-以真实工程实践为核心，记录问题、设计、实现与验证过程。
+| 范围 | 许可 | 说明 |
+|------|------|------|
+| 代码（`layouts/`、`assets/`、`scripts/`、`hugo.toml`） | [MIT](https://opensource.org/licenses/MIT) | 可自由使用、修改、分发，保留版权声明即可 |
+| 文章内容（`content/` 下的 Markdown） | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) | 署名、非商业用途、相同方式共享 |
 
-### 长期
+### 你需要知道的边界
 
-博客不仅用于发布文章，也作为个人长期技术知识库与工程记录。
+- **可以**：引用观点并注明出处，转载全文需保留原文链接与作者署名，基于本文思路继续写作。
+- **需要授权**：商业培训、付费专栏、书籍收录、以文章内容为主体的商业产品。
+- **不属于本站**：`_vendor/` 下的 PaperMod 主题遵循其自身 MIT 协议；`assets/js/mermaid.min.js` 遵循 Mermaid 的 MIT 协议；文中引用的第三方图片版权归原作者。
 
-### 开源
+### 为什么这样选
 
-公开可分享的技术实践、工具和开源项目。
+MIT 让想复用模板与样式的人没有负担 —— 这套「数据驱动导航 + 多层 layout 覆盖」的结构本身就有参考价值。而文章采用 CC BY-NC-SA，是因为其中的工程结论来自真实生产环境，需要保证署名与不被断章取义地商用。
 
-## Roadmap
-
-* [x] Hugo 基础环境
-* [x] Hugo Modules
-* [x] Podman + Ubuntu 开发环境
-* [x] VS Code Dev Container
-* [ ] 个人主页
-* [ ] 技术方向展示
-* [ ] 精选项目
-* [ ] 博客文章系统
-* [ ] About 页面
-* [ ] RSS
-* [ ] Sitemap
-* [ ] SEO
-* [ ] 深色 / 浅色模式
-* [ ] GitHub Pages / CI 自动部署
-
-## License
-
-Content and code are provided for personal and educational purposes unless otherwise specified.
-
----
-
-## 神经网络分类关系图
-
-`/categories/` 页面展示一个以 **shenghong** 为核心的三级力导向神经网络图，动态反映博客的分类、系列与文章之间的关联关系。
-
-> 写文章、建系列的基础规范见上方[内容创作](#内容创作)，本节只说明这张图的数据与连线逻辑。
-
-### 体系架构
-
-```
-                    Center (shenghong)
-                   /      |      \      \
-                  /       |       \      \
-          Category   Category   Category  Resources
-          /  |  \      / | \       |         \
-         /   |   \    /  |  \      |          \
-     Title Title Title Title Title Title     Title
-       |            |       |
-     Post         Post    Post ...
-```
-
-**四层节点：**
-
-| 层级 | group 值 | 节点大小 | 颜色 | 说明 |
-|------|----------|---------|------|------|
-| 中心 | `center` | 28px | 金色 `#f0a040` | 固定画布中央，不可拖拽 |
-| 分类 | 数字 `"1"`~`"8"` | 按文章数动态 | 分区色 | 来自 Hugo Taxonomy categories |
-| 系列标题 | `title` | 10px | 继承父分类色 | 来自 `data/blog_links.yaml` |
-| 文章 | `post` | 6px | 继承父分类色 | 来自 `content/posts/` |
-
-### 数据来源
-
-| 节点类型 | 数据源 | 生成方式 |
-|----------|--------|---------|
-| 中心 | 硬编码 | `id: "shenghong"`，固定在模板中 |
-| 分类 | `.Site.Taxonomies.categories` | 遍历 Hugo 分类 taxonomy，自动生成 |
-| Resources | 手动定义 | 不在 taxonomy 中，模板中单独添加（`id: "resources"`） |
-| 系列标题 | `data/blog_links.yaml` | 遍历 `hugo.Data.blog_links`，自动生成 |
-| 文章 | `.Site.RegularPages` (section `posts`) | 遍历所有已发布文章，自动生成 |
-
-### 连线逻辑
-
-| 连线 | source → target | 生成规则 |
-|------|----------------|---------|
-| 中心 → 分类 | `shenghong` → 每个 category | 固定，每个分类一条（含 resources） |
-| 分类 → 系列标题 | category → title | 按 `blog_links.yaml` 中的 `category` 字段匹配 |
-| 系列标题 → 文章 | title → post | 基于文章 front matter 的 `series` 字段精确匹配 |
-| 分类共现 | category ↔ category | 分类在同一篇文章中共现的次数（原有逻辑） |
-
-### 文章与系列标题的精确关联（series 字段）
-
-每篇文章的 front matter 需要指定 `series` 字段：
-
-```yaml
-# content/posts/your-post.en.md
----
-title: "Your Post Title"
-categories:
-  - cloud-native
-series: kubernetes-tutorial   # 关联到 blog_links.yaml 中的对应标题
----
-```
-
-**匹配规则：**
-
-1. 从 `blog_links.yaml` 中每个条目的 `url` 或 `title.en` 推导出 `slug`：
-   - URL 是 `/series/xxx/` → slug = `xxx`
-   - URL 是 `/posts/` → slug = `title.en` 的小写 + 空格转连字符
-2. 文章的 `series` 字段与 title 的 `slug` 精确匹配后建立连线
-
-**示例：**
-
-| 文章 series 值 | 匹配到的 blog_links 标题 | 推导方式 |
-|---------------|------------------------|---------|
-| `ai-agent-building-guide` | AI Agent Building Guide | url `/series/ai-agent-building-guide/` → slug = `ai-agent-building-guide` |
-| `kubernetes-tutorial` | Kubernetes Tutorial | url `/posts/` → slug = `"kubernetes tutorial".lower()` → `kubernetes-tutorial` |
-| `service-mesh-intro` | Service Mesh Introduction | url `/series/service-mesh-intro/` → slug = `service-mesh-intro` |
-
-### 自动识别机制
-
-**新增系列标题：** 只需在 `data/blog_links.yaml` 中添加条目，无需修改任何模板代码：
-
-```yaml
-- title:
-    en: "New Series"
-    zh: "新系列"
-  icon: "cpu"
-  url: "/series/new-series/"
-  category: "ai-engineering"
-```
-
-模板自动遍历 `hugo.Data.blog_links`，新增条目自动生成 title 节点和 category→title 连线。
-
-**新增文章：** 只需在文章 front matter 中添加 `series` 字段：
-
-```yaml
-series: new-series   # 对应 blog_links.yaml 中推导出的 slug
-```
-
-模板自动遍历 `.Site.RegularPages`，新文章自动生成 post 节点和 title→post 连线。
-
-### 技术实现
-
-**模板文件：** `layouts/categories/list.html`
-
-**可视化库：** D3.js v7（CDN 加载）
-
-**关键 JS 函数：**
-
-| 函数 | 作用 |
-|------|------|
-| `getNodeGroup(d)` | 获取节点的实际颜色组（title/post 继承父分类） |
-| `getNodeColor(d)` | 获取节点颜色（center 返回金色） |
-| `nodeRadius(d)` | 根据节点类型返回不同半径 |
-| `highlightNode(d)` | 悬停高亮：当前节点+邻居高亮，其余暗淡 |
-| `resetHighlight()` | 恢复所有节点和连线到默认状态 |
-
-**力模拟参数（按层级不同）：**
-
-| 层级 | 连线距离 | 电荷斥力 |
-|------|---------|---------|
-| center → category | 200px | -600 |
-| category → title | 120px | -280 |
-| title → post | 80px | -150 / -80 |
-
-**交互：**
-- 拖拽节点（中心节点除外）
-- 点击节点跳转到对应页面
-- 悬停高亮关联节点和连线
-- 滚轮缩放、拖拽平移
-- R 键重置视图
-
-### 维护指南
-
-**新增系列：**
-1. 编辑 `data/blog_links.yaml`，在对应 category 下添加条目
-2. （可选）创建 `content/series/<slug>/_index.en.md` 和 `_index.zh.md`
-3. 更新 `layouts/partials/icon.html` 添加新图标（如需要）
-
-**新增文章并关联到系列：**
-1. 在文章 front matter 中设置 `categories`（至少一个）
-2. 在文章 front matter 中设置 `series`（对应 blog_links 中某条目的 slug）
-3. 文章自动出现在图中，并连线到对应系列标题
-
-**新增图标：**
-1. 在 `layouts/partials/icon.html` 中添加 `else if eq $name "新图标名"` 分支
-2. 在 `data/blog_links.yaml` 对应条目中设置 `icon: "新图标名"`
+如需商业授权，请通过站点 About 页面的联系方式沟通。
