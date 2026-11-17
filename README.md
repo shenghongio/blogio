@@ -100,6 +100,13 @@ hugo mod verify                     # 校验主题模块完整性
 
 `Makefile` 提供常用封装：`make dev`、`make build`、`make check`、`make new POST=<name>`。
 
+`make check` 覆盖三层校验：Hugo 配置、站点构建（含路径警告）、CSS 完整性。CSS 检查针对 `assets/css/custom.css` 验证花括号配平、悬空选择器、空声明块与残留空白段 —— 选择器列表以逗号结尾但声明块被删除时，CSS 解析器不会报错，却会把后续规则合并进上一条，表现为某个主题下样式莫名失效。CI 在构建前执行同一检查，可单独运行：
+
+```bash
+./scripts/check-css.sh                          # 默认检查 custom.css
+./scripts/check-css.sh path/to/other.css        # 指定文件
+```
+
 ## 内容创作速查
 
 **新增文章**：在 `content/articles/<分类>/` 下创建 `my-post.zh.md`。
