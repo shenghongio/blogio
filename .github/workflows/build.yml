@@ -56,6 +56,9 @@ jobs:
       - name: Verify Hugo modules
         run: hugo mod verify
 
+      - name: Check CSS integrity
+        run: ./scripts/check-css.sh
+
       - name: Build site
         run: hugo --gc --minify --printPathWarnings
 

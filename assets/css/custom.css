@@ -2508,7 +2508,6 @@ html[data-theme="dark"] .series-chapter {
 .perspective-card--purple .perspective-card-index { color: #7c4dff; background: rgba(124, 77, 255, 0.10); }
 .perspective-card--purple:hover { border-color: rgba(124, 77, 255, 0.4); }
 
-.perspective-card--cyan { }
 .perspective-card--cyan::before { background: linear-gradient(90deg, #00bcd4, #4dd0e1); }
 .perspective-card--cyan .perspective-card-index { color: #00acc1; background: rgba(0, 188, 212, 0.10); }
 .perspective-card--cyan:hover { border-color: rgba(0, 188, 212, 0.4); }
@@ -2517,7 +2516,6 @@ html[data-theme="dark"] .series-chapter {
 .perspective-card--amber .perspective-card-index { color: #f57c00; background: rgba(255, 167, 38, 0.12); }
 .perspective-card--amber:hover { border-color: rgba(255, 167, 38, 0.4); }
 
-.perspective-card--green { }
 .perspective-card--green::before { background: linear-gradient(90deg, #66bb6a, #a5d6a7); }
 .perspective-card--green .perspective-card-index { color: #43a047; background: rgba(102, 187, 106, 0.10); }
 .perspective-card--green:hover { border-color: rgba(102, 187, 106, 0.4); }
@@ -2526,7 +2524,6 @@ html[data-theme="dark"] .series-chapter {
 .perspective-card--pink .perspective-card-index { color: #d81b60; background: rgba(236, 64, 122, 0.10); }
 .perspective-card--pink:hover { border-color: rgba(236, 64, 122, 0.4); }
 
-.perspective-card--indigo { }
 .perspective-card--indigo::before { background: linear-gradient(90deg, #5c6bc0, #9fa8da); }
 .perspective-card--indigo .perspective-card-index { color: #3949ab; background: rgba(92, 107, 192, 0.10); }
 .perspective-card--indigo:hover { border-color: rgba(92, 107, 192, 0.4); }

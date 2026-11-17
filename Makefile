@@ -116,6 +116,9 @@ check:
 	@echo "==> Checking site build..."
 	$(HUGO) --gc --minify --printPathWarnings
 	@echo ""
+	@echo "==> Checking CSS integrity..."
+	@./scripts/check-css.sh
+	@echo ""
 	@echo "==> Check completed."
 
 clean:
