@@ -51,10 +51,10 @@
         if (!inner) return;
         var widest = 0;
         var titleEl = inner.querySelector('.at-toc-title');
-        if (titleEl) widest = Math.ceil(titleEl.offsetWidth);
+        if (titleEl) widest = Math.max(Math.ceil(titleEl.offsetWidth), Math.ceil(titleEl.scrollWidth));
         listEl.querySelectorAll('a').forEach(function(a){
             var indent = a.parentElement.className === 'at-toc-h3' ? 18 : 0;
-            widest = Math.max(widest, Math.ceil(a.offsetWidth) + indent);
+            widest = Math.max(widest, Math.ceil(a.scrollWidth) + indent);
         });
         if (!widest) return;
         var width = widest + 40 + 2;

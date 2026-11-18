@@ -52,19 +52,11 @@
     var modal = document.getElementById('gs-stack-modal');
     if (!btn || !modal) return;
     var STORAGE_KEY = 'gs-stack-logo-pos';
+    var STORAGE_VERSION = 3;
     var DRAG_THRESHOLD = 5;
     var dragging = false;
     var didDrag = false;
     var startX, startY, origLeft, origTop;
-
-    var saved = null;
-    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
-    if (saved && typeof saved.left === 'number') {
-        btn.style.left = saved.left + 'px';
-        btn.style.top = saved.top + 'px';
-        btn.style.transform = 'none';
-        btn.style.right = 'auto';
-    }
 
     var clampPos = function(l, t){
         var w = btn.offsetWidth, h = btn.offsetHeight;
@@ -75,6 +67,33 @@
             top: Math.max(4, Math.min(t, maxT))
         };
     };
+
+    var saved = null;
+    try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+    if (saved && saved.v !== STORAGE_VERSION) {
+        saved = null;
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+    }
+    if (saved && typeof saved.left === 'number') {
+        var p0 = clampPos(saved.left, saved.top);
+        btn.style.left = p0.left + 'px';
+        btn.style.top = p0.top + 'px';
+        btn.style.transform = 'none';
+        btn.style.right = 'auto';
+    }
+
+    var relocateOnResize = function(){
+        if (typeof btn.style.left !== 'string' || !btn.style.left) return;
+        var curL = parseInt(btn.style.left);
+        var curT = parseInt(btn.style.top);
+        if (isNaN(curL) || isNaN(curT)) return;
+        var p = clampPos(curL, curT);
+        if (p.left !== curL || p.top !== curT) {
+            btn.style.left = p.left + 'px';
+            btn.style.top = p.top + 'px';
+        }
+    };
+    window.addEventListener('resize', relocateOnResize);
 
     btn.addEventListener('pointerdown', function(e){
         dragging = true;
@@ -108,6 +127,7 @@
         if (didDrag) {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    v: STORAGE_VERSION,
                     left: parseInt(btn.style.left),
                     top: parseInt(btn.style.top)
                 }));
