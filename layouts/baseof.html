@@ -3,13 +3,11 @@
 {{- end -}}
 
 <!DOCTYPE html>
-{{- $theme := site.Params.defaultTheme | default "auto" }}
+{{- $theme := site.Params.defaultTheme | default "light" }}
 {{- if eq $theme "dark" }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="dark">
-{{- else if eq $theme "light" }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="light">
+<html lang="{{ site.Language }}" dir="ltr" data-theme="dark">
 {{- else }}
-<html lang="{{ site.Language }}" dir="{{ .Language.Direction | default "auto" }}" data-theme="auto">
+<html lang="{{ site.Language }}" dir="ltr" data-theme="light">
 {{- end }}
 
 <head>

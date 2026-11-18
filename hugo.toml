@@ -9,6 +9,7 @@ hasCJKLanguage = true
 
 [params]
   author = "ShengHong"
+  defaultTheme = "light"
 
 [languages]
   [languages.zh]

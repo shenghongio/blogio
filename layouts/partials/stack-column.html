@@ -1,0 +1,44 @@
+{{- $title := .title -}}
+{{- $icon := .icon | default "default" -}}
+{{- $data := .data -}}
+{{- $category := .category -}}
+{{- $lang := site.Language.Lang -}}
+<div class="blog-column">
+    <span class="blog-column-header blog-column-header--{{ $icon }}">
+        <svg class="tooltip-icon tooltip-icon--{{ $icon }}" viewBox="0 0 24 24" aria-hidden="true">
+            {{- if eq $icon "ai" -}}
+            <path d="M12 2a8 8 0 0 0-8 8c0 3.5 2 6.5 4.8 8L12 22l3.2-4A8 8 0 0 0 12 2z"></path>
+            <circle cx="12" cy="10" r="2"></circle>
+            {{- else if eq $icon "cn" -}}
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <path d="M4 22v-7"></path>
+            {{- else if eq $icon "shield" -}}
+            <path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"></path>
+            {{- else if eq $icon "sre" -}}
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 7v5l3 2"></path>
+            {{- else -}}
+            <path d="M4 20h16a2 2 0 002-2V8a2 2 0 00-2-2h-7.93a2 2 0 01-1.66-.9l-.82-1.2A2 2 0 007.93 3H4A2 2 0 002 5v13c0 1.1.9 2 2 2z"></path>
+            {{- end -}}
+        </svg>
+        <span class="blog-column-header-label">{{ $title }}</span>
+    </span>
+    <div class="blog-column-posts">
+        {{- with .bookLink }}
+        <a href="{{ .url }}" class="blog-column-post" target="_blank" rel="noopener">
+            {{ partial "icon.html" "book" }}
+            <span class="blog-column-post-title">{{ i18n .title }}</span>
+            <span class="blog-column-post-desc">{{ i18n .desc }}</span>
+        </a>
+        {{- end }}
+        {{- with $data }}
+        {{- range where . "category" $category }}
+        <a href="{{ .url | relLangURL }}" class="blog-column-post">
+            {{ partial "icon.html" .icon }}
+            <span class="blog-column-post-title">{{ index .title $lang }}</span>
+            <span class="blog-column-post-desc">{{ index .description $lang }}</span>
+        </a>
+        {{- end }}
+        {{- end }}
+    </div>
+</div>

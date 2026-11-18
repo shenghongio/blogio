@@ -61,21 +61,10 @@
         </aside>
         <div class="{{ $prefix }}-content">
             <div class="{{ $prefix }}-content-inner">
-                <div class="{{ $prefix }}-article-viewer" id="{{ $prefix }}-article-viewer" data-toc-managed="page"{{ if eq $page.Kind "page" }} data-single="1"{{ end }}>
+                <div class="{{ $prefix }}-article-viewer" id="{{ $prefix }}-article-viewer"{{ if eq $page.Kind "page" }} data-single="1"{{ end }}>
                     {{ if eq $page.Kind "page" }}
                     <h2 class="{{ $prefix }}-overview-title">{{ $page.Title }}</h2>
-                    <div class="{{ $prefix }}-overview-meta">
-                        {{ if gt $page.Lastmod.Year 1 }}
-                        <span class="{{ $prefix }}-date-tag">updated {{ $page.Lastmod.Format "2006-01-02" }}</span>
-                        {{ else if gt $page.Date.Year 1 }}
-                        <span class="{{ $prefix }}-date-tag">updated {{ $page.Date.Format "2006-01-02" }}</span>
-                        {{ end }}
-                        {{ with $page.GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
-                        {{ if isset $page.Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if $page.Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
-                        {{ with $page.WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
-                        {{ $author := $page.Params.author | default site.Params.author | default "ShengHong" }}
-                        <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
-                    </div>
+                    {{ partial "series/meta.html" (dict "page" $page "prefix" $prefix) }}
                     <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
                         {{ $page.Content }}
                         {{ partial "series/article-nav.html" (dict "nav" $data.nav "currentPath" (relURL $page.RelPermalink) "baseURL" (relURL "")) }}
@@ -87,18 +76,7 @@
                             {{ with $partPage }}
                             <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
                                 <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
-                                <div class="{{ $prefix }}-overview-meta">
-                                    {{ if gt .Lastmod.Year 1 }}
-                                    <span class="{{ $prefix }}-date-tag">updated {{ .Lastmod.Format "2006-01-02" }}</span>
-                                    {{ else if gt .Date.Year 1 }}
-                                    <span class="{{ $prefix }}-date-tag">updated {{ .Date.Format "2006-01-02" }}</span>
-                                    {{ end }}
-                                    {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
-                                    {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if .Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
-                                    {{ with .WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
-                                    {{ $author := .Params.author | default site.Params.author | default "ShengHong" }}
-                                    <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
-                                </div>
+                                {{ partial "series/meta.html" (dict "page" . "prefix" $prefix) }}
                                 <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
                             </div>
                             {{ else }}
@@ -133,18 +111,7 @@
         {{ with $partPage }}
         <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
             <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
-            <div class="{{ $prefix }}-overview-meta">
-                {{ if gt .Lastmod.Year 1 }}
-                <span class="{{ $prefix }}-date-tag">updated {{ .Lastmod.Format "2006-01-02" }}</span>
-                {{ else if gt .Date.Year 1 }}
-                <span class="{{ $prefix }}-date-tag">updated {{ .Date.Format "2006-01-02" }}</span>
-                {{ end }}
-                {{ with .GitInfo }}<span class="{{ $prefix }}-badge {{ $prefix }}-commit-tag" data-commit="{{ .Hash }}" title="提交：{{ .Hash }}">commit {{ .Hash }}</span>{{ end }}
-                {{ if isset .Params "sustain" }}<span class="{{ $prefix }}-badge {{ $prefix }}-sustain-tag">sustained {{ if .Params.sustain }}yes{{ else }}no{{ end }}</span>{{ end }}
-                {{ with .WordCount }}<span class="{{ $prefix }}-badge {{ $prefix }}-count-tag">{{ lang.FormatNumber 0 . }} words</span>{{ end }}
-                {{ $author := .Params.author | default site.Params.author | default "ShengHong" }}
-                <span class="{{ $prefix }}-badge {{ $prefix }}-author-tag">by {{ $author }}</span>
-            </div>
+            {{ partial "series/meta.html" (dict "page" . "prefix" $prefix) }}
             <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
         </div>
         {{ end }}

@@ -129,11 +129,11 @@
             if (sustainEl) sustain = sustainEl.getAttribute('data-sustain') === 'true';
         }
         if (!words && header) {
-            var wcHead = header.querySelector('.kt-badge-count');
+            var wcHead = header.querySelector('.' + P + '-count-tag');
             if (wcHead) words = wcHead.textContent.replace(/\s*words\s*$/i, '').trim();
         }
         if (!author && header) {
-            var auHead = header.querySelector('.kt-badge-author');
+            var auHead = header.querySelector('.' + P + '-author-tag');
             if (auHead) author = auHead.textContent.replace(/^by\s*/i, '').trim();
         }
         return {
@@ -390,8 +390,6 @@
     }
 
     document.querySelectorAll('[data-section-head]').forEach(function(head){
-        if (head.getAttribute('data-section-bound') === '1') return;
-        head.setAttribute('data-section-bound', '1');
         head.addEventListener('click', function(){
             var section = head.closest('.' + P + '-section');
             if (section) section.classList.toggle(P + '-section--open');
