@@ -8,10 +8,112 @@ cover:
 ---
 
 ## 先说结论
+SRE 转 AI Infra，已有的能力大部分不会浪费，但需要重新排一次优先级。真正要补的不是工具链，而是**对 GPU 资源特性的直觉**——哪些指标决定成败，哪些优化是无效劳动，哪些故障模式在传统系统里根本不会出现。
 
-SRE 转 AI Infra，已有的能力大部分不会浪费，但需要重新排一次优先级。
+## Kubernetes 到 AI Infra
+**必须跨越的 5 道技术鸿沟**
 
-真正要补的不是工具链，而是**对 GPU 资源特性的直觉**——哪些指标决定成败，哪些优化是无效劳动，哪些故障模式在传统系统里根本不会出现。
+我们都知道Kubernetes 解决的是容器化工作负载的编排问题，而AI Infra 解决的是 AI 计算资源、分布式训练、模型推理和算力效率问题。 这两者并不是简单的技术栈升级，而是底层工程能力的扩展。 最大的变化是：你不能只关注 Pod 是否 Running，
+还要理解 GPU 为什么没有跑满、训练为什么卡住、推理为什么延迟升高，以及整个集群的算力为什么没有得到有效利用。
+
+```mermaid
+%% caption: 图 1：K8s → AI Infra 能力升级路线：5 道技术鸿沟
+flowchart LR
+    subgraph K8S["Kubernetes 能力"]
+        direction TB
+        K1("<i class='luc-box'></i>容器编排")
+        K2("<i class='luc-network'></i>集群调度")
+        K3("<i class='luc-cable'></i>网络与存储")
+        K4("<i class='luc-app-window'></i>服务部署")
+        K5("<i class='luc-activity'></i>故障排查")
+    end
+
+    subgraph AI["AI Infra 能力"]
+        direction TB
+        A1("<i class='luc-cpu'></i>GPU 资源管理")
+        A2("<i class='luc-layers'></i>AI 作业调度")
+        A3("<i class='luc-zap'></i>高性能计算通信")
+        A4("<i class='luc-bot'></i>模型推理系统")
+        A5("<i class='luc-gauge'></i>AI 性能诊断")
+    end
+
+    subgraph GAP["需要跨越的鸿沟"]
+        direction TB
+        G1("从 CPU / Memory 到<br/>GPU / VRAM / MIG / 拓扑")
+        G2("从 Pod 调度到 Gang Scheduling<br/>/ Queue / 拓扑感知")
+        G3("从 CNI / CSI 到<br/>RDMA / RoCE / NCCL")
+        G4("从 Deployment / Service 到<br/>LLM Serving / KV Cache")
+        G5("从 Pod / Node 故障到<br/>GPU / 通信 / 算子性能分析")
+    end
+
+    K1 -->|01| A1
+    K2 -->|02| A2
+    K3 -->|03| A3
+    K4 -->|04| A4
+    K5 -->|05| A5
+
+    A1 -.-> G1
+    A2 -.-> G2
+    A3 -.-> G3
+    A4 -.-> G4
+    A5 -.-> G5
+
+    classDef default fill:#ffffff,stroke:#d0d5dd,stroke-width:1px,color:#344054,font-size:14px
+    classDef core fill:#eff6ff,stroke:#1685ff,stroke-width:1.5px,color:#1d4ed8
+    classDef note fill:#ffffff,stroke:#d0d5dd,stroke-width:1px,color:#667085,stroke-dasharray:4 4
+    class A1,A2,A3,A4,A5 core
+    class G1,G2,G3,G4,G5 note
+    style K8S fill:#fcfcfd,stroke:#e4e7ec,stroke-width:1px,color:#475467
+    style AI fill:#fcfcfd,stroke:#e4e7ec,stroke-width:1px,color:#475467
+    style GAP fill:#fcfcfd,stroke:#e4e7ec,stroke-width:1px,color:#475467
+    linkStyle default stroke:#98a2b3,stroke-width:1px
+```
+### GPU 资源管理
+> 从 Kubernetes Resource 到 GPU Computing
+
+这是 K8s 工程师进入 AI Infra 最先需要补齐的能力。传统 Kubernetes 关注的是：
+- CPU Requests / Limits
+- Memory Requests / Limits
+- Pod 调度与资源隔离
+- Node Allocatable
+
+**而AI Infra 还需要理解的是：**
+- GPU 显存（VRAM）
+- GPU SM 利用率
+- GPU 显存带宽
+- MIG / MPS
+- NVLink / NVSwitch
+- GPU Direct RDMA
+- GPU 健康状态与 ECC 错误
+
+以上两个最核心的一个认知变化就是：__Kubernetes 认为一个 GPU 是可分配资源，但 AI 任务真正关心的是 GPU 的计算能力、显存容量、显存带宽和 GPU 之间的通信能力__
+
+例如：一个 Pod 成功申请了 8 张 GPU，不代表这 8 张 GPU 就能高效协同工作。 你需要进一步判断 GPU 拓扑、NUMA 亲和性、NVLink 连接情况等，那这些需要掌握的技能。
+
+### AI作业的调度
+> 从 Pod Scheduling 到 AI Workload Scheduling
+
+Kubernetes 默认调度器主要解决 Pod 的资源分配问题。 但 AI 训练通常不是一个 Pod 的事情，而是多个 Worker 协同完成的分布式任务
+
+例如：一个分布式训练任务可能需要：
+- 4 台机器
+- 每台机器 8 张 GPU
+- 总共 32 张 GPU
+- 多个 Worker 同时启动
+- Worker 之间需要高速通信
+
+画图：一个分布式训练任务的调度流程
+```mermaid
+%% caption: 图 2：一个分布式训练任务的调度流程
+flowchart LR
+    subgraph AI["AI 作业调度"]
+        direction TB
+        A1("任务提交")
+        A2("任务分配")
+        A3("任务执行")
+        A4("任务完成")
+    end
+```
 
 ## 哪些能力可以直接搬
 
