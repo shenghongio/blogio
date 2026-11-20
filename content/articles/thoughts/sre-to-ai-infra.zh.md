@@ -90,6 +90,9 @@ flowchart LR
 
 例如：一个 Pod 成功申请了 8 张 GPU，不代表这 8 张 GPU 就能高效协同工作。 你需要进一步判断 GPU 拓扑、NUMA 亲和性、NVLink 连接情况等，那这些需要掌握的技能。
 
+> [!NOTE] 考核标准： 能够解释 GPU 为什么利用率低、显存不足，以及 GPU 节点为什么出现资源碎片
+>
+
 ### AI作业的调度
 > 从 Pod Scheduling 到 AI Workload Scheduling
 
@@ -102,17 +105,37 @@ Kubernetes 默认调度器主要解决 Pod 的资源分配问题。 但 AI 训�
 - 多个 Worker 同时启动
 - Worker 之间需要高速通信
 
-画图：一个分布式训练任务的调度流程
+一个分布式训练任务的调度流程
 ```mermaid
 %% caption: 图 2：一个分布式训练任务的调度流程
-flowchart LR
-    subgraph AI["AI 作业调度"]
-        direction TB
-        A1("任务提交")
-        A2("任务分配")
-        A3("任务执行")
-        A4("任务完成")
-    end
+flowchart TB
+    S1("<i class='luc-send'></i>提交训练作业<br/>声明 Worker 数与 GPU 数")
+    S2("<i class='luc-hourglass'></i>进入队列<br/>按优先级排队等待")
+    G1("<i class='luc-users'></i>Gang 调度预检<br/>全部 Worker 需同时满足")
+    G2("<i class='luc-cpu'></i>拓扑感知分配<br/>NVLink / 同交换机优先")
+    R1("<i class='luc-network'></i>启动 Worker 组<br/>建立 NCCL 通信组")
+    R2("<i class='luc-repeat'></i>训练循环<br/>前向 / 反向 / 梯度同步")
+    R3("<i class='luc-save'></i>周期 checkpoint<br/>落盘训练状态")
+    D1("<i class='luc-circle-check'></i>任务完成")
+    X2("<i class='luc-triangle-alert'></i>通信超时 / OOM<br/>Worker 失败，任务中断")
+    X3("<i class='luc-rotate-ccw'></i>断点续跑<br/>从 checkpoint 恢复并重跑")
+
+    S1 --> S2 --> G1 --> G2 --> R1 --> R2 --> R3
+    G1 -.->|资源不足，整组回队列| S2
+    R3 -->|达到目标步数| D1
+    R2 -.->|Worker 失败| X2
+    X2 --> X3
+
+    classDef default fill:#ffffff,stroke:#d0d5dd,stroke-width:1px,color:#344054,font-size:14px
+    classDef core fill:#eff6ff,stroke:#1685ff,stroke-width:1.5px,color:#1d4ed8
+    classDef success fill:#ecfdf5,stroke:#12b76a,stroke-width:1.5px,color:#047857
+    classDef note fill:#ffffff,stroke:#d0d5dd,stroke-width:1px,color:#667085,stroke-dasharray:4 4
+    classDef terminal fill:#f2f4f7,stroke:#98a2b3,stroke-width:1px,color:#475467
+    class G1,G2 core
+    class D1 success
+    class X2,X3 note
+    class S1,S2 terminal
+    linkStyle default stroke:#98a2b3,stroke-width:1px
 ```
 
 ## 哪些能力可以直接搬

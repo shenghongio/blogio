@@ -63,6 +63,7 @@ nav:
           - name: "开发指南"
             articles:
               - path: "/zh/series/kubernetes-tutorial/overview/"
+              - path: "/zh/series/kubernetes-tutorial/sig-and-wg/"
       - label: "扩展 Kubernetes"
         sections:
           - name: "扩展 Kubernetes"

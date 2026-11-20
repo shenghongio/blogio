@@ -16,7 +16,7 @@
     --header-height: 61px;
 
     --series-sidebar-top: 220px;
-    --kt-sidebar-width: 240px;
+    --kt-sidebar-width: 296px;
     --kt-toc-width: 216px;
     --kt-rail-width: 240px;
     --kt-rail-gutter: 24px;
@@ -4918,7 +4918,7 @@ body:has(.kt-page--standalone) .kt-layout {
 }
 
 .kt-sidebar-inner {
-    padding: 24px 32px 0;
+    padding: 24px 24px 0;
 }
 
 .kt-content {
@@ -4971,7 +4971,7 @@ body:has(.kt-page--standalone) .kt-layout {
 
 @media (max-width: 1440px) {
     body:has(.kt-page--standalone) {
-        --kt-sidebar-width: 212px;
+        --kt-sidebar-width: 260px;
         --kt-rail-width: 212px;
         --kt-toc-width: 196px;
     }
@@ -4979,7 +4979,7 @@ body:has(.kt-page--standalone) .kt-layout {
 
 @media (max-width: 1280px) {
     body:has(.kt-page--standalone) {
-        --kt-sidebar-width: 200px;
+        --kt-sidebar-width: 240px;
         --kt-rail-width: 200px;
     }
 }
@@ -7216,6 +7216,41 @@ html[data-theme="dark"] .series-pager-title {
 
 html[data-theme="dark"] .series-pager-link:hover .series-pager-title {
     color: #a78bfa;
+}
+
+/* ===== 正文列内的全宽图表 =====
+   图表宽度按 left 区（正文左边界 → 视口左边缘）+ 正文列宽计算，
+   超出正文列宽的部分只向左侧借用空间，不动正文排版与右侧目录。
+   任何一翼窄于 --at-bleed-min 时退化为 100% 正文列宽。 */
+body:has(.post-single--article) {
+    --at-bleed-min: 150px;
+    --at-bleed-left: calc(var(--at-main-left) - 16px);
+    --at-bleed-right: calc(100vw - var(--at-main-left) - var(--at-main-width));
+    --at-figure-width: min(
+        calc(var(--at-main-left) + var(--at-main-width)),
+        calc(100vw - 16px - var(--at-bleed-min))
+    );
+}
+
+.mermaid-figure--wide {
+    width: max(100%, var(--at-figure-width, 100%));
+    margin-left: 2px;
+}
+
+.mermaid-figure--wide .mermaid,
+.mermaid-figure--wide .mermaid-caption {
+    text-align: left;
+}
+
+.mermaid-figure--wide .mermaid svg {
+    width: auto;
+    max-width: none;
+    height: auto;
+}
+
+body:not(:has(.post-single--article)) .mermaid-figure--wide {
+    width: 100%;
+    margin-left: 0;
 }
 
 /* ===== Article detail TOC (右侧浮动目录) ===== */

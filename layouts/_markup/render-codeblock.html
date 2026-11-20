@@ -2,16 +2,19 @@
 {{- if eq $lang "mermaid" -}}
 {{- $caption := "" -}}
 {{- $align := "" -}}
+{{- $layout := "" -}}
 {{- $code := .Inner -}}
-{{- range seq 3 -}}
+{{- range seq 4 -}}
   {{- $inner := cond (gt (len $code) 1) $code "" -}}
-  {{- if and $inner (findRE `^%%\s*(caption|align):` $inner) -}}
+  {{- if and $inner (findRE `^%%\s*(caption|align|layout):` $inner) -}}
     {{- $lines := split $inner "\n" -}}
     {{- $first := index $lines 0 -}}
     {{- if findRE `^%%\s*caption:` $first -}}
       {{- $caption = replaceRE `^%%\s*caption:\s*` "" $first -}}
     {{- else if findRE `^%%\s*align:` $first -}}
       {{- $align = replaceRE `^%%\s*align:\s*` "" $first -}}
+    {{- else if findRE `^%%\s*layout:` $first -}}
+      {{- $layout = replaceRE `^%%\s*layout:\s*` "" $first -}}
     {{- end -}}
     {{- $code = delimit (after 1 $lines) "\n" -}}
   {{- end -}}
@@ -20,7 +23,9 @@
 {{- $cls := "mermaid-align-center" -}}
 {{- if eq $align "left" -}}{{- $cls = "mermaid-align-left" -}}{{- end -}}
 {{- if eq $align "right" -}}{{- $cls = "mermaid-align-right" -}}{{- end -}}
-<div class="mermaid-figure">
+{{- $figureCls := "mermaid-figure" -}}
+{{- if eq (lower (trim $layout " \n\r\t")) "wide" -}}{{- $figureCls = "mermaid-figure mermaid-figure--wide" -}}{{- end -}}
+<div class="{{ $figureCls }}">
 <div class="mermaid {{ $cls }}" id="mermaid-{{ .Ordinal }}">{{ $code }}</div>
 {{- with $caption }}
 <div class="mermaid-caption {{ $cls }}">{{ . }}</div>
