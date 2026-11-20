@@ -3,6 +3,7 @@
 {{- $dataKey    := .dataKey | default ($page.Params.seriesDataKey | default "") -}}
 {{- $seriesId   := .seriesId | default ($page.Params.seriesId | default "") -}}
 {{- $partSwitch := $page.Params.enablePartSwitch | default false -}}
+{{- $autoPartDropdownWidth := $page.Params.autoPartDropdownWidth | default false -}}
 {{- $tocInside  := $page.Params.tocInsideContent | default false -}}
 {{- $data       := index hugo.Data $dataKey -}}
 {{- $seriesSites := slice -}}
@@ -28,6 +29,14 @@
   {{- end -}}
 {{- end -}}
 {{- $partPages = sort $partPages "File.Path" -}}
+{{- if and $data (gt (len $data.nav) 0) (index $data.nav 0).overviewOnly -}}
+  {{- $partPages = slice false | append $partPages -}}
+{{- end -}}
+{{- range $i, $part := $data.nav -}}
+  {{- if ge $i (len $partPages) -}}
+    {{- $partPages = $partPages | append false -}}
+  {{- end -}}
+{{- end -}}
 <div class="{{ $prefix }}-page {{ $prefix }}-page--standalone">
 
     <div class="{{ $prefix }}-hero-head">
@@ -54,7 +63,7 @@
             <div class="{{ $prefix }}-sidebar-inner" id="{{ $prefix }}-sidebar-inner">
                 {{ range $i, $part := $data.nav }}
                 <div class="{{ $prefix }}-nav-pane{{ if ne $i 0 }} {{ $prefix }}-nav-pane--hidden{{ end }}" data-part-pane="{{ $i }}">
-                    {{ partial "series/nav.html" (dict "nav" $data.nav "currentPath" (relURL $page.RelPermalink) "partIndex" $i "prefix" $prefix "enablePartSwitch" $partSwitch) }}
+                    {{ partial "series/nav.html" (dict "nav" $data.nav "currentPath" (relURL $page.RelPermalink) "partIndex" $i "prefix" $prefix "enablePartSwitch" $partSwitch "autoPartDropdownWidth" $autoPartDropdownWidth) }}
                 </div>
                 {{ end }}
             </div>
@@ -83,7 +92,7 @@
                             <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
                                 <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
                                 <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
-                                    <p>建设中…</p>
+                                    <p>{{ $part.description | default "建设中…" }}</p>
                                 </div>
                             </div>
                             {{ end }}
@@ -108,13 +117,13 @@
     <script type="text/template" id="{{ $prefix }}-part-templates">
         {{ range $i, $part := $data.nav }}
         {{ $partPage := index $partPages $i }}
-        {{ with $partPage }}
         <div class="{{ $prefix }}-part-overview" data-overview="{{ $i }}">
             <h2 class="{{ $prefix }}-overview-title">{{ $part.name }}</h2>
-            {{ partial "series/meta.html" (dict "page" . "prefix" $prefix) }}
-            <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">{{ .Content }}</div>
+            {{ with $partPage }}{{ partial "series/meta.html" (dict "page" . "prefix" $prefix) }}{{ end }}
+            <div class="{{ $prefix }}-markdown {{ $prefix }}-overview-body">
+                {{ with $partPage }}{{ .Content }}{{ else }}<p>{{ $part.description | default "建设中…" }}</p>{{ end }}
+            </div>
         </div>
-        {{ end }}
         {{ end }}
     </script>
 

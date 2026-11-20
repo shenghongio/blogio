@@ -7,6 +7,7 @@ cascade:
 stackGroup: "语言与工具"
 seriesId: "go-tutorial"
 seriesDataKey: "go_tutorial"
-enablePartSwitch: false
+enablePartSwitch: true
+autoPartDropdownWidth: true
 tocInsideContent: true
 ---
