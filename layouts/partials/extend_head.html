@@ -11,6 +11,12 @@
 <script src="{{ $articleSortJS.RelPermalink }}" integrity="{{ $articleSortJS.Data.Integrity }}" defer></script>
 {{ end }}
 
+{{ $tutorialCodeJS := resources.Get "js/tutorial-code-controls.js" }}
+{{ if $tutorialCodeJS }}
+{{ $tutorialCodeJS = $tutorialCodeJS | minify | fingerprint }}
+<script src="{{ $tutorialCodeJS.RelPermalink }}" integrity="{{ $tutorialCodeJS.Data.Integrity }}" defer></script>
+{{ end }}
+
 {{ $needMermaid := false }}
 {{ if or (in .Content "class=\"mermaid") (in .RawContent "```mermaid") }}{{ $needMermaid = true }}{{ end }}
 {{ if and (not $needMermaid) (in .RelPermalink "/series/") }}{{ $needMermaid = true }}{{ end }}

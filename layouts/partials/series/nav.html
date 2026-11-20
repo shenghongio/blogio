@@ -3,6 +3,7 @@
 {{- $partIndex  := .partIndex | default 0 -}}
 {{- $prefix     := .prefix -}}
 {{- $enablePartSwitch := .enablePartSwitch | default false -}}
+{{- $autoPartDropdownWidth := .autoPartDropdownWidth | default false -}}
 {{- $part := index $nav $partIndex -}}
 {{- $opened := false -}}
 {{- $basePath := (urls.Parse site.BaseURL).Path | strings.TrimRight "/" -}}
@@ -10,7 +11,7 @@
 <div class="{{ $prefix }}-nav">
     {{ if $enablePartSwitch }}
     <div class="{{ $prefix }}-section {{ $prefix }}-section--open">
-        <div class="{{ $prefix }}-part-dropdown {{ $prefix }}-sidebar-part-dropdown">
+        <div class="{{ $prefix }}-part-dropdown {{ $prefix }}-sidebar-part-dropdown{{ if $autoPartDropdownWidth }} {{ $prefix }}-sidebar-part-dropdown--auto-width{{ end }}">
             <button type="button" class="{{ $prefix }}-sidebar-part-trigger" data-part-dropdown-trigger aria-expanded="false">
                 <span class="{{ $prefix }}-part-title-inline">{{ $part.name }}</span>
                 <svg class="{{ $prefix }}-sidebar-part-caret" viewBox="0 0 16 16" width="10" height="10" fill="currentColor">

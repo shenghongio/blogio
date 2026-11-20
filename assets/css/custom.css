@@ -3526,7 +3526,80 @@ html[data-theme="dark"]:has(.post-single--article) .post-content blockquote {
     font-size: 0.9em;
     font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 }
-@media (max-width: 1200px) {
+.tutorial-code-block {
+    display: flex;
+    flex-direction: column;
+    margin: 24px 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: #2a2a2e;
+}
+
+.tutorial-code-toolbar {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #232329;
+}
+
+.tutorial-code-action {
+    min-height: 34px;
+    padding: 5px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    background: transparent;
+    color: #d7d7e0;
+    font: inherit;
+    font-size: 11px;
+    line-height: 1.3;
+    cursor: pointer;
+}
+
+.tutorial-code-action:hover,
+.tutorial-code-action:focus-visible {
+    border-color: #9b8cff;
+    background: rgba(155, 140, 255, 0.14);
+    color: #fff;
+    outline: none;
+}
+
+.tutorial-code-language {
+    align-self: center;
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    color: #a7a7b3;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.tutorial-code-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.tutorial-code-content .highlight {
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.tutorial-code-block--collapsed .tutorial-code-content {
+    display: none;
+}
+
+.tutorial-code-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
 }
 
 /* ── Stack 分类卡片（/stack/ 页面） ── */
@@ -4827,6 +4900,11 @@ body:has(.kt-page--standalone) .kt-layout {
     width: 100%;
 }
 
+.kt-sidebar-part-dropdown--auto-width {
+    width: max-content;
+    max-width: 100%;
+}
+
 .kt-sidebar-part-trigger {
     display: flex;
     align-items: center;
@@ -4840,6 +4918,11 @@ body:has(.kt-page--standalone) .kt-layout {
     cursor: pointer;
     text-align: left;
     white-space: nowrap;
+}
+
+.kt-sidebar-part-dropdown--auto-width .kt-sidebar-part-trigger {
+    width: auto;
+    max-width: 100%;
 }
 
 .kt-sidebar-part-trigger .kt-part-title-inline {
